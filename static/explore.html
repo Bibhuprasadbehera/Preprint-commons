@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore Data - Preprint Commons</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="navbar-container"></div>
+  <div class="container">
+    <h1>Explore Data</h1>
+    <p>This is where the interactive data visualizations and search functionality will be.</p>
+    <iframe id="map-iframe" src="map.html" style="width: 100%; height: 600px; border: none;"></iframe>
+  </div>
+  <div id="footer-container"></div>
+
+  <script>
+    fetch('navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-container').innerHTML = data;
+      });
+
+    fetch('footer.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('footer-container').innerHTML = data;
+      });
+  </script>
+</body>
+</html>

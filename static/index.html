@@ -3,308 +3,130 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Preprint Counts by Country</title>
-  
-  <!-- Load D3.js and TopoJSON -->
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <script src="https://unpkg.com/topojson@3/dist/topojson.min.js"></script>
-  
+  <title>Preprint Commons - Tracking the Global Impact of Preprints</title>
+  <link rel="stylesheet" href="styles.css">
   <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: #f5f5f5;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      background-color: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    h1 {
-      color: #333;
+    .hero {
+      background: url('https://www.transparenttextures.com/patterns/cubes.png') #2c3e50;
+      color: white;
+      padding: 100px 20px;
       text-align: center;
+    }
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      color: white;
+    }
+    .hero p {
+      font-size: 1.2rem;
       margin-bottom: 30px;
     }
-
-    .controls {
-      margin-bottom: 20px;
-      text-align: center;
+    .cta-buttons a {
+      background: #e67e22;
+      color: white;
+      padding: 15px 30px;
+      text-decoration: none;
+      border-radius: 5px;
+      margin: 0 10px;
+      font-weight: bold;
     }
-
-    select {
-      padding: 8px 12px;
-      font-size: 14px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      margin-left: 8px;
-    }
-
-    #map-container {
+    .features {
       display: flex;
-      justify-content: center;
+      justify-content: space-around;
+      padding: 50px 20px;
+      background: #ecf0f1;
     }
-
-    svg {
-      max-width: 100%;
-      height: auto;
-      border-radius: 4px;
-    }
-
-    #tooltip {
-      position: absolute;
-      padding: 8px 12px;
+    .feature-card {
       background: white;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      pointer-events: none;
-      opacity: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      font-size: 14px;
-      transition: opacity 0.2s;
-    }
-
-    .loading {
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      width: 30%;
       text-align: center;
-      padding: 20px;
-      color: #666;
     }
-
-    .error {
+    .feature-card h3 {
+      margin-top: 0;
+    }
+    .data-snapshot {
+      padding: 50px 20px;
       text-align: center;
-      padding: 20px;
-      color: #dc3545;
+    }
+    .how-it-works {
+      background: #ecf0f1;
+      padding: 50px 20px;
+      text-align: center;
+    }
+    .testimonials {
+      padding: 50px 20px;
+      text-align: center;
+    }
+    #map-iframe {
+        width: 100%;
+        height: 600px;
+        border: none;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Global Preprint Distribution Map</h1>
-    
-    <div class="controls">
-      <label for="year-filter">Select Year:</label>
-      <select id="year-filter">
-        <option value="all">All Years</option>
-      </select>
-    </div>
+  <div id="navbar-container"></div>
 
-    <div id="map-container">
-      <div class="loading">Loading map data...</div>
+  <section class="hero">
+    <h1>Tracking the Global Impact of Preprints in Open Science</h1>
+    <p>Explore trends, collaborations, and citations across arXiv, bioRxiv, medRxiv, and more.</p>
+    <div class="cta-buttons">
+      <a href="/explore.html">Explore Data</a>
+      <a href="/about.html">Learn More</a>
     </div>
-    <div id="tooltip"></div>
-  </div>
+  </section>
+
+  <section class="features">
+    <div class="feature-card">
+      <h3>Global Trends</h3>
+      <p>Analyze preprint growth by country, institution, and field.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Interactive Visualizations</h3>
+      <p>Explore dynamic charts, maps, and collaboration networks.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Open Science Impact</h3>
+      <p>Compare citations and peer-reviewed publication rates.</p>
+    </div>
+  </section>
+
+  <section class="data-snapshot">
+    <h2>Preprint Snapshot</h2>
+    <iframe id="map-iframe" src="map.html"></iframe>
+    <p><strong>500,000+</strong> preprints indexed | <strong>50+</strong> countries contributing</p>
+  </section>
+
+  <section class="how-it-works">
+    <h2>How It Works</h2>
+    <p>1. Data Collection: We aggregate preprints from medrXiv, bioRxiv, q-bio(arXiv).</p>
+    <p>2. Enrichment: LLMs extract missing metadata (affiliations, funding).</p>
+    <p>3. Visualization: Explore insights via interactive dashboards.</p>
+  </section>
+
+  <section class="testimonials">
+    <h2>Testimonials</h2>
+    <blockquote>"Preprint Commons helped me identify collaboration opportunities in quantum computing."</blockquote>
+    <cite>- A Researcher</cite>
+  </section>
+
+  <div id="footer-container"></div>
 
   <script>
-    async function createChoropleth() {
-      const width = 960;
-      const marginTop = 50;
-      const height = width / 2 + marginTop;
+    fetch('navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-container').innerHTML = data;
+      });
 
-      // Country name mappings for data normalization
-      const countryNameMapping = {
-        'United States of America': 'USA',
-        'United States': 'USA',
-        'US': 'USA',
-        'United Kingdom': 'UK',
-        'Great Britain': 'UK',
-        'Czech Republic': 'Czechia',
-        'Korea, Republic of': 'South Korea',
-        'Republic of Korea': 'South Korea',
-        'Democratic Republic of the Congo': 'Congo',
-        'Russian Federation': 'Russia',
-        'Taiwan, Province of China': 'Taiwan',
-        'Iran, Islamic Republic of': 'Iran',
-        'Syrian Arab Republic': 'Syria',
-        'Venezuela, Bolivarian Republic of': 'Venezuela',
-        'Vietnam': 'Viet Nam',
-        'Tanzania, United Republic of': 'Tanzania'
-      };
-
-      function normalizeCountryName(name) {
-        if (!name) return '';
-        return countryNameMapping[name] || name;
-      }
-
-      try {
-        // Clear loading message
-        document.querySelector('.loading').remove();
-
-        // Fetch map and data
-        const [world, responseData] = await Promise.all([
-          d3.json("world-110m.json"),
-          d3.json("/country-data") // Your API endpoint
-        ]);
-
-        if (!world || !responseData?.data) {
-          throw new Error("Failed to load required data");
-        }
-
-        const countries = topojson.feature(world, world.objects.countries);
-        const countryData = responseData.data.map(d => ({
-          ...d,
-          country: normalizeCountryName(d.country)
-        }));
-
-        // Create SVG
-        const svg = d3.select("#map-container")
-          .append("svg")
-          .attr("viewBox", [0, 0, width, height])
-          .attr("style", "max-width: 100%; height: auto;");
-
-        // Set up projection
-        const projection = d3.geoEqualEarth()
-          .fitExtent([[2, marginTop + 2], [width - 2, height - 2]], { type: "Sphere" });
-        const path = d3.geoPath(projection);
-
-        // Create base map elements
-        svg.append("defs").append("path")
-          .attr("id", "outline")
-          .attr("d", path({ type: "Sphere" }));
-
-        svg.append("use")
-          .attr("href", "#outline")
-          .attr("fill", "#f8f9fa");
-
-        svg.append("use")
-          .attr("href", "#outline")
-          .attr("fill", "none")
-          .attr("stroke", "#dee2e6");
-
-        // Set up tooltip
-        const tooltip = d3.select("#tooltip");
-
-        // Create color scale
-        const color = d3.scaleSequential()
-          .interpolator(d3.interpolateYlGnBu);
-
-        // Set up years filter
-        const years = Array.from(new Set(countryData.map(d => d.year))).filter(Boolean);
-        const yearFilter = document.getElementById("year-filter");
-        years.sort((a, b) => a - b).forEach(year => {
-          const option = document.createElement("option");
-          option.value = year;
-          option.textContent = year;
-          yearFilter.appendChild(option);
-        });
-
-        function addLegend(maxValue) {
-          svg.selectAll(".legend-group").remove();
-
-          const legendWidth = 260;
-          const legendHeight = 12;
-          const legendGroup = svg.append("g")
-            .attr("class", "legend-group")
-            .attr("transform", `translate(${width - legendWidth - 20}, 20)`);
-
-          const legendScale = d3.scaleLinear()
-            .domain([0, maxValue])
-            .range([0, legendWidth]);
-
-          const legendAxis = d3.axisBottom(legendScale)
-            .ticks(5)
-            .tickFormat(d3.format(",.0f"));
-
-          const gradient = legendGroup.append("defs")
-            .append("linearGradient")
-            .attr("id", "legend-gradient")
-            .attr("x1", "0%")
-            .attr("x2", "100%")
-            .attr("y1", "0%")
-            .attr("y2", "0%");
-
-          const colors = d3.quantize(d3.interpolateYlGnBu, 10);
-          colors.forEach((color, i) => {
-            gradient.append("stop")
-              .attr("offset", `${(i / (colors.length - 1)) * 100}%`)
-              .attr("stop-color", color);
-          });
-
-          legendGroup.append("rect")
-            .attr("width", legendWidth)
-            .attr("height", legendHeight)
-            .style("fill", "url(#legend-gradient)");
-
-          legendGroup.append("g")
-            .attr("transform", `translate(0, ${legendHeight})`)
-            .call(legendAxis);
-
-          legendGroup.append("text")
-            .attr("x", legendWidth / 2)
-            .attr("y", -6)
-            .attr("text-anchor", "middle")
-            .style("font-size", "12px")
-            .text("Number of Preprints");
-        }
-
-        function updateMap(selectedYear) {
-          const filteredData = selectedYear === "all" 
-            ? countryData 
-            : countryData.filter(d => d.year === +selectedYear);
-
-          const countryTotals = new Map();
-          filteredData.forEach(d => {
-            const current = countryTotals.get(d.country) || 0;
-            countryTotals.set(d.country, current + d.count);
-          });
-
-          const maxCount = Math.max(...countryTotals.values(), 1);
-          color.domain([0, maxCount]);
-
-          addLegend(maxCount);
-
-          svg.selectAll(".country")
-            .data(countries.features)
-            .join("path")
-            .attr("class", "country")
-            .attr("fill", d => color(countryTotals.get(normalizeCountryName(d.properties.name)) || 0))
-            .attr("d", path)
-            .attr("stroke", "white")
-            .attr("stroke-width", 0.5)
-            .on("mouseover", function(event, d) {
-              const count = countryTotals.get(normalizeCountryName(d.properties.name)) || 0;
-              tooltip
-                .style("opacity", 1)
-                .html(`
-                  <strong>${d.properties.name}</strong><br>
-                  Preprints: ${count.toLocaleString()}
-                `)
-                .style("left", `${event.pageX + 10}px`)
-                .style("top", `${event.pageY + 10}px`);
-            })
-            .on("mousemove", function(event) {
-              tooltip
-                .style("left", `${event.pageX + 10}px`)
-                .style("top", `${event.pageY + 10}px`);
-            })
-            .on("mouseout", () => tooltip.style("opacity", 0));
-        }
-
-        yearFilter.addEventListener("change", (event) => {
-          updateMap(event.target.value);
-        });
-
-        updateMap("all");
-
-      } catch (error) {
-        console.error("Error creating map:", error);
-        document.getElementById("map-container").innerHTML = `
-          <div class="error">
-            <p>Error loading map data. Please try again later.</p>
-            <p>Details: ${error.message}</p>
-          </div>
-        `;
-      }
-    }
-
-    // Initialize the map
-    createChoropleth();
+    fetch('footer.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('footer-container').innerHTML = data;
+      });
   </script>
 </body>
-</html>          });
-        } else {
+</html>
