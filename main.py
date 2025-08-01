@@ -1,73 +1,53 @@
 from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
-import sqlite3
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+import pandas as pd
 
 app = FastAPI()
-
-
 
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:8000", "http://localhost:8000"],  # Allow frontend origins
+    allow_origins=["http://127.0.0.1:8000", "http://localhost:8000"],
     allow_credentials=True,
-    allow_methods=["*"],  # Allow all HTTP methods
-    allow_headers=["*"],  # Allow all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-
-
-# Database query function
-def get_country_counts():
-    conn = sqlite3.connect('Dummy_Medarxiv.db')
-    cursor = conn.cursor()
-
-    # Query to count the entries per country
-    cursor.execute("SELECT country, year, COUNT(*) FROM entries GROUP BY country, year")
-    rows = cursor.fetchall()
-
-    conn.close()
-    return rows
-
-# Database query function to fetch papers for a country and year
-def get_papers_by_country_and_year(country: str, year: int):
-    conn = sqlite3.connect('Dummy_Medarxiv.db')
-    cursor = conn.cursor()
-
-    # Query to fetch paper details
-    cursor.execute("""
-        SELECT title, doi, authors 
-        FROM entries 
-        WHERE country = ? AND year = ?
-    """, (country, year))
-    rows = cursor.fetchall()
-
-    conn.close()
-    return rows
-
-@app.get("/papers")
-def fetch_papers(country: str, year: int):
-    papers = get_papers_by_country_and_year(country, year)
-    return JSONResponse(content={
-        "papers": [
-            {"title": row[0], "doi": row[1], "authors": row[2].split(", ")} for row in papers
-        ]
-    })
-
+# Load the CSV data into a pandas DataFrame
+try:
+    df = pd.read_csv("combined_db_with_ppc_id.csv")
+    df["preprint_submission_date"] = pd.to_datetime(df["preprint_submission_date"])
+    df["year"] = df["preprint_submission_date"].dt.year
+except FileNotFoundError:
+    df = pd.DataFrame()  # Create an empty DataFrame if the file is not found
 
 @app.get("/country-data")
 def country_data():
-    data = get_country_counts()
-    # Convert the data into a dictionary format suitable for D3.js
-    return JSONResponse(content={
-        "data": [
-            {"country": row[0], "year": row[1], "count": row[2]} for row in data
-        ]
-    })
+    if df.empty:
+        return JSONResponse(content={"data": []})
+
+    # Group by country and year, then count the number of preprints
+    country_counts = df.groupby(["country_name", "year"]).size().reset_index(name="count")
+    
+    # Convert the DataFrame to a list of dictionaries
+    data = country_counts.to_dict("records")
+    
+    return JSONResponse(content={"data": data})
+
+@app.get("/papers")
+def fetch_papers(country: str, year: int):
+    if df.empty:
+        return JSONResponse(content={"papers": []})
+
+    # Filter papers by country and year
+    papers = df[(df["country_name"] == country) & (df["year"] == year)]
+    
+    # Convert the filtered DataFrame to a list of dictionaries
+    papers_data = papers.to_dict("records")
+    
+    return JSONResponse(content={"papers": papers_data})
 
 
 app.mount("/", StaticFiles(directory="static", html=True), name="static")

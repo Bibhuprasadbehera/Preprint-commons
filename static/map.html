@@ -136,7 +136,7 @@
 
         // Fetch map and data
         const [world, responseData] = await Promise.all([
-          d3.json("world-110m.json"),
+          d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"),
           d3.json("/country-data") // Your API endpoint
         ]);
 
@@ -147,8 +147,12 @@
         const countries = topojson.feature(world, world.objects.countries);
         const countryData = responseData.data.map(d => ({
           ...d,
-          country: normalizeCountryName(d.country)
+          country: normalizeCountryName(d.country_name)
         }));
+
+        // Console logs for debugging
+        console.log("Data from CSV:", countryData);
+        console.log("Map countries:", countries.features.map(d => d.properties.name));
 
         // Create SVG
         const svg = d3.select("#map-container")
