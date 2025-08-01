@@ -5,118 +5,84 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Preprint Counts by Country</title>
   <link rel="stylesheet" href="map.css">
-  
-  <!-- Load D3.js and TopoJSON -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://unpkg.com/topojson@3/dist/topojson.min.js"></script>
 </head>
 <body>
   <div class="container">
     <h1>Global Preprint Distribution Map</h1>
-    
     <div class="controls">
       <label for="year-filter">Select Year:</label>
       <select id="year-filter">
         <option value="all">All Years</option>
       </select>
     </div>
-
     <div id="map-container">
       <div class="loading">Loading map data...</div>
+      <div id="map-legend"></div>
     </div>
     <div id="tooltip"></div>
   </div>
-
   <script>
     async function createChoropleth() {
-      const width = 960;
-      const marginTop = 50;
-      const height = width / 2 + marginTop;
+      const width = 960, marginTop = 50, height = width / 2 + marginTop;
 
       // Country name mappings for data normalization
       const countryNameMapping = {
-        'United States of America': 'USA',
-        'United States': 'USA',
-        'US': 'USA',
-        'United Kingdom': 'UK',
-        'Great Britain': 'UK',
-        'Czech Republic': 'Czechia',
-        'Korea, Republic of': 'South Korea',
-        'Republic of Korea': 'South Korea',
-        'Democratic Republic of the Congo': 'Congo',
-        'Russian Federation': 'Russia',
-        'Taiwan, Province of China': 'Taiwan',
-        'Iran, Islamic Republic of': 'Iran',
-        'Syrian Arab Republic': 'Syria',
-        'Venezuela, Bolivarian Republic of': 'Venezuela',
-        'Vietnam': 'Viet Nam',
-        'Tanzania, United Republic of': 'Tanzania'
+        'United States of America': 'USA', 'United States': 'USA', 'US': 'USA',
+        'United Kingdom': 'UK', 'Great Britain': 'UK', 'Czech Republic': 'Czechia',
+        'Korea, Republic of': 'South Korea', 'Republic of Korea': 'South Korea',
+        'Democratic Republic of the Congo': 'Congo', 'Russian Federation': 'Russia',
+        'Taiwan, Province of China': 'Taiwan', 'Iran, Islamic Republic of': 'Iran',
+        'Syrian Arab Republic': 'Syria', 'Venezuela, Bolivarian Republic of': 'Venezuela',
+        'Vietnam': 'Viet Nam', 'Tanzania, United Republic of': 'Tanzania'
       };
 
       function normalizeCountryName(name) {
-        if (!name) return '';
         return countryNameMapping[name] || name;
       }
 
-      try {
-        // Clear loading message
-        document.querySelector('.loading').remove();
+      function processData(rawData) {
+        return rawData.map(d => ({
+          ...d, count: Math.max(0, parseInt(d.count) || 0),
+          year: parseInt(d.year) || null,
+          country: normalizeCountryName(d.country_name.trim())
+        })).filter(d => d.count > 0);
+      }
 
-        // Fetch map and data
+      function updateTitle(year) {
+        d3.select("h1").text(year === "all" ? "Global Preprint Distribution (All Years)" : `Global Preprint Distribution (${year})`);
+      }
+
+      try {
+        document.querySelector('.loading').remove();
         const [world, responseData] = await Promise.all([
           d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"),
-          d3.json("/country-data") // Your API endpoint
+          d3.json("/country-data")
         ]);
 
-        if (!world || !responseData?.data) {
-          throw new Error("Failed to load required data");
-        }
+        if (!world || !responseData?.data) throw new Error("Failed to load required data");
 
         const countries = topojson.feature(world, world.objects.countries);
-        const countryData = responseData.data.map(d => ({
-          ...d,
-          country: normalizeCountryName(d.country_name)
-        }));
+        const countryData = processData(responseData.data);
 
-        // Console logs for debugging
-        console.log("Data from CSV:", countryData);
-        console.log("Map countries:", countries.features.map(d => d.properties.name));
-
-        // Create SVG
-        const svg = d3.select("#map-container")
-          .append("svg")
+        const svg = d3.select("#map-container").append("svg")
           .attr("viewBox", [0, 0, width, height])
           .attr("style", "max-width: 100%; height: auto;");
 
-        // Set up projection
-        const projection = d3.geoEqualEarth()
-          .fitExtent([[2, marginTop + 2], [width - 2, height - 2]], { type: "Sphere" });
+        const projection = d3.geoEqualEarth().fitExtent([[2, marginTop + 2], [width - 2, height - 2]], { type: "Sphere" });
         const path = d3.geoPath(projection);
 
-        // Create base map elements
-        svg.append("defs").append("path")
-          .attr("id", "outline")
-          .attr("d", path({ type: "Sphere" }));
+        svg.append("defs").append("path").attr("id", "outline").attr("d", path({ type: "Sphere" }));
+        svg.append("use").attr("href", "#outline").attr("fill", "#f8f9fa");
+        svg.append("use").attr("href", "#outline").attr("fill", "none").attr("stroke", "#dee2e6");
 
-        svg.append("use")
-          .attr("href", "#outline")
-          .attr("fill", "#f8f9fa");
-
-        svg.append("use")
-          .attr("href", "#outline")
-          .attr("fill", "none")
-          .attr("stroke", "#dee2e6");
-
-        // Set up tooltip
         const tooltip = d3.select("#tooltip");
+        const color = d3.scaleSequential().interpolator(d3.interpolatePlasma);
 
-        // Create color scale
-        const color = d3.scaleSequential()
-          .interpolator(d3.interpolateYlGnBu);
-
-        // Set up years filter
         const years = Array.from(new Set(countryData.map(d => d.year))).filter(Boolean);
         const yearFilter = document.getElementById("year-filter");
+
         years.sort((a, b) => a - b).forEach(year => {
           const option = document.createElement("option");
           option.value = year;
@@ -125,115 +91,111 @@
         });
 
         function addLegend(maxValue) {
-          svg.selectAll(".legend-group").remove();
+          const legendWidth = 260, legendHeight = 12, legendMargin = 20;
+          svg.selectAll(".legend-container").remove();
 
-          const legendWidth = 260;
-          const legendHeight = 12;
-          const legendGroup = svg.append("g")
-            .attr("class", "legend-group")
-            .attr("transform", `translate(${width - legendWidth - 20}, 20)`);
+          const legendContainer = svg.append("g")
+            .attr("class", "legend-container")
+            .attr("transform", `translate(${width - legendWidth - legendMargin - 10}, ${legendMargin - 5})`);
 
-          const legendScale = d3.scaleLinear()
-            .domain([0, maxValue])
-            .range([0, legendWidth]);
+          legendContainer.append("rect")
+            .attr("width", legendWidth + 20).attr("height", legendHeight + 40)
+            .attr("rx", 6).attr("fill", "white").attr("stroke", "#ddd");
 
-          const legendAxis = d3.axisBottom(legendScale)
-            .ticks(5)
-            .tickFormat(d3.format(",.0f"));
+          const legendGroup = legendContainer.append("g")
+            .attr("class", "legend-group").attr("transform", `translate(10, 20)`);
 
-          const gradient = legendGroup.append("defs")
-            .append("linearGradient")
-            .attr("id", "legend-gradient")
-            .attr("x1", "0%")
-            .attr("x2", "100%")
-            .attr("y1", "0%")
-            .attr("y2", "0%");
+          const legendScale = d3.scaleLinear().domain([0, maxValue]).range([0, legendWidth]);
+          const legendAxis = d3.axisBottom(legendScale).ticks(5).tickFormat(d3.format(",.0f"));
 
-          const colors = d3.quantize(d3.interpolateYlGnBu, 10);
-          colors.forEach((color, i) => {
-            gradient.append("stop")
-              .attr("offset", `${(i / (colors.length - 1)) * 100}%`)
-              .attr("stop-color", color);
+          const gradient = legendGroup.append("defs").append("linearGradient")
+            .attr("id", "legend-gradient").attr("x1", "0%").attr("x2", "100%");
+
+          d3.quantize(d3.interpolatePlasma, 10).forEach((color, i) => {
+            gradient.append("stop").attr("offset", `${i * 100 / 9}%`).attr("stop-color", color);
           });
 
-          legendGroup.append("rect")
-            .attr("width", legendWidth)
-            .attr("height", legendHeight)
+          legendGroup.append("rect").attr("width", legendWidth).attr("height", legendHeight)
             .style("fill", "url(#legend-gradient)");
 
-          legendGroup.append("g")
-            .attr("transform", `translate(0, ${legendHeight})`)
-            .call(legendAxis);
+          legendGroup.append("g").attr("transform", `translate(0, ${legendHeight})`).call(legendAxis);
 
-          legendGroup.append("text")
-            .attr("x", legendWidth / 2)
-            .attr("y", -6)
-            .attr("text-anchor", "middle")
-            .style("font-size", "12px")
-            .text("Number of Preprints");
+          legendGroup.append("text").attr("x", legendWidth / 2).attr("y", -6)
+            .attr("text-anchor", "middle").style("font-size", "12px").text("Number of Preprints");
         }
+
+        const zoom = d3.zoom().scaleExtent([1, 8]).on('zoom', (event) => {
+          svg.selectAll('path').attr('transform', event.transform);
+        });
+        svg.call(zoom);
 
         function updateMap(selectedYear) {
-          const filteredData = selectedYear === "all" 
-            ? countryData 
-            : countryData.filter(d => d.year === +selectedYear);
-
+          updateTitle(selectedYear);
+          const filteredData = selectedYear === "all" ? countryData : countryData.filter(d => d.year === +selectedYear);
           const countryTotals = new Map();
-          filteredData.forEach(d => {
-            const current = countryTotals.get(d.country) || 0;
-            countryTotals.set(d.country, current + d.count);
-          });
-
+          filteredData.forEach(d => countryTotals.set(d.country, (countryTotals.get(d.country) || 0) + d.count));
           const maxCount = Math.max(...countryTotals.values(), 1);
           color.domain([0, maxCount]);
-
           addLegend(maxCount);
 
-          svg.selectAll(".country")
-            .data(countries.features)
-            .join("path")
+          svg.selectAll(".country").data(countries.features).join("path")
             .attr("class", "country")
-            .attr("fill", d => color(countryTotals.get(normalizeCountryName(d.properties.name)) || 0))
+            .attr("fill", d => {
+              const count = countryTotals.get(normalizeCountryName(d.properties.name)) || 0;
+              return count > 0 ? color(count) : "#f0f0f0";
+            })
             .attr("d", path)
             .attr("stroke", "white")
-            .attr("stroke-width", 0.5)
             .on("mouseover", function(event, d) {
               const count = countryTotals.get(normalizeCountryName(d.properties.name)) || 0;
-              tooltip
-                .style("opacity", 1)
-                .html(`
-                  <strong>${d.properties.name}</strong><br>
-                  Preprints: ${count.toLocaleString()}
-                `)
-                .style("left", `${event.pageX + 10}px`)
-                .style("top", `${event.pageY + 10}px`);
+              tooltip.style("opacity", 1).html(`
+                <div class="tooltip-header">${d.properties.name}</div>
+                <div class="tooltip-value">${count.toLocaleString()} preprints</div>
+                ${selectedYear !== "all" ? `<div class="tooltip-year">Year: ${selectedYear}</div>` : ''}
+              `).style("left", `${event.pageX + 10}px`).style("top", `${event.pageY + 10}px`);
             })
             .on("mousemove", function(event) {
-              tooltip
-                .style("left", `${event.pageX + 10}px`)
-                .style("top", `${event.pageY + 10}px`);
+              tooltip.style("left", `${event.pageX + 10}px`).style("top", `${event.pageY + 10}px`);
             })
             .on("mouseout", () => tooltip.style("opacity", 0));
+
+          svg.selectAll(".country-label").remove();
+          if (selectedYear !== "all") {
+            svg.selectAll(".country-label").data(countries.features.filter(d =>
+              countryTotals.get(normalizeCountryName(d.properties.name)) > maxCount * 0.1
+            )).enter().append("text")
+              .attr("class", "country-label")
+              .attr("transform", d => `translate(${path.centroid(d)})`)
+              .attr("text-anchor", "middle")
+              .text(d => d.properties.name)
+              .style("font-size", "8px")
+              .style("fill", "#333")
+              .style("pointer-events", "none");
+          }
         }
 
-        yearFilter.addEventListener("change", (event) => {
-          updateMap(event.target.value);
-        });
+        yearFilter.addEventListener("change", (event) => updateMap(event.target.value));
 
+        function handleResize() {
+          const containerWidth = document.getElementById('map-container').clientWidth;
+          const newWidth = Math.min(960, containerWidth);
+          const newHeight = newWidth / 2 + marginTop;
+          svg.attr('viewBox', `0 0 ${newWidth} ${newHeight}`);
+          updateMap(document.getElementById('year-filter').value);
+        }
+
+        window.addEventListener('resize', handleResize);
         updateMap("all");
-
       } catch (error) {
         console.error("Error creating map:", error);
         document.getElementById("map-container").innerHTML = `
           <div class="error">
             <p>Error loading map data. Please try again later.</p>
             <p>Details: ${error.message}</p>
-          </div>
-        `;
+          </div>`;
       }
     }
 
-    // Initialize the map
     createChoropleth();
   </script>
 </body>
