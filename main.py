@@ -68,6 +68,24 @@ def search_papers(query: str):
     
     return JSONResponse(content=search_results)
 
+@app.get("/paper/{ppc_id}")
+def get_paper(ppc_id: str):
+    if df.empty:
+        return JSONResponse(content={})
+
+    paper = df[df["PPC_Id"] == ppc_id].iloc[0]
+    paper_data = paper.to_dict()
+    
+    # Convert timestamp to string
+    paper_data['preprint_submission_date'] = paper_data['preprint_submission_date'].strftime('%Y-%m-%d')
+    
+    # Replace NaN values with None
+    for key, value in paper_data.items():
+        if pd.isnull(value):
+            paper_data[key] = None
+
+    return JSONResponse(content=paper_data)
+
 
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
 

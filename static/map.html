@@ -13,9 +13,8 @@
     <h1>Global Preprint Distribution Map</h1>
     <div class="controls">
       <label for="year-filter">Select Year:</label>
-      <select id="year-filter">
-        <option value="all">All Years</option>
-      </select>
+      <input type="range" id="year-filter" min="2000" max="2023" value="2000" step="1">
+      <span id="year-value">2000</span>
     </div>
     <div id="map-container">
       <div class="loading">Loading map data...</div>
@@ -44,7 +43,8 @@
 
       function processData(rawData) {
         return rawData.map(d => ({
-          ...d, count: Math.max(0, parseInt(d.count) || 0),
+          ...d,
+          count: Math.max(0, parseInt(d.count) || 0),
           year: parseInt(d.year) || null,
           country: normalizeCountryName(d.country_name.trim())
         })).filter(d => d.count > 0);
@@ -80,15 +80,14 @@
         const tooltip = d3.select("#tooltip");
         const color = d3.scaleSequential().interpolator(d3.interpolatePlasma);
 
-        const years = Array.from(new Set(countryData.map(d => d.year))).filter(Boolean);
+        const years = Array.from(new Set(countryData.map(d => d.year))).filter(Boolean).sort((a, b) => a - b);
         const yearFilter = document.getElementById("year-filter");
+        const yearValue = document.getElementById("year-value");
 
-        years.sort((a, b) => a - b).forEach(year => {
-          const option = document.createElement("option");
-          option.value = year;
-          option.textContent = year;
-          yearFilter.appendChild(option);
-        });
+        yearFilter.min = Math.min(...years);
+        yearFilter.max = Math.max(...years);
+        yearFilter.value = yearFilter.min;
+        yearValue.textContent = yearFilter.min;
 
         function addLegend(maxValue) {
           const legendWidth = 260, legendHeight = 12, legendMargin = 20;
@@ -99,34 +98,49 @@
             .attr("transform", `translate(${width - legendWidth - legendMargin - 10}, ${legendMargin - 5})`);
 
           legendContainer.append("rect")
-            .attr("width", legendWidth + 20).attr("height", legendHeight + 40)
-            .attr("rx", 6).attr("fill", "white").attr("stroke", "#ddd");
+            .attr("width", legendWidth + 20)
+            .attr("height", legendHeight + 40)
+            .attr("rx", 6)
+            .attr("fill", "white")
+            .attr("stroke", "#ddd");
 
           const legendGroup = legendContainer.append("g")
-            .attr("class", "legend-group").attr("transform", `translate(10, 20)`);
+            .attr("class", "legend-group")
+            .attr("transform", `translate(10, 20)`);
 
           const legendScale = d3.scaleLinear().domain([0, maxValue]).range([0, legendWidth]);
           const legendAxis = d3.axisBottom(legendScale).ticks(5).tickFormat(d3.format(",.0f"));
 
           const gradient = legendGroup.append("defs").append("linearGradient")
-            .attr("id", "legend-gradient").attr("x1", "0%").attr("x2", "100%");
+            .attr("id", "legend-gradient")
+            .attr("x1", "0%")
+            .attr("x2", "100%");
 
           d3.quantize(d3.interpolatePlasma, 10).forEach((color, i) => {
             gradient.append("stop").attr("offset", `${i * 100 / 9}%`).attr("stop-color", color);
           });
 
-          legendGroup.append("rect").attr("width", legendWidth).attr("height", legendHeight)
+          legendGroup.append("rect")
+            .attr("width", legendWidth)
+            .attr("height", legendHeight)
             .style("fill", "url(#legend-gradient)");
 
-          legendGroup.append("g").attr("transform", `translate(0, ${legendHeight})`).call(legendAxis);
+          legendGroup.append("g")
+            .attr("transform", `translate(0, ${legendHeight})`)
+            .call(legendAxis);
 
-          legendGroup.append("text").attr("x", legendWidth / 2).attr("y", -6)
-            .attr("text-anchor", "middle").style("font-size", "12px").text("Number of Preprints");
+          legendGroup.append("text")
+            .attr("x", legendWidth / 2)
+            .attr("y", -6)
+            .attr("text-anchor", "middle")
+            .style("font-size", "12px")
+            .text("Number of Preprints");
         }
 
         const zoom = d3.zoom().scaleExtent([1, 8]).on('zoom', (event) => {
           svg.selectAll('path').attr('transform', event.transform);
         });
+
         svg.call(zoom);
 
         function updateMap(selectedYear) {
@@ -174,18 +188,21 @@
           }
         }
 
-        yearFilter.addEventListener("change", (event) => updateMap(event.target.value));
+        yearFilter.addEventListener("input", (event) => {
+          yearValue.textContent = event.target.value;
+          updateMap(+event.target.value);
+        });
 
         function handleResize() {
           const containerWidth = document.getElementById('map-container').clientWidth;
           const newWidth = Math.min(960, containerWidth);
           const newHeight = newWidth / 2 + marginTop;
           svg.attr('viewBox', `0 0 ${newWidth} ${newHeight}`);
-          updateMap(document.getElementById('year-filter').value);
+          updateMap(+document.getElementById('year-filter').value);
         }
 
         window.addEventListener('resize', handleResize);
-        updateMap("all");
+        updateMap(yearFilter.min);
       } catch (error) {
         console.error("Error creating map:", error);
         document.getElementById("map-container").innerHTML = `

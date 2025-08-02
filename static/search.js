@@ -13,19 +13,17 @@ document.addEventListener('DOMContentLoaded', () => {
           searchResults.innerHTML = '<p>No results found.</p>';
         } else {
           data.forEach(item => {
-            const resultItem = document.createElement('div');
+            const resultItem = document.createElement('a');
             resultItem.className = 'search-result-item';
+            resultItem.href = `paper.html?id=${item.PPC_Id}`;
+            resultItem.target = '_blank';
 
             const title = document.createElement('h3');
             title.textContent = item.preprint_title;
             resultItem.appendChild(title);
 
             const doi = document.createElement('p');
-            const doiLink = document.createElement('a');
-            doiLink.href = `https://doi.org/${item.preprint_doi}`;
-            doiLink.textContent = item.preprint_doi;
-            doiLink.target = '_blank';
-            doi.appendChild(doiLink);
+            doi.textContent = item.preprint_doi;
             resultItem.appendChild(doi);
 
             const authors = document.createElement('p');
