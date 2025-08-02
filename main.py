@@ -49,6 +49,25 @@ def fetch_papers(country: str, year: int):
     
     return JSONResponse(content={"papers": papers_data})
 
+@app.get("/search")
+def search_papers(query: str):
+    if df.empty:
+        return JSONResponse(content=[])
+
+    # Filter papers by title or DOI
+    results = df[df["preprint_title"].str.contains(query, case=False, na=False) | df["preprint_doi"].str.contains(query, case=False, na=False)].head(10).copy()
+    
+    # Convert the 'preprint_submission_date' column to strings
+    results['preprint_submission_date'] = results['preprint_submission_date'].dt.strftime('%Y-%m-%d')
+    
+    # Replace NaN values with None
+    results = results.where(pd.notnull(results), None)
+
+    # Convert the filtered DataFrame to a list of dictionaries
+    search_results = results.to_dict("records")
+    
+    return JSONResponse(content=search_results)
+
 
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
