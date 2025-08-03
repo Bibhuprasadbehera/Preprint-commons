@@ -12,9 +12,11 @@
   <div class="container">
     <h1>Global Preprint Distribution Map</h1>
     <div class="controls">
-      <label for="year-filter">Select Year:</label>
-      <input type="range" id="year-filter" min="2000" max="2023" value="2000" step="1">
-      <span id="year-value">2000</span>
+      <button id="toggle-mode" class="button">Year-wise</button>
+      <div class="slider-container">
+        <input type="range" id="year-filter" min="0" max="30" value="0" step="1">
+        <span id="year-value">All Year Cumulative</span>
+      </div>
     </div>
     <div id="map-container">
       <div class="loading">Loading map data...</div>
@@ -50,8 +52,16 @@
         })).filter(d => d.count > 0);
       }
 
-      function updateTitle(year) {
-        d3.select("h1").text(year === "all" ? "Global Preprint Distribution (All Years)" : `Global Preprint Distribution (${year})`);
+      function updateTitle(mode, year) {
+        if (mode === "cumulative" && year === "all") {
+          d3.select("h1").text("Global Preprint Distribution (All Year Cumulative)");
+        } else if (mode === "cumulative") {
+          d3.select("h1").text(`Global Preprint Distribution (Cumulative up to ${year})`);
+        } else if (year === "all") {
+          d3.select("h1").text("Global Preprint Distribution (All Years)");
+        } else {
+          d3.select("h1").text(`Global Preprint Distribution (${year})`);
+        }
       }
 
       try {
@@ -83,11 +93,11 @@
         const years = Array.from(new Set(countryData.map(d => d.year))).filter(Boolean).sort((a, b) => a - b);
         const yearFilter = document.getElementById("year-filter");
         const yearValue = document.getElementById("year-value");
+        const toggleMode = document.getElementById("toggle-mode");
 
-        yearFilter.min = Math.min(...years);
-        yearFilter.max = Math.max(...years);
-        yearFilter.value = yearFilter.min;
-        yearValue.textContent = yearFilter.min;
+        yearFilter.min = 0;
+        yearFilter.max = years.length;
+        yearFilter.value = 0;
 
         function addLegend(maxValue) {
           const legendWidth = 260, legendHeight = 12, legendMargin = 20;
@@ -143,9 +153,27 @@
 
         svg.call(zoom);
 
-        function updateMap(selectedYear) {
-          updateTitle(selectedYear);
-          const filteredData = selectedYear === "all" ? countryData : countryData.filter(d => d.year === +selectedYear);
+        function updateMap(isCumulative, selectedYearIndex) {
+          let selectedYear = "all";
+          if (selectedYearIndex > 0) {
+            selectedYear = years[selectedYearIndex - 1];
+          }
+
+          let filteredData;
+          if (isCumulative) {
+            if (selectedYearIndex === 0) {
+              filteredData = countryData;
+            } else {
+              filteredData = countryData.filter(d => d.year <= selectedYear);
+            }
+          } else {
+            if (selectedYearIndex === 0) {
+              filteredData = countryData;
+            } else {
+              filteredData = countryData.filter(d => d.year === +selectedYear);
+            }
+          }
+
           const countryTotals = new Map();
           filteredData.forEach(d => countryTotals.set(d.country, (countryTotals.get(d.country) || 0) + d.count));
           const maxCount = Math.max(...countryTotals.values(), 1);
@@ -165,7 +193,7 @@
               tooltip.style("opacity", 1).html(`
                 <div class="tooltip-header">${d.properties.name}</div>
                 <div class="tooltip-value">${count.toLocaleString()} preprints</div>
-                ${selectedYear !== "all" ? `<div class="tooltip-year">Year: ${selectedYear}</div>` : ''}
+                ${selectedYear !== "all" ? `<div class="tooltip-year">${isCumulative ? 'Cumulative up to' : 'Year'}: ${selectedYear}</div>` : ''}
               `).style("left", `${event.pageX + 10}px`).style("top", `${event.pageY + 10}px`);
             })
             .on("mousemove", function(event) {
@@ -186,11 +214,20 @@
               .style("fill", "#333")
               .style("pointer-events", "none");
           }
+          updateTitle(isCumulative ? "cumulative" : "year-wise", selectedYear);
         }
 
         yearFilter.addEventListener("input", (event) => {
-          yearValue.textContent = event.target.value;
-          updateMap(+event.target.value);
+          const selectedYearIndex = parseInt(event.target.value);
+          yearValue.textContent = selectedYearIndex === 0 ? "All Year Cumulative" : years[selectedYearIndex - 1];
+          updateMap(toggleMode.textContent === "Cumulative", selectedYearIndex);
+        });
+
+        toggleMode.addEventListener("click", () => {
+          const isCumulative = toggleMode.textContent === "Year-wise";
+          toggleMode.textContent = isCumulative ? "Cumulative" : "Year-wise";
+          yearFilter.style.setProperty("--thumb-color", isCumulative ? "red" : "#3498db");
+          updateMap(isCumulative, yearFilter.value);
         });
 
         function handleResize() {
@@ -198,11 +235,11 @@
           const newWidth = Math.min(960, containerWidth);
           const newHeight = newWidth / 2 + marginTop;
           svg.attr('viewBox', `0 0 ${newWidth} ${newHeight}`);
-          updateMap(+document.getElementById('year-filter').value);
+          updateMap(toggleMode.textContent === "Cumulative", yearFilter.value);
         }
 
         window.addEventListener('resize', handleResize);
-        updateMap(yearFilter.min);
+        updateMap(false, 0);
       } catch (error) {
         console.error("Error creating map:", error);
         document.getElementById("map-container").innerHTML = `

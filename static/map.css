@@ -32,19 +32,54 @@ h1 {
     gap: 1rem;
 }
 
-label {
-    font-weight: 500;
-    color: #555;
+.button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.button:hover {
+    background-color: #f0f0f0;
+    border-color: #aaa;
+}
+
+.slider-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 input[type="range"] {
-    width: 400px;
+    width: 300px;
+    --thumb-color: #3498db;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: var(--thumb-color);
+    cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: var(--thumb-color);
+    cursor: pointer;
 }
 
 #year-value {
     font-weight: 500;
     color: #555;
-    min-width: 50px;
+    min-width: 150px;
     text-align: center;
 }
 
