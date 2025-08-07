@@ -29,7 +29,7 @@ const Footer = () => {
                 </svg>
               </a>
               <a 
-                href="https://github.com" 
+                href="https://github.com/Bibhuprasadbehera/Preprint-commons" 
                 className={styles.socialLink}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -69,10 +69,11 @@ const Footer = () => {
           <div className={styles.section}>
             <h3>Resources</h3>
             <div className={styles.links}>
-              <a href="#" className={styles.link}>API Documentation</a>
-              <a href="#" className={styles.link}>Data Sources</a>
-              <a href="#" className={styles.link}>Research Papers</a>
-              <a href="#" className={styles.link}>Methodology</a>
+              <Link to="/documentation" className={styles.link}>Documentation</Link>
+              <Link to="/documentation#api" className={styles.link}>API Reference</Link>
+              <Link to="/documentation#sources" className={styles.link}>Data Sources</Link>
+              <Link to="/documentation#paper" className={styles.link}>Research Paper</Link>
+              <Link to="/documentation#methodology" className={styles.link}>Methodology</Link>
             </div>
           </div>
 
@@ -80,9 +81,6 @@ const Footer = () => {
           <div className={styles.section}>
             <h3>Legal</h3>
             <div className={styles.links}>
-              <a href="#" className={styles.link}>Privacy Policy</a>
-              <a href="#" className={styles.link}>Terms of Service</a>
-              <a href="#" className={styles.link}>Cookie Policy</a>
               <a href="#" className={styles.link}>CC-BY License</a>
             </div>
           </div>

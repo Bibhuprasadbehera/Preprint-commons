@@ -116,26 +116,7 @@ const Index = () => {
                 author="Dr. Emma Thompson, Science Policy Analyst"
               />
             </div>
-            
-            <div className={styles.ctaSection}>
-              <h3 className={styles.ctaTitle}>Ready to Explore?</h3>
-              <p className={styles.ctaDescription}>
-                Join thousands of researchers already using Preprint Commons to advance their work
-              </p>
-              <div className={styles.ctaButtons}>
-                <Link to="/explore">
-                  <Button variant="primary" size="large">
-                    Start Exploring
-                  </Button>
-                </Link>
-                <Link to="/about">
-                  <Button variant="outline" size="large">
-                    Learn More
-                  </Button>
-                </Link>
-              </div>
             </div>
-          </div>
         </section>
     </Layout>
   );

@@ -1,0 +1,138 @@
+.codeBlock {
+  background: var(--color-neutral-900);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  margin: var(--spacing-lg) 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--color-neutral-800);
+  border-bottom: 1px solid var(--color-neutral-700);
+}
+
+.title {
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+}
+
+.language {
+  color: var(--color-neutral-400);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.05em;
+}
+
+.codeContainer {
+  position: relative;
+}
+
+.code {
+  padding: var(--spacing-lg);
+  margin: 0;
+  overflow-x: auto;
+  font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+  color: var(--color-neutral-100);
+  background: transparent;
+}
+
+.code code {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+  color: inherit;
+}
+
+.copyButton {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-neutral-800);
+  border: 1px solid var(--color-neutral-600);
+  border-radius: var(--radius-md);
+  color: var(--color-neutral-300);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  opacity: 0.8;
+}
+
+.copyButton:hover {
+  background: var(--color-neutral-700);
+  color: var(--color-text-inverse);
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.copyIcon {
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.copyIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Syntax highlighting for JSON */
+.code .token.property {
+  color: #79c0ff;
+}
+
+.code .token.string {
+  color: #a5d6ff;
+}
+
+.code .token.number {
+  color: #79c0ff;
+}
+
+.code .token.boolean {
+  color: #ff7b72;
+}
+
+.code .token.null {
+  color: #ff7b72;
+}
+
+.code .token.punctuation {
+  color: #c9d1d9;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .code {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-md);
+  }
+  
+  .copyButton {
+    position: static;
+    margin: var(--spacing-md);
+    margin-top: 0;
+    width: fit-content;
+    align-self: flex-end;
+  }
+  
+  .codeContainer {
+    display: flex;
+    flex-direction: column;
+  }
+}

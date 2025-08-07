@@ -28,6 +28,7 @@ const Navbar = () => {
     { path: '/', label: 'Home' },
     { path: '/explore', label: 'Explore Data' },
     { path: '/about', label: 'About' },
+    { path: '/documentation', label: 'Documentation' },
     { path: '/faq', label: 'FAQ' },
     { path: '/contact', label: 'Contact' }
   ];

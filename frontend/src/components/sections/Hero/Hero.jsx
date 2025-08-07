@@ -42,16 +42,16 @@ const Hero = () => {
               <span className={styles.statLabel}>Preprints Indexed</span>
             </div>
             <div className={styles.stat}>
-              <span className={styles.statNumber}>50+</span>
+              <span className={styles.statNumber}>150+</span>
               <span className={styles.statLabel}>Countries Contributing</span>
             </div>
             <div className={styles.stat}>
-              <span className={styles.statNumber}>1,000+</span>
+              <span className={styles.statNumber}>10,000+</span>
               <span className={styles.statLabel}>Institutions Tracked</span>
             </div>
             <div className={styles.stat}>
-              <span className={styles.statNumber}>24/7</span>
-              <span className={styles.statLabel}>Real-time Updates</span>
+              <span className={styles.statNumber}>Frequent</span>
+              <span className={styles.statLabel}>Data Updates</span>
             </div>
           </div>
         </div>

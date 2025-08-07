@@ -180,7 +180,7 @@ The backend is configured to accept requests from:
 Preprint Commons aggregates data from:
 - **medRxiv** - Medical preprints
 - **bioRxiv** - Biological sciences preprints
-- **arXiv** - Physics, mathematics, and other sciences
+- **arXiv(Q-bio)** - Physics, mathematics, and other sciences
 
 ## 🤝 Contributing
 
@@ -204,13 +204,9 @@ If you encounter any issues or have questions:
 
 ## 🔮 Future Roadmap
 
-- [ ] Advanced analytics dashboard
+- [ ] Advanced search page
 - [ ] Export functionality for research data
-- [ ] Integration with more preprint repositories
-- [ ] Enhanced search and filtering capabilities
-- [ ] User authentication and personalized dashboards
-- [ ] API rate limiting and authentication
-- [ ] Docker containerization
+- [ ] Integration with more preprint repositories (qbio)
 
 ---
 
