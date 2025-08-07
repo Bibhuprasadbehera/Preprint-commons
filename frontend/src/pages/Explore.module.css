@@ -1,0 +1,220 @@
+/* Explore Page Styles */
+
+/* Tab Navigation */
+.tabNavigation {
+  display: flex;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-4xl);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.tabButton {
+  min-width: 160px;
+  transition: all var(--transition-normal);
+}
+
+.tabButton:hover {
+  transform: translateY(-2px);
+}
+
+/* Map Section */
+.mapSection {
+  width: 100%;
+  margin-bottom: var(--spacing-4xl);
+}
+
+.mapHeader {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mapHeader h2 {
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text-primary);
+}
+
+.mapHeader p {
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+.mapContainer {
+  position: relative;
+  margin: 0 auto var(--spacing-4xl) auto; /* Center the container */
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+  background: var(--color-neutral-100);
+  height: 80vh; /* Large height to show full map without internal scrolling */
+  min-height: 800px; /* Ensure minimum height for proper map display */
+  max-width: 1200px; /* Consistent max-width with homepage */
+  width: 100%; /* Ensure full width up to max-width */
+}
+
+.mapIframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  pointer-events: auto; /* Ensure iframe can receive events */
+}
+
+/* Add a subtle border to better define the map area */
+.mapContainer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 2px solid rgba(52, 152, 219, 0.1);
+  border-radius: var(--radius-2xl);
+  pointer-events: none;
+  transition: border-color var(--transition-fast);
+}
+
+.mapContainer:hover::after {
+  border-color: rgba(52, 152, 219, 0.3);
+}
+
+/* Enhanced visual feedback for zoom interaction */
+.mapContainer:hover {
+  box-shadow: var(--shadow-2xl);
+  transform: translateY(-2px);
+  transition: all var(--transition-normal);
+}
+
+/* Map Statistics */
+.mapStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-xl);
+  margin-top: var(--spacing-2xl);
+}
+
+.statCard {
+  text-align: center;
+  padding: var(--spacing-2xl);
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+  border: 1px solid var(--color-neutral-200);
+}
+
+.statCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary);
+}
+
+.statNumber {
+  display: block;
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-sm);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.statLabel {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Search Section Enhancements */
+.searchSection {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .mapContainer {
+    height: 70vh;
+    min-height: 600px;
+  }
+  
+  .tabNavigation {
+    gap: var(--spacing-md);
+  }
+  
+  .tabButton {
+    min-width: 140px;
+  }
+}
+
+@media (max-width: 768px) {
+  .mapContainer {
+    height: 60vh;
+    min-height: 500px;
+    margin-left: var(--spacing-lg); /* Maintain side margins on tablets */
+    margin-right: var(--spacing-lg);
+  }
+  
+  .tabNavigation {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+  
+  .tabButton {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .mapStats {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+  
+  .statNumber {
+    font-size: var(--font-size-3xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .mapContainer {
+    height: 50vh;
+    min-height: 400px;
+    margin-left: var(--spacing-md); /* Smaller margins on mobile */
+    margin-right: var(--spacing-md);
+  }
+  
+  .mapHeader {
+    padding: 0 var(--spacing-md);
+  }
+  
+  .mapHeader h2 {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .statCard {
+    padding: var(--spacing-lg);
+  }
+  
+  .statNumber {
+    font-size: var(--font-size-2xl);
+  }
+}

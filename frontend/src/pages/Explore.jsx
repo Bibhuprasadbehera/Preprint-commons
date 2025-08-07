@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/layout/Layout/Layout';
 import Button from '../components/ui/Button/Button';
-import styles from '../components/layout/Layout/Layout.module.css';
+import layoutStyles from '../components/layout/Layout/Layout.module.css';
+import styles from './Explore.module.css';
 
 const Explore = () => {
   const [activeTab, setActiveTab] = useState('map');
@@ -31,9 +32,9 @@ const Explore = () => {
 
   return (
     <Layout>
-      <div className={styles.pageContainerFullWidth}>
+      <div className={layoutStyles.pageContainerFullWidth}>
         <div className="container">
-          <div className={styles.contentSection}>
+          <div className={layoutStyles.contentSection}>
             <h1 className="text-heading-1">Explore Preprint Data</h1>
             <p className="text-body-large mt-4 mb-6">
               Discover insights through interactive visualizations and comprehensive search capabilities.
@@ -43,16 +44,18 @@ const Explore = () => {
         
         {/* Tab Navigation */}
         <div className="container">
-          <div className="flex gap-4 mb-6">
+          <div className={styles.tabNavigation}>
             <Button
               variant={activeTab === 'map' ? 'primary' : 'outline'}
               onClick={() => openTab('map')}
+              className={styles.tabButton}
             >
               Interactive Map
             </Button>
             <Button
               variant={activeTab === 'search' ? 'primary' : 'outline'}
               onClick={() => openTab('search')}
+              className={styles.tabButton}
             >
               Search Papers
             </Button>
@@ -61,39 +64,38 @@ const Explore = () => {
         
         {/* Map Tab */}
         {activeTab === 'map' && (
-          <div className="w-full">
-            <div className="container mb-6">
-              <h2 className="text-heading-3 mb-4">Global Preprint Distribution</h2>
-              <p className="text-body mb-4">
-                Explore the geographic distribution of preprints worldwide. Click on regions to see detailed statistics.
-              </p>
+          <div className={styles.mapSection}>
+            <div className="container">
+              <div className={styles.mapHeader}>
+                <h2 className="text-heading-3">Global Preprint Distribution</h2>
+                <p className="text-body">
+                  Explore the geographic distribution of preprints worldwide. Use zoom and pan to see detailed statistics.
+                </p>
+              </div>
             </div>
-            <div className="w-full" style={{ height: '600px' }}>
+            
+            <div className={styles.mapContainer}>
               <iframe 
-                id="map-iframe" 
+                id="explore-map-iframe" 
                 src="/map.html" 
-                style={{ 
-                  width: '100%', 
-                  height: '100%', 
-                  border: 'none',
-                  display: 'block'
-                }}
+                className={styles.mapIframe}
                 title="Global Preprint Distribution Map"
               />
             </div>
-            <div className="container mt-6">
-              <div className="grid md:grid-cols-3 gap-4">
-                <div className="card card-content text-center">
-                  <div className="text-heading-2 text-primary mb-2">300,000+</div>
-                  <div className="text-body">Preprints Indexed</div>
+            
+            <div className="container">
+              <div className={styles.mapStats}>
+                <div className={styles.statCard}>
+                  <div className={styles.statNumber}>300,000+</div>
+                  <div className={styles.statLabel}>Preprints Indexed</div>
                 </div>
-                <div className="card card-content text-center">
-                  <div className="text-heading-2 text-secondary mb-2">50+</div>
-                  <div className="text-body">Countries Contributing</div>
+                <div className={styles.statCard}>
+                  <div className={styles.statNumber}>50+</div>
+                  <div className={styles.statLabel}>Countries Contributing</div>
                 </div>
-                <div className="card card-content text-center">
-                  <div className="text-heading-2 text-accent mb-2">1,000+</div>
-                  <div className="text-body">Institutions Tracked</div>
+                <div className={styles.statCard}>
+                  <div className={styles.statNumber}>1,000+</div>
+                  <div className={styles.statLabel}>Institutions Tracked</div>
                 </div>
               </div>
             </div>
@@ -103,7 +105,7 @@ const Explore = () => {
         {/* Search Tab */}
         {activeTab === 'search' && (
           <div className="container">
-            <div className={styles.contentSection}>
+            <div className={layoutStyles.contentSection}>
               <h2 className="text-heading-3 mb-4">Search Preprints</h2>
               <p className="text-body mb-6">
                 Search through our comprehensive database of preprints by title, DOI, author, or keywords.

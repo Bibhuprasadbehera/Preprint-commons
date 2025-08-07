@@ -150,9 +150,12 @@
             .text("Number of Preprints");
         }
 
-        const zoom = d3.zoom().scaleExtent([1, 8]).on('zoom', (event) => {
-          svg.selectAll('path').attr('transform', event.transform);
-        });
+        // Re-enable zoom functionality with proper constraints
+        const zoom = d3.zoom()
+          .scaleExtent([1, 8])
+          .on('zoom', (event) => {
+            svg.selectAll('path').attr('transform', event.transform);
+          });
 
         svg.call(zoom);
 
@@ -234,14 +237,21 @@
         });
 
         function handleResize() {
-          const containerWidth = document.getElementById('map-container').clientWidth;
-          const newWidth = Math.min(960, containerWidth);
-          const newHeight = newWidth / 2 + marginTop;
-          svg.attr('viewBox', `0 0 ${newWidth} ${newHeight}`);
+          const container = document.getElementById('map-container');
+          const containerWidth = container.clientWidth;
+          const containerHeight = container.clientHeight;
+          
+          // Use full container dimensions for better zoom experience
+          svg.attr('viewBox', `0 0 ${width} ${height}`)
+             .attr('width', containerWidth)
+             .attr('height', containerHeight);
+          
           updateMap(toggleMode.textContent === "Cumulative", yearFilter.value);
         }
 
         window.addEventListener('resize', handleResize);
+        // Initial resize to fit container
+        setTimeout(handleResize, 100);
         updateMap(false, 0);
       } catch (error) {
         console.error("Error creating map:", error);
