@@ -1,7 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
+import sqlite3
 import pandas as pd
 
 app = FastAPI()
@@ -9,85 +9,47 @@ app = FastAPI()
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:8000", "http://localhost:8000"],
+    allow_origins=["http://127.0.0.1:8000", "http://localhost:8000", "http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Load the CSV data into a pandas DataFrame
-try:
-    df = pd.read_csv("combined_db_with_ppc_id.csv")
-    df["preprint_submission_date"] = pd.to_datetime(df["preprint_submission_date"])
-    df["year"] = df["preprint_submission_date"].dt.year
-except FileNotFoundError:
-    df = pd.DataFrame()  # Create an empty DataFrame if the file is not found
+DATABASE = 'ppc.db'
+
+def get_db_connection():
+    conn = sqlite3.connect(DATABASE)
+    conn.row_factory = sqlite3.Row
+    return conn
 
 @app.get("/country-data")
-def country_data():
-    if df.empty:
-        return JSONResponse(content={"data": []})
-
-    # Group by country and year, then count the number of preprints
-    country_counts = df.groupby(["country_name", "year"]).size().reset_index(name="count")
-    
-    # Convert the DataFrame to a list of dictionaries
-    data = country_counts.to_dict("records")
-    
-    return JSONResponse(content={"data": data})
+def country_data(conn: sqlite3.Connection = Depends(get_db_connection)):
+    query = "SELECT country_name, strftime('%Y', preprint_submission_date) as year, COUNT(*) as count FROM papers GROUP BY country_name, year"
+    df = pd.read_sql_query(query, conn)
+    conn.close()
+    return JSONResponse(content={"data": df.to_dict("records")})
 
 @app.get("/papers")
-def fetch_papers(country: str, year: int):
-    if df.empty:
-        return JSONResponse(content={"papers": []})
-
-    # Filter papers by country and year
-    papers = df[(df["country_name"] == country) & (df["year"] == year)]
-    
-    # Convert the filtered DataFrame to a list of dictionaries
-    papers_data = papers.to_dict("records")
-    
-    return JSONResponse(content={"papers": papers_data})
+def fetch_papers(country: str, year: int, conn: sqlite3.Connection = Depends(get_db_connection)):
+    query = "SELECT * FROM papers WHERE country_name = ? AND strftime('%Y', preprint_submission_date) = ?"
+    df = pd.read_sql_query(query, conn, params=(country, str(year)))
+    conn.close()
+    return JSONResponse(content={"papers": df.to_dict("records")})
 
 @app.get("/search")
-def search_papers(query: str):
-    if df.empty:
-        return JSONResponse(content=[])
-
-    # Filter papers by title or DOI
-    results = df[df["preprint_title"].str.contains(query, case=False, na=False) | df["preprint_doi"].str.contains(query, case=False, na=False)].head(10).copy()
-    
-    # Convert the 'preprint_submission_date' column to strings
-    results['preprint_submission_date'] = results['preprint_submission_date'].dt.strftime('%Y-%m-%d')
-    
-    # Replace NaN values with None
-    results = results.where(pd.notnull(results), None)
-
-    # Convert the filtered DataFrame to a list of dictionaries
-    search_results = results.to_dict("records")
-    
-    return JSONResponse(content=search_results)
+def search_papers(query: str, conn: sqlite3.Connection = Depends(get_db_connection)):
+    sql_query = "SELECT * FROM papers WHERE preprint_title LIKE ? OR preprint_doi LIKE ? LIMIT 10"
+    df = pd.read_sql_query(sql_query, conn, params=(f"%{query}%", f"%{query}%"))
+    conn.close()
+    return JSONResponse(content=df.to_dict("records"))
 
 @app.get("/paper/{ppc_id}")
-def get_paper(ppc_id: str):
+def get_paper(ppc_id: str, conn: sqlite3.Connection = Depends(get_db_connection)):
+    query = "SELECT * FROM papers WHERE PPC_Id = ?"
+    df = pd.read_sql_query(query, conn, params=(ppc_id,))
+    conn.close()
     if df.empty:
-        return JSONResponse(content={})
-
-    paper = df[df["PPC_Id"] == ppc_id].iloc[0]
-    paper_data = paper.to_dict()
-    
-    # Convert timestamp to string
-    paper_data['preprint_submission_date'] = paper_data['preprint_submission_date'].strftime('%Y-%m-%d')
-    
-    # Replace NaN values with None
-    for key, value in paper_data.items():
-        if pd.isnull(value):
-            paper_data[key] = None
-
-    return JSONResponse(content=paper_data)
-
-
-app.mount("/", StaticFiles(directory="static", html=True), name="static")
-
+        return JSONResponse(content={}, status_code=404)
+    return JSONResponse(content=df.iloc[0].to_dict())
 
 #bibhu backend

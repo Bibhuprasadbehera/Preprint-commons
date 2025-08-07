@@ -1,0 +1,66 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.main {
+  flex: 1;
+  width: 100%;
+  min-height: calc(100vh - 160px); /* Account for navbar and footer */
+}
+
+/* Ensure full width for all content */
+.main > * {
+  width: 100%;
+}
+
+/* Page container utility */
+.pageContainer {
+  max-width: var(--breakpoint-xl);
+  margin: 0 auto;
+  padding: var(--spacing-4xl) var(--spacing-lg);
+  width: 100%;
+}
+
+.pageContainerWide {
+  max-width: var(--breakpoint-2xl);
+  margin: 0 auto;
+  padding: var(--spacing-4xl) var(--spacing-lg);
+  width: 100%;
+}
+
+.pageContainerFullWidth {
+  width: 100%;
+  padding: var(--spacing-4xl) 0;
+}
+
+/* Content sections */
+.contentSection {
+  padding: var(--spacing-2xl) 0;
+}
+
+.contentSection:first-child {
+  padding-top: 0;
+}
+
+.contentSection:last-child {
+  padding-bottom: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .pageContainer,
+  .pageContainerWide {
+    padding: var(--spacing-2xl) var(--spacing-md);
+  }
+  
+  .pageContainerFullWidth {
+    padding: var(--spacing-2xl) 0;
+  }
+  
+  .contentSection {
+    padding: var(--spacing-xl) 0;
+  }
+}

@@ -44,12 +44,15 @@
       }
 
       function processData(rawData) {
-        return rawData.map(d => ({
-          ...d,
-          count: Math.max(0, parseInt(d.count) || 0),
-          year: parseInt(d.year) || null,
-          country: normalizeCountryName(d.country_name.trim())
-        })).filter(d => d.count > 0);
+        return rawData.map(d => {
+          if (!d.country_name) return null;
+          return {
+            ...d,
+            count: Math.max(0, parseInt(d.count) || 0),
+            year: parseInt(d.year) || null,
+            country: normalizeCountryName(d.country_name.trim())
+          };
+        }).filter(Boolean).filter(d => d.count > 0);
       }
 
       function updateTitle(mode, year) {
