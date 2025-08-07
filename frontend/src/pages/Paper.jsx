@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import Chart from 'chart.js/auto';
 import Layout from '../components/layout/Layout/Layout';
-import styles from '../components/layout/Layout/Layout.module.css';
+import Card from '../components/ui/Card/Card';
+import Button from '../components/ui/Button/Button';
+import PaperMetadata from '../components/ui/PaperMetadata/PaperMetadata';
+import layoutStyles from '../components/layout/Layout/Layout.module.css';
+import styles from './Paper.module.css';
 
 const Paper = () => {
   const { id } = useParams();
@@ -70,9 +74,11 @@ const Paper = () => {
   if (isLoading) {
     return (
       <Layout>
-        <div className={styles.pageContainer}>
-          <div className="flex items-center justify-center min-h-64">
-            <div className="text-heading-3">Loading paper details...</div>
+        <div className={layoutStyles.pageContainer}>
+          <div className={styles.loadingContainer}>
+            <div className={styles.loadingSpinner}></div>
+            <h2 className="text-heading-3">Loading paper details...</h2>
+            <p className="text-body text-neutral-600">Please wait while we fetch the paper information.</p>
           </div>
         </div>
       </Layout>
@@ -82,103 +88,134 @@ const Paper = () => {
   if (!paper) {
     return (
       <Layout>
-        <div className={styles.pageContainer}>
-          <div className="card card-content text-center">
+        <div className={layoutStyles.pageContainer}>
+          <div className={styles.errorContainer}>
+            <div className={styles.errorIcon}>📄</div>
             <h1 className="text-heading-2 mb-4">Paper Not Found</h1>
-            <p className="text-body">The requested paper could not be found.</p>
+            <p className="text-body mb-6">The requested paper could not be found in our database.</p>
+            <div className={styles.errorActions}>
+              <Link to="/explore">
+                <Button variant="primary">
+                  Search Papers
+                </Button>
+              </Link>
+              <Link to="/">
+                <Button variant="outline">
+                  Go Home
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </Layout>
     );
   }
 
-  const meta = [
-    { k: 'preprint_doi', l: 'DOI', v: d => `<a href="https://doi.org/${d}" target="_blank" class="text-primary hover:text-primary-dark">${d}</a>` },
-    { k: 'preprint_submission_date', l: 'Submission Date', v: d => new Date(d).toLocaleDateString() },
-    { k: 'preprint_server', l: 'Preprint Server' },
-    { k: 'submission_contact', l: 'Submission Contact' },
-    { k: 'corresponding_institution', l: 'Corresponding Institution' },
-    { k: 'country_name', l: 'Country' },
-    { k: 'versions', l: 'Versions', v: d => {
-      try {
-        return JSON.parse(d).map(v => `${v.version} (${new Date(v.created).toLocaleDateString()})`).join(', ');
-      } catch {
-        return d;
-      }
-    }},
-    { k: 'submission_type', l: 'Submission Type' },
-    { k: 'submission_license', l: 'License' },
-    { k: 'preprint_subject', l: 'Subject' },
-    { k: 'published_DOI', l: 'Published DOI', v: d => `<a href="https://doi.org/${d}" target="_blank" class="text-primary hover:text-primary-dark">${d}</a>` },
-    { k: 'publication_date', l: 'Publication Date', v: d => new Date(d).toLocaleDateString() },
-    { k: 'total_citation', l: 'Total Citations' }
-  ];
-
   const authors = paper.all_authors ? JSON.parse(paper.all_authors) : [];
+  
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
 
   return (
     <Layout>
-      <div className={styles.pageContainer}>
-        <div className="grid lg:grid-cols-3 gap-8">
+      <div className={layoutStyles.pageContainer}>
+        {/* Breadcrumb Navigation */}
+        <div className={styles.breadcrumb}>
+          <Link to="/" className={styles.breadcrumbLink}>Home</Link>
+          <span className={styles.breadcrumbSeparator}>›</span>
+          <Link to="/explore" className={styles.breadcrumbLink}>Explore</Link>
+          <span className={styles.breadcrumbSeparator}>›</span>
+          <span className={styles.breadcrumbCurrent}>Paper Details</span>
+        </div>
+
+        <div className={styles.paperContainer}>
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
-            <div className={styles.contentSection}>
-              <h1 className="text-heading-1 mb-4">{paper.preprint_title}</h1>
-              <div className="text-body-large text-neutral-600 mb-4">
-                {authors.map(a => a.author_name).join(', ')}
+          <div className={styles.mainContent}>
+            {/* Paper Header */}
+            <div className={styles.paperHeader}>
+              <div className={styles.paperBadge}>
+                <span className={styles.badgeText}>Preprint</span>
+                {paper.preprint_server && (
+                  <span className={styles.serverBadge}>{paper.preprint_server}</span>
+                )}
+              </div>
+              
+              <h1 className={styles.paperTitle}>{paper.preprint_title}</h1>
+              
+              <div className={styles.paperMeta}>
+                <div className={styles.authorsList}>
+                  {authors.map(a => a.author_name).join(', ')}
+                </div>
+                <div className={styles.paperDate}>
+                  Submitted: {formatDate(paper.preprint_submission_date)}
+                </div>
+                {paper.total_citation && (
+                  <div className={styles.citationCount}>
+                    {paper.total_citation} citations
+                  </div>
+                )}
               </div>
             </div>
             
+            {/* Abstract Section */}
             {paper.preprint_abstract && (
-              <div className="card card-content">
-                <h2 className="text-heading-3 mb-4">Abstract</h2>
-                <p className="text-body leading-relaxed">{paper.preprint_abstract}</p>
-              </div>
+              <Card className={styles.abstractCard}>
+                <Card.Header>
+                  <h2 className={styles.sectionTitle}>Abstract</h2>
+                </Card.Header>
+                <Card.Content>
+                  <p className={styles.abstractText}>{paper.preprint_abstract}</p>
+                </Card.Content>
+              </Card>
             )}
             
+            {/* Citation Chart */}
             {paper.citation && (
-              <div className="card card-content">
-                <h2 className="text-heading-3 mb-4">Citation History</h2>
-                <div ref={chartRef} className="w-full h-64"></div>
-              </div>
+              <Card className={styles.chartCard}>
+                <Card.Header>
+                  <h2 className={styles.sectionTitle}>Citation History</h2>
+                </Card.Header>
+                <Card.Content>
+                  <div ref={chartRef} className={styles.chartContainer}></div>
+                </Card.Content>
+              </Card>
             )}
+            
+            {/* Action Buttons */}
+            <div className={styles.actionButtons}>
+              {paper.preprint_doi && (
+                <a 
+                  href={`https://doi.org/${paper.preprint_doi}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="primary" size="large">
+                    View Original Paper
+                  </Button>
+                </a>
+              )}
+              {paper.published_DOI && (
+                <a 
+                  href={`https://doi.org/${paper.published_DOI}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="secondary" size="large">
+                    View Published Version
+                  </Button>
+                </a>
+              )}
+            </div>
           </div>
           
           {/* Metadata Sidebar */}
-          <div className="space-y-4">
-            <div className="card card-content">
-              <h3 className="text-heading-4 mb-4">Paper Details</h3>
-              <div className="space-y-3">
-                {meta.map(m => {
-                  if (!paper[m.k]) return null;
-                  let val = m.v ? m.v(paper[m.k]) : paper[m.k];
-                  return (
-                    <div key={m.k} className="border-b border-neutral-200 pb-2 last:border-b-0">
-                      <div className="text-body-small font-medium text-neutral-600 mb-1">
-                        {m.l}
-                      </div>
-                      <div 
-                        className="text-body" 
-                        dangerouslySetInnerHTML={{ __html: val }}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            
-            {authors.length > 0 && (
-              <div className="card card-content">
-                <h3 className="text-heading-4 mb-4">Authors</h3>
-                <div className="space-y-2">
-                  {authors.map((author, index) => (
-                    <div key={index} className="text-body">
-                      {author.author_name}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+          <div className={styles.sidebar}>
+            <PaperMetadata paper={paper} />
           </div>
         </div>
       </div>

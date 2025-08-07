@@ -91,9 +91,6 @@ const Footer = () => {
             © 2025 Preprint Commons. All rights reserved. Licensed under CC-BY.
           </div>
           <div className={styles.bottomLinks}>
-            <a href="#" className={styles.bottomLink}>Privacy</a>
-            <a href="#" className={styles.bottomLink}>Terms</a>
-            <a href="#" className={styles.bottomLink}>Cookies</a>
           </div>
         </div>
       </div>

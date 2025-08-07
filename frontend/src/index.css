@@ -1,5 +1,10 @@
 /* Global CSS - Import theme and set base styles */
 @import url('./styles/theme.css');
+@import url('./components/ui/SearchBar/SearchBar.module.css');
+@import url('./components/ui/Pagination/Pagination.module.css');
+@import url('./components/ui/PaperCard/PaperCard.module.css');
+@import url('./components/ui/PaperMetadata/PaperMetadata.module.css');
+@import url('./pages/Paper.module.css');
 
 /* CSS Reset and Base Styles */
 *,

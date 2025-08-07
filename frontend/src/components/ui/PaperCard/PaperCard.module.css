@@ -1,0 +1,183 @@
+.paperCardLink {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  transition: all var(--transition-normal);
+}
+
+.paperCard {
+  height: 100%;
+  border: 1px solid var(--color-neutral-200);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.paperCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  transform: scaleX(0);
+  transition: transform var(--transition-normal);
+}
+
+.paperCardLink:hover .paperCard {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--color-primary);
+}
+
+.paperCardLink:hover .paperCard::before {
+  transform: scaleX(1);
+}
+
+.paperHeader {
+  margin-bottom: var(--spacing-lg);
+}
+
+.paperTitle {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--spacing-sm);
+  transition: color var(--transition-fast);
+}
+
+.paperCardLink:hover .paperTitle {
+  color: var(--color-primary-dark);
+}
+
+.paperMeta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+}
+
+.paperDoi {
+  font-family: 'Courier New', monospace;
+  font-size: var(--font-size-xs);
+  background: var(--color-neutral-100);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  display: inline-block;
+  max-width: fit-content;
+}
+
+.paperDate {
+  font-weight: var(--font-weight-medium);
+}
+
+.paperContent {
+  margin-bottom: var(--spacing-lg);
+}
+
+.paperAuthors {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-md);
+  line-height: var(--line-height-normal);
+}
+
+.paperAbstract {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--spacing-md);
+}
+
+.paperFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: auto;
+}
+
+.paperTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  flex: 1;
+}
+
+.tag {
+  background: var(--color-neutral-100);
+  color: var(--color-text-secondary);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.citationTag {
+  background: var(--color-accent);
+  color: var(--color-text-inverse);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+.readMore {
+  color: var(--color-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all var(--transition-fast);
+}
+
+.paperCardLink:hover .readMore {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .paperTitle {
+    font-size: var(--font-size-lg);
+  }
+  
+  .paperMeta {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+  
+  .paperFooter {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+  
+  .readMore {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .paperTitle {
+    font-size: var(--font-size-base);
+  }
+  
+  .paperDoi {
+    font-size: 10px;
+  }
+  
+  .paperTags {
+    gap: var(--spacing-xs);
+  }
+  
+  .tag,
+  .citationTag {
+    font-size: 10px;
+    padding: 2px var(--spacing-xs);
+  }
+}
