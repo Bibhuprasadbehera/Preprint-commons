@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Card from '../Card/Card';
-import styles from './PaperCard.module.css';
+import Card from '../ui/Card/Card';
+import styles from './Paper.module.css';
 
 const PaperCard = ({ paper, className = '' }) => {
   const formatDate = (dateString) => {

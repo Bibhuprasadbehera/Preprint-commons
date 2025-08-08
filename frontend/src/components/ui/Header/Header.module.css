@@ -1,0 +1,125 @@
+.header {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.centered {
+  text-align: center;
+}
+
+.title {
+  font-family: var(--font-family-display);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--spacing-lg);
+  position: relative;
+}
+
+.subtitle {
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  margin: 0 auto;
+}
+
+/* Variant styles */
+.page .title {
+  font-weight: var(--font-weight-bold);
+}
+
+.section .title {
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Size variants */
+.small .title {
+  font-size: var(--font-size-xl);
+}
+
+.small .subtitle {
+  font-size: var(--font-size-sm);
+  max-width: 400px;
+}
+
+.medium .title {
+  font-size: var(--font-size-2xl);
+}
+
+.medium .subtitle {
+  font-size: var(--font-size-base);
+  max-width: 500px;
+}
+
+.large .title {
+  font-size: var(--font-size-4xl);
+}
+
+.large .subtitle {
+  font-size: var(--font-size-lg);
+  max-width: 700px;
+}
+
+/* Page variant gets larger underline */
+.centered.page .title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  border-radius: var(--radius-sm);
+}
+
+/* Section variant gets smaller underline */
+.centered.section .title::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  border-radius: var(--radius-sm);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .large .title {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .medium .title {
+    font-size: var(--font-size-xl);
+  }
+  
+  .small .title {
+    font-size: var(--font-size-lg);
+  }
+  
+  .subtitle {
+    font-size: var(--font-size-base);
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  .large .title {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .medium .title {
+    font-size: var(--font-size-lg);
+  }
+  
+  .small .title {
+    font-size: var(--font-size-base);
+  }
+  
+  .subtitle {
+    font-size: var(--font-size-sm);
+  }
+}

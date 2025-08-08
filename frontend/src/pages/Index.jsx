@@ -3,7 +3,7 @@ import Layout from '../components/layout/Layout/Layout';
 import Hero from '../components/sections/Hero/Hero';
 import Features from '../components/sections/Features/Features';
 import Card from '../components/ui/Card/Card';
-import Button from '../components/ui/Button/Button';
+import MapContainer from '../components/ui/MapContainer/MapContainer';
 import { Link } from 'react-router-dom';
 import styles from './Index.module.css';
 
@@ -23,29 +23,15 @@ const Index = () => {
               </p>
             </div>
             
-            <div className={styles.mapContainer}>
-              <iframe 
-                id="map-iframe" 
-                src="/map.html"
-                className={styles.mapIframe}
-                title="Global Preprint Distribution Map"
-              ></iframe>
-            </div>
-            
-            <div className={styles.mapStats}>
-              <div className={styles.statItem}>
-                <span className={styles.statNumber}>300,000+</span>
-                <span className={styles.statLabel}>preprints indexed</span>
-              </div>
-              <div className={styles.statItem}>
-                <span className={styles.statNumber}>50+</span>
-                <span className={styles.statLabel}>countries contributing</span>
-              </div>
-              <div className={styles.statItem}>
-                <span className={styles.statNumber}>1,000+</span>
-                <span className={styles.statLabel}>institutions tracked</span>
-              </div>
-            </div>
+            <MapContainer 
+              title="Global Preprint Distribution Map"
+              showStats={true}
+              statsData={[
+                { number: "300,000+", label: "Preprints Indexed" },
+                { number: "50+", label: "Countries Contributing" },
+                { number: "1,000+", label: "Institutions Tracked" }
+              ]}
+            />
           </div>
         </section>
 

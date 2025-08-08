@@ -4,7 +4,7 @@ import Chart from 'chart.js/auto';
 import Layout from '../components/layout/Layout/Layout';
 import Card from '../components/ui/Card/Card';
 import Button from '../components/ui/Button/Button';
-import PaperMetadata from '../components/ui/PaperMetadata/PaperMetadata';
+import { PaperMetadata } from '../components/Paper';
 import layoutStyles from '../components/layout/Layout/Layout.module.css';
 import styles from './Paper.module.css';
 

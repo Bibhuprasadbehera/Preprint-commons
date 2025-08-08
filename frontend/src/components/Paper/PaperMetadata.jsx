@@ -1,6 +1,6 @@
 import React from 'react';
-import Card from '../Card/Card';
-import styles from './PaperMetadata.module.css';
+import Card from '../ui/Card/Card';
+import styles from './Paper.module.css';
 
 const PaperMetadata = ({ paper }) => {
   const meta = [

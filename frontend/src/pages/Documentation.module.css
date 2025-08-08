@@ -3,11 +3,11 @@
   background: var(--color-bg-primary);
 }
 
-/* Page Header */
+/* Page Header - Reduced padding for information density */
 .pageHeader {
   background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);
   border-bottom: 1px solid var(--color-neutral-200);
-  padding: var(--spacing-4xl) 0 var(--spacing-2xl);
+  padding: var(--spacing-2xl) 0 var(--spacing-xl);
   position: relative;
   overflow: hidden;
 }
@@ -124,11 +124,11 @@
   transform: translateY(-2px);
 }
 
-/* Section Headers */
+/* Section Headers - Tighter spacing */
 .sectionHeader {
   text-align: center;
-  margin-bottom: var(--spacing-4xl);
-  padding-top: var(--spacing-4xl);
+  margin-bottom: var(--spacing-2xl);
+  padding-top: var(--spacing-2xl);
 }
 
 .sectionHeader h2 {
@@ -142,9 +142,9 @@
   margin: 0 auto;
 }
 
-/* Overview Section */
+/* Overview Section - Reduced padding */
 .overview {
-  padding: var(--spacing-4xl) 0;
+  padding: var(--spacing-2xl) 0;
 }
 
 .overviewGrid {
@@ -203,16 +203,16 @@
   margin-top: var(--spacing-xs);
 }
 
-/* API Section */
+/* API Section - Tighter spacing */
 .apiSection {
-  padding: var(--spacing-2xl) 0 var(--spacing-4xl);
+  padding: var(--spacing-xl) 0 var(--spacing-2xl);
 }
 
 .apiEndpoints {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xl);
-  margin-bottom: var(--spacing-4xl);
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
 }
 
 .apiInfo {
@@ -234,16 +234,16 @@
   font-size: var(--font-size-sm);
 }
 
-/* Sources Section */
+/* Sources Section - Tighter spacing */
 .sourcesSection {
-  padding: var(--spacing-2xl) 0 var(--spacing-4xl);
+  padding: var(--spacing-xl) 0 var(--spacing-2xl);
 }
 
 .sourcesGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: var(--spacing-xl);
-  margin-bottom: var(--spacing-4xl);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
 }
 
 .dataProcessing {
@@ -288,16 +288,16 @@
   line-height: var(--line-height-normal);
 }
 
-/* Methodology Section */
+/* Methodology Section - Tighter spacing */
 .methodologySection {
-  padding: var(--spacing-2xl) 0 var(--spacing-4xl);
+  padding: var(--spacing-xl) 0 var(--spacing-2xl);
 }
 
 .methodologyDetails {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: var(--spacing-xl);
-  margin-top: var(--spacing-4xl);
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-2xl);
 }
 
 .aiProcess {
@@ -357,15 +357,15 @@
   text-align: center;
 }
 
-/* Paper Section */
+/* Paper Section - Tighter spacing */
 .paperSection {
-  padding: var(--spacing-2xl) 0 var(--spacing-4xl);
+  padding: var(--spacing-xl) 0 var(--spacing-2xl);
 }
 
-/* Responsive Design */
+/* Responsive Design - Maintain information density */
 @media (max-width: 768px) {
   .pageHeader {
-    padding: var(--spacing-2xl) 0 var(--spacing-lg);
+    padding: var(--spacing-xl) 0 var(--spacing-lg);
   }
   
   .pageTitle {

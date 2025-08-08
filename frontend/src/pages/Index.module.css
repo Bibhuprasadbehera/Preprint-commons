@@ -1,6 +1,6 @@
-/* Data Snapshot Section */
+/* Data Snapshot Section - Tighter spacing */
 .dataSnapshot {
-  padding: var(--spacing-5xl) 0;
+  padding: var(--spacing-3xl) 0;
   background: var(--color-bg-primary);
 }
 
@@ -12,7 +12,7 @@
 
 .sectionHeader {
   text-align: center;
-  margin-bottom: var(--spacing-4xl);
+  margin-bottom: var(--spacing-2xl);
 }
 
 .sectionTitle {
@@ -31,92 +31,11 @@
   line-height: var(--line-height-relaxed);
 }
 
-.mapContainer {
-  position: relative;
-  margin: 0 auto var(--spacing-3xl) auto; /* Center the container */
-  border-radius: var(--radius-2xl);
-  overflow: hidden;
-  box-shadow: var(--shadow-xl);
-  background: var(--color-neutral-100);
-  height: 80vh; /* Much larger height to show full map without internal scrolling */
-  min-height: 800px; /* Ensure minimum height for proper map display */
-  max-width: 1200px; /* Constrain maximum width for better centering */
-  width: 100%; /* Ensure full width up to max-width */
-}
+/* Map styles are now handled by MapContainer component */
 
-.mapIframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  display: block;
-  pointer-events: auto; /* Ensure iframe can receive events */
-}
-
-/* Add a subtle border to better define the map area */
-.mapContainer::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border: 2px solid rgba(52, 152, 219, 0.1);
-  border-radius: var(--radius-2xl);
-  pointer-events: none;
-  transition: border-color var(--transition-fast);
-}
-
-.mapContainer:hover::after {
-  border-color: rgba(52, 152, 219, 0.3);
-}
-
-/* Enhanced visual feedback for zoom interaction */
-.mapContainer:hover {
-  box-shadow: var(--shadow-2xl);
-  transform: translateY(-2px);
-  transition: all var(--transition-normal);
-}
-
-.mapStats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--spacing-xl);
-  margin-top: var(--spacing-2xl);
-}
-
-.statItem {
-  text-align: center;
-  padding: var(--spacing-xl);
-  background: var(--color-bg-primary);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-md);
-  transition: transform var(--transition-fast);
-}
-
-.statItem:hover {
-  transform: translateY(-4px);
-}
-
-.statNumber {
-  display: block;
-  font-family: var(--font-family-display);
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-primary);
-  margin-bottom: var(--spacing-sm);
-}
-
-.statLabel {
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: var(--font-weight-medium);
-}
-
-/* How It Works Section */
+/* How It Works Section - Tighter spacing */
 .howItWorks {
-  padding: var(--spacing-5xl) 0;
+  padding: var(--spacing-3xl) 0;
   background: var(--color-bg-secondary);
   position: relative;
 }
@@ -133,8 +52,8 @@
 
 .processGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--spacing-3xl);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-2xl);
   position: relative;
   z-index: 2;
 }
@@ -191,17 +110,17 @@
   font-size: var(--font-size-base);
 }
 
-/* Testimonials Section */
+/* Testimonials Section - Tighter spacing */
 .testimonials {
-  padding: var(--spacing-5xl) 0;
+  padding: var(--spacing-3xl) 0;
   background: var(--color-bg-primary);
 }
 
 .testimonialsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: var(--spacing-2xl);
-  margin-bottom: var(--spacing-4xl);
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
 }
 
 .ctaSection {
@@ -250,28 +169,19 @@
   z-index: 2;
 }
 
-/* Responsive Design */
+/* Responsive Design - Maintain tighter spacing */
 @media (max-width: 768px) {
   .dataSnapshot,
   .howItWorks,
   .testimonials {
-    padding: var(--spacing-4xl) 0;
+    padding: var(--spacing-2xl) 0;
   }
   
   .sectionTitle {
     font-size: var(--font-size-3xl);
   }
   
-  .mapContainer {
-    height: 70vh; /* Slightly smaller on tablets but still large enough */
-    min-height: 600px;
-    margin-left: var(--spacing-lg); /* Add side margins on smaller screens */
-    margin-right: var(--spacing-lg);
-  }
-  
-  .mapIframe {
-    height: 100%;
-  }
+  /* Map responsive styles handled by MapContainer component */
   
   .processGrid {
     grid-template-columns: 1fr;
@@ -302,20 +212,7 @@
     font-size: var(--font-size-2xl);
   }
   
-  .mapContainer {
-    height: 60vh; /* Smaller on mobile but still substantial */
-    min-height: 500px;
-    margin-left: var(--spacing-md); /* Smaller margins on mobile */
-    margin-right: var(--spacing-md);
-  }
-  
-  .mapIframe {
-    height: 100%;
-  }
-  
-  .mapStats {
-    grid-template-columns: 1fr;
-  }
+  /* Map responsive styles handled by MapContainer component */
   
   .ctaSection {
     padding: var(--spacing-2xl) var(--spacing-lg);

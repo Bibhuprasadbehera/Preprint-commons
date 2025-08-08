@@ -4,7 +4,9 @@ import Layout from '../components/layout/Layout/Layout';
 import Button from '../components/ui/Button/Button';
 import SearchBar from '../components/ui/SearchBar/SearchBar';
 import Pagination from '../components/ui/Pagination/Pagination';
-import PaperCard from '../components/ui/PaperCard/PaperCard';
+import { PaperCard } from '../components/Paper';
+import MapContainer from '../components/ui/MapContainer/MapContainer';
+import Header from '../components/ui/Header/Header';
 import layoutStyles from '../components/layout/Layout/Layout.module.css';
 import styles from './Explore.module.css';
 
@@ -77,10 +79,12 @@ const Explore = () => {
       <div className={layoutStyles.pageContainerFullWidth}>
         <div className="container">
           <div className={layoutStyles.contentSection}>
-            <h1 className="text-heading-1">Explore Preprint Data</h1>
-            <p className="text-body-large mt-4 mb-6">
-              Discover insights through interactive visualizations and comprehensive search capabilities.
-            </p>
+            <Header 
+              title="Explore Preprint Data"
+              subtitle="Discover insights through interactive visualizations and comprehensive search capabilities."
+              variant="page"
+              size="large"
+            />
           </div>
         </div>
         
@@ -106,41 +110,24 @@ const Explore = () => {
         
         {/* Map Tab */}
         {activeTab === 'map' && (
-          <div className={styles.mapSection}>
-            <div className="container">
-              <div className={styles.mapHeader}>
-                <h2 className="text-heading-3">Global Preprint Distribution</h2>
-                <p className="text-body">
-                  Explore the geographic distribution of preprints worldwide. Use zoom and pan to see detailed statistics.
-                </p>
-              </div>
-            </div>
+          <div className="container">
+            <Header 
+              title="Global Preprint Distribution"
+              subtitle="Explore the geographic distribution of preprints worldwide. Use zoom and pan to see detailed statistics."
+              variant="section"
+              size="medium"
+            />
             
-            <div className={styles.mapContainer}>
-              <iframe 
-                id="explore-map-iframe" 
-                src="/map.html" 
-                className={styles.mapIframe}
-                title="Global Preprint Distribution Map"
-              />
-            </div>
-            
-            <div className="container">
-              <div className={styles.mapStats}>
-                <div className={styles.statCard}>
-                  <div className={styles.statNumber}>300,000+</div>
-                  <div className={styles.statLabel}>Preprints Indexed</div>
-                </div>
-                <div className={styles.statCard}>
-                  <div className={styles.statNumber}>50+</div>
-                  <div className={styles.statLabel}>Countries Contributing</div>
-                </div>
-                <div className={styles.statCard}>
-                  <div className={styles.statNumber}>1,000+</div>
-                  <div className={styles.statLabel}>Institutions Tracked</div>
-                </div>
-              </div>
-            </div>
+            <MapContainer 
+              title="Global Preprint Distribution Map"
+              showStats={true}
+              statsData={[
+                { number: "300,000+", label: "Preprints Indexed" },
+                { number: "50+", label: "Countries Contributing" },
+                { number: "1,000+", label: "Institutions Tracked" }
+              ]}
+              className={styles.exploreMapContainer}
+            />
           </div>
         )}
         
@@ -148,13 +135,18 @@ const Explore = () => {
         {activeTab === 'search' && (
           <div className="container">
             <div className={layoutStyles.contentSection}>
-              <div className={styles.searchHeader}>
-                <h2 className="text-heading-3 mb-4">Search Preprints</h2>
-                <p className="text-body mb-6">
-                  Search through our comprehensive database of preprints by title, DOI, author, or keywords.
-                  <span className={styles.searchLimit}>Limited to {MAX_RESULTS} results for optimal performance.</span>
-                </p>
-              </div>
+              <Header 
+                title="Search Preprints"
+                subtitle={
+                  <>
+                    Search through our comprehensive database of preprints by title, DOI, author, or keywords.
+                    <span className={styles.searchLimit}> Limited to {MAX_RESULTS} results for optimal performance.</span>
+                  </>
+                }
+                variant="section"
+                size="medium"
+                className={styles.searchHeader}
+              />
               
               <div className={styles.searchSection}>
                 <SearchBar

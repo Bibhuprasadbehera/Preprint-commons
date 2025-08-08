@@ -70,16 +70,16 @@
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.75;
   
-  /* Spacing */
+  /* Spacing - Optimized for information density */
   --spacing-xs: 0.25rem;   /* 4px */
   --spacing-sm: 0.5rem;    /* 8px */
-  --spacing-md: 1rem;      /* 16px */
-  --spacing-lg: 1.5rem;    /* 24px */
-  --spacing-xl: 2rem;      /* 32px */
-  --spacing-2xl: 3rem;     /* 48px */
-  --spacing-3xl: 4rem;     /* 64px */
-  --spacing-4xl: 6rem;     /* 96px */
-  --spacing-5xl: 8rem;     /* 128px */
+  --spacing-md: 0.75rem;   /* 12px */
+  --spacing-lg: 1rem;      /* 16px */
+  --spacing-xl: 1.5rem;    /* 24px */
+  --spacing-2xl: 2rem;     /* 32px */
+  --spacing-3xl: 2.5rem;   /* 40px */
+  --spacing-4xl: 3rem;     /* 48px */
+  --spacing-5xl: 4rem;     /* 64px */
   
   /* Border Radius */
   --radius-sm: 4px;
@@ -214,15 +214,24 @@
 }
 
 .section-padding {
-  padding: var(--spacing-4xl) 0;
+  padding: var(--spacing-3xl) 0;
 }
 
 .section-padding-sm {
-  padding: var(--spacing-2xl) 0;
+  padding: var(--spacing-xl) 0;
 }
 
 .section-padding-lg {
-  padding: var(--spacing-5xl) 0;
+  padding: var(--spacing-4xl) 0;
+}
+
+/* Tighter spacing utilities for information density */
+.section-padding-xs {
+  padding: var(--spacing-lg) 0;
+}
+
+.section-padding-tight {
+  padding: var(--spacing-2xl) 0;
 }
 
 /* Button Base Styles */
