@@ -91,6 +91,100 @@ const Documentation = () => {
         authors: "John Doe, Jane Smith",
         country_name: "United States"
       }
+    },
+    {
+      method: 'GET',
+      endpoint: '/citation-impact',
+      description: 'Get citation impact data for scatter plot visualization',
+      parameters: [
+        { name: 'time_range', type: 'string', required: false, description: 'Time range filter: all, last_year, last_5_years, last_10_years' },
+        { name: 'subject', type: 'string', required: false, description: 'Subject area filter' }
+      ],
+      response: {
+        data: [
+          {
+            PPC_Id: "PPC_001",
+            preprint_title: "Sample Research Paper",
+            publication_date: "2023-01-01",
+            total_citation: 156,
+            all_authors: '[{"author_name": "John Doe", "index": 1}]',
+            preprint_subject: "bioinformatics"
+          }
+        ]
+      }
+    },
+    {
+      method: 'GET',
+      endpoint: '/citation-trends',
+      description: 'Get citation trends over time for area chart',
+      parameters: [
+        { name: 'time_range', type: 'string', required: false, description: 'Time range filter: all, last_year, last_5_years, last_10_years' },
+        { name: 'subject', type: 'string', required: false, description: 'Subject area filter' }
+      ],
+      response: {
+        data: [
+          {
+            year: "2023",
+            citations: 15678,
+            papers: 234
+          }
+        ]
+      }
+    },
+    {
+      method: 'GET',
+      endpoint: '/citation-heatmap',
+      description: 'Get citation heatmap data by year and month',
+      parameters: [
+        { name: 'time_range', type: 'string', required: false, description: 'Time range filter: all, last_year, last_5_years, last_10_years' }
+      ],
+      response: {
+        data: [
+          {
+            year: 2023,
+            month: 6,
+            day: 15,
+            citations: 45
+          }
+        ]
+      }
+    },
+    {
+      method: 'GET',
+      endpoint: '/top-cited-papers',
+      description: 'Get top cited papers with sorting options',
+      parameters: [
+        { name: 'limit', type: 'integer', required: false, description: 'Number of papers to return (default: 10)' },
+        { name: 'sort_by', type: 'string', required: false, description: 'Sort option: citations_desc, citations_asc, date_desc, date_asc, title_asc' },
+        { name: 'time_range', type: 'string', required: false, description: 'Time range filter: all, last_year, last_5_years, last_10_years' },
+        { name: 'subject', type: 'string', required: false, description: 'Subject area filter' }
+      ],
+      response: {
+        data: [
+          {
+            PPC_Id: "PPC_001",
+            preprint_title: "Highly Cited Research Paper",
+            publication_date: "2023-01-01",
+            total_citation: 892,
+            all_authors: '[{"author_name": "Jane Smith", "index": 1}]',
+            preprint_subject: "molecular biology"
+          }
+        ]
+      }
+    },
+    {
+      method: 'GET',
+      endpoint: '/subjects',
+      description: 'Get all unique subject areas from the database',
+      parameters: [],
+      response: {
+        data: [
+          "bioinformatics",
+          "molecular biology",
+          "neuroscience",
+          "genomics"
+        ]
+      }
     }
   ];
 

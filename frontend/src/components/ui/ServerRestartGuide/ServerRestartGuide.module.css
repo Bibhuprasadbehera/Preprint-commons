@@ -1,0 +1,189 @@
+.guide {
+  max-width: 600px;
+  margin: 0 auto var(--spacing-xl) auto;
+  border: 2px solid var(--color-primary);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(168, 85, 247, 0.05));
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.progressBar {
+  width: 100%;
+  height: 8px;
+  background: var(--color-neutral-200);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  transition: width var(--transition-normal);
+}
+
+.progressText {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.stepContent {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.stepHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.stepIcon {
+  font-size: var(--font-size-2xl);
+}
+
+.stepTitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.stepDescription {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--spacing-lg) 0;
+  line-height: var(--line-height-relaxed);
+}
+
+.commandList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.commandItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background: var(--color-neutral-900);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-neutral-700);
+}
+
+.command {
+  flex: 1;
+  font-family: monospace;
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-100);
+  background: transparent;
+  border: none;
+  white-space: pre-wrap;
+  line-height: var(--line-height-normal);
+}
+
+.copyButton {
+  flex-shrink: 0;
+  padding: var(--spacing-xs);
+  min-width: auto;
+  opacity: 0.7;
+  transition: opacity var(--transition-fast);
+}
+
+.copyButton:hover {
+  opacity: 1;
+}
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.stepIndicators {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.stepIndicator {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--color-neutral-300);
+  background: var(--color-bg-primary);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stepIndicator:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.stepIndicator.active {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+.stepIndicator.completed {
+  border-color: var(--color-success);
+  background: var(--color-success);
+  color: var(--color-text-inverse);
+}
+
+.stepIndicator.completed::before {
+  content: '✓';
+  font-size: var(--font-size-xs);
+}
+
+.stepIndicator.completed {
+  font-size: 0; /* Hide the number when showing checkmark */
+}
+
+@media (max-width: 768px) {
+  .navigation {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  
+  .stepIndicators {
+    order: -1;
+  }
+  
+  .commandItem {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-md);
+  }
+  
+  .copyButton {
+    align-self: flex-end;
+  }
+}

@@ -1,0 +1,84 @@
+.citationAnalysis {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--spacing-xl);
+}
+
+.chartsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+  gap: var(--spacing-xl);
+  margin-top: var(--spacing-xl);
+}
+
+.chartCard {
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+}
+
+.chartCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-2xl);
+}
+
+.chartTitle {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-xs) 0;
+  font-family: var(--font-family-display);
+}
+
+.chartSubtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+@media (max-width: 1200px) {
+  .chartsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .citationAnalysis {
+    padding: var(--spacing-lg);
+  }
+  
+  .chartsGrid {
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+  }
+  
+  .chartCard {
+    border-radius: var(--radius-lg);
+  }
+  
+  .chartTitle {
+    font-size: var(--font-size-lg);
+  }
+}
+
+.error {
+  color: var(--color-error);
+  background: rgba(239, 68, 68, 0.1);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin-top: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .citationAnalysis {
+    padding: var(--spacing-md);
+  }
+  
+  .chartsGrid {
+    gap: var(--spacing-md);
+  }
+}
