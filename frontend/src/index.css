@@ -8,6 +8,7 @@
 @import url('./components/ui/Select/Select.module.css');
 @import url('./components/ui/FilterControls/FilterControls.module.css');
 @import url('./components/ui/PapersList/PapersList.module.css');
+@import url('./components/ui/PaperDetails/PaperDetails.module.css');
 @import url('./components/ui/DynamicSectionTitle/DynamicSectionTitle.module.css');
 @import url('./components/ui/ServerRestartGuide/ServerRestartGuide.module.css');
 @import url('./components/charts/CitationScatterChart.module.css');
@@ -38,12 +39,19 @@ html {
 }
 
 body {
-  font-family: var(--font-family-primary);
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-normal);
-  color: var(--color-text-primary);
-  background-color: var(--color-bg-primary);
-  overflow-x: hidden;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.centered-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 #root {

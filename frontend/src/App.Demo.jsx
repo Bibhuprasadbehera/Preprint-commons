@@ -1,8 +1,17 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Index from './pages/Index';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import Faq from './pages/Faq';
+import Explore from './pages/Explore';
+import Paper from './pages/Paper';
+import Documentation from './pages/Documentation';
 import CitationScatterChart from './components/charts/CitationScatterChart';
 import Card from './components/ui/Card/Card';
 import Header from './components/ui/Header/Header';
 import FilterControls from './components/ui/FilterControls/FilterControls';
+import Layout from './components/layout/Layout/Layout';
 import { useUnifiedCitationData } from './hooks/useUnifiedCitationData';
 import './index.css';
 
@@ -42,45 +51,52 @@ const mockCitationData = [
     publication_date: "2023-04-18",
     total_citation: 23,
     all_authors: [{"author_name": "Dr. Alex Thompson"}, {"author_name": "Dr. Nina Patel"}]
-  },
-  {
-    PPC_Id: "6",
-    preprint_title: "Single-Cell RNA Sequencing Analysis Pipeline",
-    publication_date: "2020-09-12",
-    total_citation: 67,
-    all_authors: [{"author_name": "Prof. Jennifer Kim"}, {"author_name": "Dr. Mark Anderson"}]
-  },
-  {
-    PPC_Id: "7",
-    preprint_title: "AI-Driven Personalized Medicine Approaches",
-    publication_date: "2021-12-03",
-    total_citation: 89,
-    all_authors: [{"author_name": "Dr. Rachel Brown"}, {"author_name": "Prof. Steven Davis"}]
-  },
-  {
-    PPC_Id: "8",
-    preprint_title: "Quantum Computing Applications in Molecular Modeling",
-    publication_date: "2022-08-25",
-    total_citation: 41,
-    all_authors: [{"author_name": "Dr. Kevin Liu"}, {"author_name": "Dr. Amanda White"}]
-  },
-  {
-    PPC_Id: "9",
-    preprint_title: "Blockchain Technology in Healthcare Data Management",
-    publication_date: "2023-02-14",
-    total_citation: 15,
-    all_authors: [{"author_name": "Prof. Daniel Miller"}, {"author_name": "Dr. Sophie Taylor"}]
-  },
-  {
-    PPC_Id: "10",
-    preprint_title: "Immunotherapy Optimization Using Machine Learning",
-    publication_date: "2019-06-30",
-    total_citation: 134,
-    all_authors: [{"author_name": "Dr. Carlos Rodriguez"}, {"author_name": "Prof. Helen Chang"}]
   }
 ];
 
-const App = () => {
+// Demo navigation component
+const DemoNav = () => (
+  <Layout>
+    <div style={{ padding: '2rem', textAlign: 'center' }}>
+      <Header 
+        title="Preprint Commons Demo"
+        subtitle="Explore the improved styling and functionality across all pages"
+        variant="page"
+        size="large"
+      />
+      <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', marginTop: '2rem' }}>
+        <a href="/" style={{ padding: '0.5rem 1rem', background: '#3498db', color: 'white', textDecoration: 'none', borderRadius: '8px' }}>
+          Homepage (with Map)
+        </a>
+        <a href="/explore" style={{ padding: '0.5rem 1rem', background: '#e74c3c', color: 'white', textDecoration: 'none', borderRadius: '8px' }}>
+          Explore (Search & Map)
+        </a>
+        <a href="/paper/PPC00000001" style={{ padding: '0.5rem 1rem', background: '#2ecc71', color: 'white', textDecoration: 'none', borderRadius: '8px' }}>
+          Paper Details
+        </a>
+        <a href="/documentation" style={{ padding: '0.5rem 1rem', background: '#9b59b6', color: 'white', textDecoration: 'none', borderRadius: '8px' }}>
+          Documentation
+        </a>
+        <a href="/citation-demo" style={{ padding: '0.5rem 1rem', background: '#f39c12', color: 'white', textDecoration: 'none', borderRadius: '8px' }}>
+          Citation Analysis Demo
+        </a>
+      </div>
+      <div style={{ marginTop: '2rem', padding: '1rem', background: '#f8f9fa', borderRadius: '8px' }}>
+        <h3>✨ Key Improvements:</h3>
+        <ul style={{ textAlign: 'left', maxWidth: '600px', margin: '0 auto' }}>
+          <li><strong>Consolidated Code:</strong> Removed duplicate utilities and hooks</li>
+          <li><strong>Modular CSS:</strong> Converted standalone CSS to CSS modules</li>
+          <li><strong>Unified API:</strong> Single source for API utilities and data fetching</li>
+          <li><strong>Clean Architecture:</strong> Better organized components and utilities</li>
+          <li><strong>Demo Integration:</strong> All demos accessible from single entry point</li>
+        </ul>
+      </div>
+    </div>
+  </Layout>
+);
+
+// Citation Analysis Demo Component
+const CitationAnalysisDemo = () => {
   const [selectedTimeRange, setSelectedTimeRange] = useState('all');
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [sortOption, setSortOption] = useState('citations_desc');
@@ -90,7 +106,6 @@ const App = () => {
 
   const handleSearchClick = () => {
     if (useMockData) {
-      // Use mock data for demonstration
       return;
     }
     fetchAllData(selectedTimeRange, selectedSubject, sortOption, 10);
@@ -98,7 +113,6 @@ const App = () => {
 
   const handleRefreshData = () => {
     if (useMockData) {
-      // Simulate refresh with mock data
       setUseMockData(false);
       setTimeout(() => setUseMockData(true), 1000);
       return;
@@ -192,27 +206,27 @@ const App = () => {
             )}
           </Card.Content>
         </Card>
-
-        <Card>
-          <Card.Header>
-            <h3 style={{ margin: 0, fontSize: '1.125rem', fontWeight: '600' }}>
-              Features Demonstrated
-            </h3>
-          </Card.Header>
-          <Card.Content>
-            <ul style={{ margin: 0, paddingLeft: '20px', lineHeight: '1.6' }}>
-              <li><strong>Unified Data Fetching:</strong> Single hook manages all citation data consistently</li>
-              <li><strong>Year-Only Display:</strong> X-axis shows only publication years for clarity</li>
-              <li><strong>Interactive Zoom Controls:</strong> Zoom in/out buttons and reset functionality</li>
-              <li><strong>Mouse/Touch Zoom:</strong> Ctrl+scroll wheel and pinch gestures for zooming</li>
-              <li><strong>Year Range Indicator:</strong> Shows current zoom range when zoomed</li>
-              <li><strong>Responsive Design:</strong> Adapts to different screen sizes</li>
-              <li><strong>Enhanced Tooltips:</strong> Rich hover information for each data point</li>
-            </ul>
-          </Card.Content>
-        </Card>
       </div>
     </div>
+  );
+};
+
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/faq" element={<Faq />} />
+        <Route path="/explore" element={<Explore />} />
+        <Route path="/paper/:id" element={<Paper />} />
+        <Route path="/documentation" element={<Documentation />} />
+        <Route path="/citation-demo" element={<CitationAnalysisDemo />} />
+        <Route path="/demo" element={<DemoNav />} />
+        <Route path="*" element={<DemoNav />} />
+      </Routes>
+    </Router>
   );
 };
 

@@ -154,48 +154,42 @@ const Explore = () => {
 
   return (
     <Layout>
-      <div className={layoutStyles.pageContainerFullWidth}>
-        <div className="container">
-          <div className={layoutStyles.contentSection}>
-            <Header 
-              title="Explore Preprint Data"
-              subtitle="Discover insights through interactive visualizations and comprehensive search capabilities."
-              variant="page"
-              size="large"
-            />
-          </div>
-        </div>
+      <div className="centered-page">
+        <Header 
+          title="Explore Preprint Data"
+          subtitle="Discover insights through interactive visualizations and comprehensive search capabilities."
+          variant="page"
+          size="large"
+        />
         
         {/* Tab Navigation */}
-        <div className="container">
-          <div className={styles.tabNavigation}>
-            <Button
-              variant={activeTab === 'map' ? 'primary' : 'outline'}
-              onClick={() => openTab('map')}
-              className={styles.tabButton}
-            >
-              Interactive Map
-            </Button>
-            <Button
-              variant={activeTab === 'search' ? 'primary' : 'outline'}
-              onClick={() => openTab('search')}
-              className={styles.tabButton}
-            >
-              Search Papers
-            </Button>
-            <Button
-              variant={activeTab === 'analytics' ? 'primary' : 'outline'}
-              onClick={() => openTab('analytics')}
-              className={styles.tabButton}
-            >
-              Citation Analytics
-            </Button>
-          </div>
+        <div className={styles.tabNavigation}>
+          <Button
+            variant={activeTab === 'map' ? 'primary' : 'outline'}
+            onClick={() => openTab('map')}
+            className={styles.tabButton}
+          >
+            Interactive Map
+          </Button>
+          <Button
+            variant={activeTab === 'search' ? 'primary' : 'outline'}
+            onClick={() => openTab('search')}
+            className={styles.tabButton}
+          >
+            Search Papers
+          </Button>
+          <Button
+            variant={activeTab === 'analytics' ? 'primary' : 'outline'}
+            onClick={() => openTab('analytics')}
+            className={styles.tabButton}
+          >
+            Citation Analytics
+          </Button>
         </div>
         
         {/* Map Tab */}
         {activeTab === 'map' && (
-          <div className="container">
+          <>
             <Header 
               title="Global Preprint Distribution"
               subtitle="Explore the geographic distribution of preprints worldwide. Use zoom and pan to see detailed statistics."
@@ -213,7 +207,7 @@ const Explore = () => {
               ]}
               className={styles.exploreMapContainer}
             />
-          </div>
+          </>
         )}
         
         {/* Search Tab */}

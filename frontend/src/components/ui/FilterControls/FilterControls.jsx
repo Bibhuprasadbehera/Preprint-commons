@@ -1,8 +1,66 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Select from '../Select/Select';
 import Button from '../Button/Button';
-import { useSubjects } from '../../../hooks/useSubjects';
+import { API_BASE_URL } from '../../../utils/api';
 import styles from './FilterControls.module.css';
+
+// useSubjects hook moved here since it's only used in this component
+const useSubjects = () => {
+  const [subjects, setSubjects] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchSubjects = async () => {
+      setLoading(true);
+      setError(null);
+      
+      try {
+        const response = await fetch(`${API_BASE_URL}/subjects`);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const result = await response.json();
+        console.log('✅ Subjects data received:', result);
+        
+        // Transform subjects into options format
+        const subjectOptions = [
+          { value: '', label: 'All Subjects' },
+          ...result.data.map(subject => ({
+            value: subject,
+            label: subject.split(' ').map(word => 
+              word.charAt(0).toUpperCase() + word.slice(1)
+            ).join(' ')
+          }))
+        ];
+        
+        setSubjects(subjectOptions);
+      } catch (err) {
+        console.error('💥 Subjects fetch error:', err);
+        setError(err.message);
+        
+        // Fallback to hardcoded subjects if API fails
+        const fallbackSubjects = [
+          { value: '', label: 'All Subjects' },
+          { value: 'bioinformatics', label: 'Bioinformatics' },
+          { value: 'molecular biology', label: 'Molecular Biology' },
+          { value: 'neuroscience', label: 'Neuroscience' },
+          { value: 'genomics', label: 'Genomics' },
+          { value: 'immunology', label: 'Immunology' }
+        ];
+        setSubjects(fallbackSubjects);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSubjects();
+  }, []);
+
+  return { subjects, loading, error };
+};
 
 const FilterControls = ({
   selectedTimeRange,
