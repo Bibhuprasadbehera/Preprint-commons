@@ -3,6 +3,13 @@
   height: 400px;
   width: 100%;
   padding: var(--spacing-lg);
+  overflow: hidden;
+}
+
+.chartCanvas {
+  cursor: crosshair;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-primary);
 }
 
 .loadingContainer {
@@ -56,6 +63,37 @@
   color: var(--color-text-secondary);
   box-shadow: var(--shadow-sm);
   z-index: 5;
+}
+
+.tooltip {
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  max-width: 300px;
+  box-shadow: var(--shadow-lg);
+  pointer-events: none;
+}
+
+.tooltipTitle {
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-tight);
+}
+
+.tooltipContent {
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+}
+
+.tooltipContent div {
+  margin-bottom: 2px;
+}
+
+.tooltipContent div:last-child {
+  margin-bottom: 0;
 }
 
 @keyframes spin {

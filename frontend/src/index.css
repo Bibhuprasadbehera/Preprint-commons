@@ -8,6 +8,7 @@
 @import url('./components/ui/Select/Select.module.css');
 @import url('./components/ui/FilterControls/FilterControls.module.css');
 @import url('./components/ui/PapersList/PapersList.module.css');
+@import url('./components/ui/DynamicSectionTitle/DynamicSectionTitle.module.css');
 @import url('./components/ui/ServerRestartGuide/ServerRestartGuide.module.css');
 @import url('./components/charts/CitationScatterChart.module.css');
 @import url('./components/charts/ZoomControls/ZoomControls.module.css');

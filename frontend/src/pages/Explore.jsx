@@ -13,6 +13,7 @@ import CitationScatterChart from '../components/charts/CitationScatterChart';
 import CitationTrendsChart from '../components/charts/CitationTrendsChart';
 import CitationHeatmap from '../components/charts/CitationHeatmap';
 import PapersList from '../components/ui/PapersList/PapersList';
+import DynamicSectionTitle from '../components/ui/DynamicSectionTitle/DynamicSectionTitle';
 import { useUnifiedCitationData } from '../hooks/useUnifiedCitationData';
 import layoutStyles from '../components/layout/Layout/Layout.module.css';
 import styles from './Explore.module.css';
@@ -402,8 +403,7 @@ const Explore = () => {
 
                 <Card className={styles.chartCard}>
                   <Card.Header>
-                    <h3 className={styles.chartTitle}>High-Impact Papers</h3>
-                    <p className={styles.chartSubtitle}>Top Cited Papers</p>
+                    <DynamicSectionTitle sortOption={sortOption} />
                   </Card.Header>
                   <Card.Content>
                     <PapersList 
