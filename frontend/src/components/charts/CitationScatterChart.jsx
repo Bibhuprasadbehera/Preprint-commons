@@ -25,7 +25,7 @@ const CitationScatterChart = ({ data, loading = false }) => {
       
       const minDate = Math.min(...dates);
       const maxDate = Math.max(...dates);
-      const minCitations = Math.min(...citations);
+      const minCitations = 0; // Start y-axis at 0
       const maxCitations = Math.max(...citations);
       
       setZoomState(prev => ({
@@ -148,10 +148,7 @@ const CitationScatterChart = ({ data, loading = false }) => {
       const date = zoomState.minDate + (dateRange * i / gridLines);
       const x = xScale(date);
       const dateObj = new Date(date);
-      const label = dateObj.toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'short' 
-      });
+      const label = dateObj.getFullYear().toString();
       ctx.fillText(label, x, height - margin.bottom + 20);
     }
 
