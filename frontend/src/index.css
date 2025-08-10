@@ -15,6 +15,11 @@
 @import url('./components/charts/ZoomControls/ZoomControls.module.css');
 @import url('./components/charts/CitationTrendsChart.module.css');
 @import url('./components/charts/CitationHeatmap.module.css');
+@import url('./components/analytics/StatisticsCard/StatisticsCard.module.css');
+@import url('./components/analytics/PublicationTimelineChart/PublicationTimelineChart.module.css');
+@import url('./components/analytics/SubjectDistributionChart/SubjectDistributionChart.module.css');
+@import url('./components/analytics/ServerDistributionChart/ServerDistributionChart.module.css');
+@import url('./components/analytics/AnalyticsDashboard/AnalyticsDashboard.module.css');
 @import url('./pages/Paper.module.css');
 @import url('./pages/CitationAnalysis.module.css');
 

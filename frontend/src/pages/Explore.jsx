@@ -14,6 +14,7 @@ import CitationTrendsChart from '../components/charts/CitationTrendsChart';
 import CitationHeatmap from '../components/charts/CitationHeatmap';
 import PapersList from '../components/ui/PapersList/PapersList';
 import DynamicSectionTitle from '../components/ui/DynamicSectionTitle/DynamicSectionTitle';
+import AnalyticsDashboard from '../components/analytics/AnalyticsDashboard/AnalyticsDashboard';
 import { useUnifiedCitationData } from '../hooks/useUnifiedCitationData';
 import layoutStyles from '../components/layout/Layout/Layout.module.css';
 import styles from './Explore.module.css';
@@ -185,6 +186,13 @@ const Explore = () => {
           >
             Citation Analytics
           </Button>
+          <Button
+            variant={activeTab === 'dashboard' ? 'primary' : 'outline'}
+            onClick={() => openTab('dashboard')}
+            className={styles.tabButton}
+          >
+            Analytics Dashboard
+          </Button>
         </div>
         
         {/* Map Tab */}
@@ -318,6 +326,15 @@ const Explore = () => {
                   </div>
                 )}
               </div>
+            </div>
+          </div>
+        )}
+        
+        {/* Analytics Dashboard Tab */}
+        {activeTab === 'dashboard' && (
+          <div className="container">
+            <div className={layoutStyles.contentSection}>
+              <AnalyticsDashboard />
             </div>
           </div>
         )}

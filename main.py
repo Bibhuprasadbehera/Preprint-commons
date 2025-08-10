@@ -208,4 +208,121 @@ def get_subjects(conn: sqlite3.Connection = Depends(get_db_connection)):
     
     return JSONResponse(content={"data": subjects})
 
+@app.get("/analytics-data")
+def get_analytics_data(conn: sqlite3.Connection = Depends(get_db_connection)):
+    """Get analytics dashboard data including timeline, subject distribution, and server distribution"""
+    print("🚀 Analytics Data API called")
+    
+    try:
+        # 1. Publication Timeline Data (monthly submissions)
+        timeline_query = """
+            SELECT strftime('%Y-%m', preprint_submission_date) as month,
+                   COUNT(*) as submissions
+            FROM papers 
+            WHERE preprint_submission_date IS NOT NULL
+            GROUP BY strftime('%Y-%m', preprint_submission_date)
+            ORDER BY month
+        """
+        timeline_df = pd.read_sql_query(timeline_query, conn)
+        
+        # 2. Subject Distribution Data
+        subject_query = """
+            SELECT preprint_subject as subject,
+                   COUNT(*) as count,
+                   ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM papers WHERE preprint_subject IS NOT NULL), 1) as percentage
+            FROM papers 
+            WHERE preprint_subject IS NOT NULL 
+            AND preprint_subject != ''
+            GROUP BY preprint_subject
+            ORDER BY count DESC
+            LIMIT 10
+        """
+        subject_df = pd.read_sql_query(subject_query, conn)
+        
+        # 3. Server Distribution Data (use preprint_server column directly)
+        server_query = """
+            SELECT preprint_server as server,
+                   COUNT(*) as count
+            FROM papers 
+            WHERE preprint_server IS NOT NULL 
+            AND preprint_server != ''
+            GROUP BY preprint_server
+            ORDER BY count DESC
+        """
+        server_df = pd.read_sql_query(server_query, conn)
+        
+        # Calculate percentages for server data
+        total_papers = server_df['count'].sum()
+        server_df['percentage'] = round(server_df['count'] * 100.0 / total_papers, 1)
+        
+        # 4. Key Statistics
+        stats_query = """
+            SELECT 
+                COUNT(*) as total_papers,
+                MIN(preprint_submission_date) as earliest_date,
+                MAX(preprint_submission_date) as latest_date,
+                COUNT(DISTINCT preprint_subject) as active_subjects
+            FROM papers 
+            WHERE preprint_submission_date IS NOT NULL
+        """
+        stats_df = pd.read_sql_query(stats_query, conn)
+        
+        # Most active period
+        most_active_query = """
+            SELECT strftime('%Y-%m', preprint_submission_date) as period,
+                   COUNT(*) as count
+            FROM papers 
+            WHERE preprint_submission_date IS NOT NULL
+            GROUP BY strftime('%Y-%m', preprint_submission_date)
+            ORDER BY count DESC
+            LIMIT 1
+        """
+        most_active_df = pd.read_sql_query(most_active_query, conn)
+        
+        # Average papers per month
+        avg_query = """
+            SELECT AVG(monthly_count) as avg_papers_per_month
+            FROM (
+                SELECT COUNT(*) as monthly_count
+                FROM papers 
+                WHERE preprint_submission_date IS NOT NULL
+                GROUP BY strftime('%Y-%m', preprint_submission_date)
+            )
+        """
+        avg_df = pd.read_sql_query(avg_query, conn)
+        
+        conn.close()
+        
+        # Prepare response
+        response_data = {
+            "timelineData": timeline_df.to_dict("records"),
+            "subjectData": subject_df.to_dict("records"),
+            "serverData": server_df.to_dict("records"),
+            "statisticsData": {
+                "totalPapers": int(stats_df.iloc[0]['total_papers']),
+                "dateRange": {
+                    "startDate": stats_df.iloc[0]['earliest_date'],
+                    "endDate": stats_df.iloc[0]['latest_date']
+                },
+                "mostActivePeriod": {
+                    "period": most_active_df.iloc[0]['period'] if not most_active_df.empty else "N/A",
+                    "count": int(most_active_df.iloc[0]['count']) if not most_active_df.empty else 0
+                },
+                "averagePapersPerMonth": int(avg_df.iloc[0]['avg_papers_per_month']) if not avg_df.empty else 0,
+                "activeSubjects": int(stats_df.iloc[0]['active_subjects']),
+                "activeServers": len(server_df)
+            },
+            "metadata": {
+                "lastUpdated": pd.Timestamp.now().isoformat(),
+                "totalRecords": int(stats_df.iloc[0]['total_papers'])
+            }
+        }
+        
+        print(f"✅ Analytics Data: Returning timeline={len(timeline_df)}, subjects={len(subject_df)}, servers={len(server_df)} records")
+        return JSONResponse(content=response_data)
+        
+    except Exception as e:
+        print(f"❌ Analytics Data Error: {str(e)}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
 #bibhu backend
