@@ -1,0 +1,62 @@
+.zoomControls {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  display: flex;
+  gap: var(--spacing-xs);
+  z-index: 10;
+}
+
+.zoomButton,
+.resetButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--font-size-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+.zoomButton:hover:not(:disabled),
+.resetButton:hover:not(:disabled) {
+  background: var(--color-neutral-100);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.zoomButton:disabled,
+.resetButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.zoomIcon,
+.resetIcon {
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.zoomButton:hover:not(:disabled) .zoomIcon,
+.resetButton:hover:not(:disabled) .resetIcon {
+  color: var(--color-primary);
+}
+
+.resetButton {
+  border-color: var(--color-secondary);
+}
+
+.resetButton:hover:not(:disabled) {
+  border-color: var(--color-secondary-dark);
+}
+
+.resetButton:hover:not(:disabled) .resetIcon {
+  color: var(--color-secondary);
+}

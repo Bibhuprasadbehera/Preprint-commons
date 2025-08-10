@@ -13,12 +13,7 @@ import CitationScatterChart from '../components/charts/CitationScatterChart';
 import CitationTrendsChart from '../components/charts/CitationTrendsChart';
 import CitationHeatmap from '../components/charts/CitationHeatmap';
 import PapersList from '../components/ui/PapersList/PapersList';
-import { 
-  useCitationImpactData, 
-  useCitationTrendsData, 
-  useCitationHeatmapData, 
-  useTopCitedPapersData 
-} from '../hooks/useCitationData';
+import { useUnifiedCitationData } from '../hooks/useUnifiedCitationData';
 import layoutStyles from '../components/layout/Layout/Layout.module.css';
 import styles from './Explore.module.css';
 
@@ -41,11 +36,12 @@ const Explore = () => {
   const RESULTS_PER_PAGE = 10;
   const MAX_RESULTS = 100;
 
-  // Initialize citation data hooks with manual fetching
-  const { data: impactData, loading: impactLoading, error: impactError, fetchData: fetchImpactData, clearData: clearImpactData } = useCitationImpactData();
-  const { data: trendsData, loading: trendsLoading, error: trendsError, fetchData: fetchTrendsData, clearData: clearTrendsData } = useCitationTrendsData();
-  const { data: heatmapData, loading: heatmapLoading, error: heatmapError, fetchData: fetchHeatmapData, clearData: clearHeatmapData } = useCitationHeatmapData();
-  const { data: topPapersData, loading: papersLoading, error: papersError, fetchData: fetchTopPapersData, clearData: clearTopPapersData } = useTopCitedPapersData();
+  // Initialize unified citation data hook
+  const { data, loading, error, fetchAllData, clearAllData } = useUnifiedCitationData();
+  
+  const { impactData, trendsData, heatmapData, topPapersData } = data;
+  const { impactData: impactLoading, trendsData: trendsLoading, heatmapData: heatmapLoading, topPapersData: papersLoading } = loading;
+  const { impactData: impactError, trendsData: trendsError, heatmapData: heatmapError, topPapersData: papersError } = error;
 
   const openTab = (tabName) => {
     setActiveTab(tabName);
@@ -103,49 +99,23 @@ const Explore = () => {
     
     // Clear all existing data immediately to avoid showing stale results
     console.log('🔄 Starting new search - clearing existing data');
-    clearImpactData();
-    clearTrendsData();
-    clearHeatmapData();
-    clearTopPapersData();
+    clearAllData();
     
-    // Fetch all citation data independently - don't wait for all to complete
+    // Fetch all citation data using unified hook
     console.log('📊 Fetching all citation data with filters:', {
       timeRange: selectedTimeRange,
       subject: selectedSubject,
       sortOption: sortOption
     });
     
-    // Start all fetches independently - each will handle its own loading/error states
-    const fetchPromises = [
-      fetchImpactData(selectedTimeRange, selectedSubject).catch(err => 
-        console.error('Citation impact fetch failed:', err)
-      ),
-      fetchTrendsData(selectedTimeRange, selectedSubject).catch(err => 
-        console.error('Citation trends fetch failed:', err)
-      ),
-      fetchHeatmapData(selectedTimeRange).catch(err => 
-        console.error('Citation heatmap fetch failed:', err)
-      ),
-      fetchTopPapersData(10, sortOption, selectedTimeRange, selectedSubject).catch(err => 
-        console.error('Top papers fetch failed:', err)
-      )
-    ];
-    
-    // Don't wait for all to complete - let each chart update independently
-    Promise.allSettled(fetchPromises).then(results => {
-      const endpoints = ['citation-impact', 'citation-trends', 'citation-heatmap', 'top-cited-papers'];
-      results.forEach((result, index) => {
-        if (result.status === 'fulfilled') {
-          console.log(`✅ ${endpoints[index]} completed successfully`);
-        } else {
-          console.error(`❌ ${endpoints[index]} failed:`, result.reason);
-        }
-      });
-      console.log('🎉 All citation data fetch attempts completed');
-    });
-    
-    // Set searching to false immediately since individual components handle their own loading
-    setIsSearching(false);
+    try {
+      await fetchAllData(selectedTimeRange, selectedSubject, sortOption, 10);
+      console.log('🎉 All citation data fetch completed');
+    } catch (err) {
+      console.error('Citation data fetch failed:', err);
+    } finally {
+      setIsSearching(false);
+    }
   };
 
   const handleExportData = () => {

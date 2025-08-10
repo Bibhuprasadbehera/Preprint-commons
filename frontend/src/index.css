@@ -10,6 +10,7 @@
 @import url('./components/ui/PapersList/PapersList.module.css');
 @import url('./components/ui/ServerRestartGuide/ServerRestartGuide.module.css');
 @import url('./components/charts/CitationScatterChart.module.css');
+@import url('./components/charts/ZoomControls/ZoomControls.module.css');
 @import url('./components/charts/CitationTrendsChart.module.css');
 @import url('./components/charts/CitationHeatmap.module.css');
 @import url('./pages/Paper.module.css');

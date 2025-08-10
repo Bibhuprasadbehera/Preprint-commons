@@ -7,12 +7,7 @@ import CitationScatterChart from '../components/charts/CitationScatterChart';
 import CitationTrendsChart from '../components/charts/CitationTrendsChart';
 import CitationHeatmap from '../components/charts/CitationHeatmap';
 import PapersList from '../components/ui/PapersList/PapersList';
-import { 
-  useCitationImpactData, 
-  useCitationTrendsData, 
-  useCitationHeatmapData, 
-  useTopCitedPapersData 
-} from '../hooks/useCitationData';
+import { useUnifiedCitationData } from '../hooks/useUnifiedCitationData';
 import styles from './CitationAnalysis.module.css';
 
 const CitationAnalysis = () => {
@@ -20,14 +15,25 @@ const CitationAnalysis = () => {
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [sortOption, setSortOption] = useState('citations_desc');
 
-  // Fetch data using custom hooks
-  const { data: impactData, loading: impactLoading, error: impactError } = useCitationImpactData(selectedTimeRange, selectedSubject);
-  const { data: trendsData, loading: trendsLoading, error: trendsError } = useCitationTrendsData(selectedTimeRange, selectedSubject);
-  const { data: heatmapData, loading: heatmapLoading, error: heatmapError } = useCitationHeatmapData(selectedTimeRange);
-  const { data: topPapersData, loading: papersLoading, error: papersError } = useTopCitedPapersData(10, sortOption, selectedTimeRange, selectedSubject);
+  // Fetch data using unified hook
+  const { data, loading, error, fetchAllData } = useUnifiedCitationData();
+  
+  const { impactData, trendsData, heatmapData, topPapersData } = data;
+  const { impactData: impactLoading, trendsData: trendsLoading, heatmapData: heatmapLoading, topPapersData: papersLoading } = loading;
+  const { impactData: impactError, trendsData: trendsError, heatmapData: heatmapError, topPapersData: papersError } = error;
+
+  // Fetch data when filters change
+  React.useEffect(() => {
+    fetchAllData(selectedTimeRange, selectedSubject, sortOption, 10);
+  }, [selectedTimeRange, selectedSubject, sortOption, fetchAllData]);
 
   const handleExportData = () => {
     const exportData = {
+      filters: {
+        timeRange: selectedTimeRange,
+        subject: selectedSubject,
+        sortOption: sortOption
+      },
       impactData,
       trendsData,
       heatmapData,
@@ -46,8 +52,7 @@ const CitationAnalysis = () => {
   };
 
   const handleRefreshData = () => {
-    // Force re-fetch by updating state
-    window.location.reload();
+    fetchAllData(selectedTimeRange, selectedSubject, sortOption, 10);
   };
 
   const handlePaperClick = (paper) => {
