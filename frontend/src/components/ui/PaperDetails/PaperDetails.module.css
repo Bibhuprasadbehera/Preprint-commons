@@ -1,4 +1,4 @@
-.paper-details-container {
+.container {
   display: flex;
   gap: 30px;
   max-width: 1200px;
@@ -6,18 +6,18 @@
   padding: 0 20px;
 }
 
-.paper-main-content, .paper-metadata {
+.mainContent, .metadata {
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
-.paper-main-content {
+.mainContent {
   flex: 3;
   background: white;
   padding: 30px;
 }
 
-.paper-metadata {
+.metadata {
   flex: 1;
   background-color: #f8f9fa;
   padding: 25px;
@@ -26,30 +26,30 @@
   top: 20px;
 }
 
-.paper-metadata h3 {
+.metadata h3 {
   margin-top: 0;
   padding-bottom: 10px;
   border-bottom: 1px solid #e0e0e0;
   color: #333;
 }
 
-.metadata-item {
+.metadataItem {
   margin-bottom: 15px;
 }
 
-.metadata-label {
+.metadataLabel {
   font-weight: 600;
   color: #555;
   font-size: 0.9rem;
   margin-bottom: 3px;
 }
 
-.metadata-value {
+.metadataValue {
   color: #333;
   word-break: break-word;
 }
 
-#paper-title {
+.title {
   color: #2c3e50;
   margin-bottom: 10px;
   font-size: 1.8rem;
@@ -62,39 +62,39 @@
   font-style: italic;
 }
 
-.abstract-section, .citations-section {
+.abstractSection, .citationsSection {
   margin-bottom: 30px;
 }
 
-.abstract-section h2, .citations-section h2 {
+.abstractSection h2, .citationsSection h2 {
   color: #2c3e50;
   font-size: 1.4rem;
   margin-bottom: 10px;
 }
 
-#paper-abstract {
+.abstract {
   line-height: 1.6;
   color: #444;
 }
 
-.citations-section {
+.citationsSection {
   margin-top: 40px;
 }
 
 @media (max-width: 768px) {
-  .paper-details-container {
+  .container {
     flex-direction: column;
   }
-  .paper-metadata {
+  .metadata {
     position: static;
   }
 }
 
-a.metadata-value {
+.metadataValue a {
   color: #3498db;
   text-decoration: none;
 }
 
-a.metadata-value:hover {
+.metadataValue a:hover {
   text-decoration: underline;
 }

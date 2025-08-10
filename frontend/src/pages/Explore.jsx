@@ -7,6 +7,14 @@ import Pagination from '../components/ui/Pagination/Pagination';
 import { PaperCard } from '../components/Paper';
 import MapContainer from '../components/ui/MapContainer/MapContainer';
 import Header from '../components/ui/Header/Header';
+import Card from '../components/ui/Card/Card';
+import FilterControls from '../components/ui/FilterControls/FilterControls';
+import CitationScatterChart from '../components/charts/CitationScatterChart';
+import CitationTrendsChart from '../components/charts/CitationTrendsChart';
+import CitationHeatmap from '../components/charts/CitationHeatmap';
+import PapersList from '../components/ui/PapersList/PapersList';
+import DynamicSectionTitle from '../components/ui/DynamicSectionTitle/DynamicSectionTitle';
+import { useUnifiedCitationData } from '../hooks/useUnifiedCitationData';
 import layoutStyles from '../components/layout/Layout/Layout.module.css';
 import styles from './Explore.module.css';
 
@@ -20,8 +28,21 @@ const Explore = () => {
   const [totalResults, setTotalResults] = useState(0);
   const [hasSearched, setHasSearched] = useState(false);
   
+  // Citation Analysis state
+  const [selectedTimeRange, setSelectedTimeRange] = useState('all');
+  const [selectedSubject, setSelectedSubject] = useState(null);
+  const [sortOption, setSortOption] = useState('citations_desc');
+  const [isSearching, setIsSearching] = useState(false);
+  
   const RESULTS_PER_PAGE = 10;
   const MAX_RESULTS = 100;
+
+  // Initialize unified citation data hook
+  const { data, loading, error, fetchAllData, clearAllData } = useUnifiedCitationData();
+  
+  const { impactData, trendsData, heatmapData, topPapersData } = data;
+  const { impactData: impactLoading, trendsData: trendsLoading, heatmapData: heatmapLoading, topPapersData: papersLoading } = loading;
+  const { impactData: impactError, trendsData: trendsError, heatmapData: heatmapError, topPapersData: papersError } = error;
 
   const openTab = (tabName) => {
     setActiveTab(tabName);
@@ -74,43 +95,101 @@ const Explore = () => {
     setHasSearched(false);
   };
 
+  const handleSearchClick = async () => {
+    setIsSearching(true);
+    
+    // Clear all existing data immediately to avoid showing stale results
+    console.log('🔄 Starting new search - clearing existing data');
+    clearAllData();
+    
+    // Fetch all citation data using unified hook
+    console.log('📊 Fetching all citation data with filters:', {
+      timeRange: selectedTimeRange,
+      subject: selectedSubject,
+      sortOption: sortOption
+    });
+    
+    try {
+      await fetchAllData(selectedTimeRange, selectedSubject, sortOption, 10);
+      console.log('🎉 All citation data fetch completed');
+    } catch (err) {
+      console.error('Citation data fetch failed:', err);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleExportData = () => {
+    const exportData = {
+      filters: {
+        timeRange: selectedTimeRange,
+        subject: selectedSubject,
+        sortOption: sortOption
+      },
+      impactData,
+      trendsData,
+      heatmapData,
+      topPapersData
+    };
+    
+    const dataStr = JSON.stringify(exportData, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    
+    const exportFileDefaultName = `citation-analysis-${new Date().toISOString().split('T')[0]}.json`;
+    
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+  };
+
+  const handleRefreshData = () => {
+    handleSearchClick();
+  };
+
+  const handlePaperClick = (paper) => {
+    console.log('Paper clicked:', paper);
+    // Navigation is handled by the PapersList component
+  };
+
   return (
     <Layout>
-      <div className={layoutStyles.pageContainerFullWidth}>
-        <div className="container">
-          <div className={layoutStyles.contentSection}>
-            <Header 
-              title="Explore Preprint Data"
-              subtitle="Discover insights through interactive visualizations and comprehensive search capabilities."
-              variant="page"
-              size="large"
-            />
-          </div>
-        </div>
+      <div className="centered-page">
+        <Header 
+          title="Explore Preprint Data"
+          subtitle="Discover insights through interactive visualizations and comprehensive search capabilities."
+          variant="page"
+          size="large"
+        />
         
         {/* Tab Navigation */}
-        <div className="container">
-          <div className={styles.tabNavigation}>
-            <Button
-              variant={activeTab === 'map' ? 'primary' : 'outline'}
-              onClick={() => openTab('map')}
-              className={styles.tabButton}
-            >
-              Interactive Map
-            </Button>
-            <Button
-              variant={activeTab === 'search' ? 'primary' : 'outline'}
-              onClick={() => openTab('search')}
-              className={styles.tabButton}
-            >
-              Search Papers
-            </Button>
-          </div>
+        <div className={styles.tabNavigation}>
+          <Button
+            variant={activeTab === 'map' ? 'primary' : 'outline'}
+            onClick={() => openTab('map')}
+            className={styles.tabButton}
+          >
+            Interactive Map
+          </Button>
+          <Button
+            variant={activeTab === 'search' ? 'primary' : 'outline'}
+            onClick={() => openTab('search')}
+            className={styles.tabButton}
+          >
+            Search Papers
+          </Button>
+          <Button
+            variant={activeTab === 'analytics' ? 'primary' : 'outline'}
+            onClick={() => openTab('analytics')}
+            className={styles.tabButton}
+          >
+            Citation Analytics
+          </Button>
         </div>
         
         {/* Map Tab */}
         {activeTab === 'map' && (
-          <div className="container">
+          <>
             <Header 
               title="Global Preprint Distribution"
               subtitle="Explore the geographic distribution of preprints worldwide. Use zoom and pan to see detailed statistics."
@@ -128,7 +207,7 @@ const Explore = () => {
               ]}
               className={styles.exploreMapContainer}
             />
-          </div>
+          </>
         )}
         
         {/* Search Tab */}
@@ -238,6 +317,102 @@ const Explore = () => {
                     </div>
                   </div>
                 )}
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {/* Citation Analytics Tab */}
+        {activeTab === 'analytics' && (
+          <div className="container">
+            <div className={layoutStyles.contentSection}>
+              <Header 
+                title="Citation Analytics Dashboard"
+                subtitle="Set your filters and click 'Search & Analyze' to explore research impact and citation patterns through interactive visualizations."
+                variant="section"
+                size="medium"
+              />
+
+              <FilterControls
+                selectedTimeRange={selectedTimeRange}
+                selectedSubject={selectedSubject}
+                sortOption={sortOption}
+                onTimeRangeChange={setSelectedTimeRange}
+                onSubjectChange={setSelectedSubject}
+                onSortChange={setSortOption}
+                onSearchClick={handleSearchClick}
+                onExportData={handleExportData}
+                onRefreshData={handleRefreshData}
+                isSearching={isSearching}
+              />
+
+              <div className={styles.chartsGrid}>
+                <Card className={styles.chartCard}>
+                  <Card.Header>
+                    <h3 className={styles.chartTitle}>Citation Impact Visualization</h3>
+                    <p className={styles.chartSubtitle}>Publication Date vs Citations</p>
+                  </Card.Header>
+                  <Card.Content>
+                    <CitationScatterChart data={impactData} loading={impactLoading} />
+                    {impactError && (
+                      <div className={styles.error}>
+                        Error: {impactError}
+                        <span className={styles.retryInfo}> (Auto-retrying...)</span>
+                      </div>
+                    )}
+                  </Card.Content>
+                </Card>
+
+                <Card className={styles.chartCard}>
+                  <Card.Header>
+                    <h3 className={styles.chartTitle}>Citation Trends Over Time</h3>
+                    <p className={styles.chartSubtitle}>Citation Accumulation</p>
+                  </Card.Header>
+                  <Card.Content>
+                    <CitationTrendsChart data={trendsData} loading={trendsLoading} />
+                    {trendsError && (
+                      <div className={styles.error}>
+                        Error: {trendsError}
+                        <span className={styles.retryInfo}> (Auto-retrying...)</span>
+                      </div>
+                    )}
+                  </Card.Content>
+                </Card>
+
+                <Card className={styles.chartCard}>
+                  <Card.Header>
+                    <h3 className={styles.chartTitle}>Citation Heatmap</h3>
+                    <p className={styles.chartSubtitle}>Citation Patterns by Year</p>
+                  </Card.Header>
+                  <Card.Content>
+                    <CitationHeatmap data={heatmapData} loading={heatmapLoading} />
+                    {heatmapError && (
+                      <div className={styles.error}>
+                        Error: {heatmapError}
+                        <span className={styles.retryInfo}> (Auto-retrying...)</span>
+                      </div>
+                    )}
+                  </Card.Content>
+                </Card>
+
+                <Card className={styles.chartCard}>
+                  <Card.Header>
+                    <DynamicSectionTitle sortOption={sortOption} />
+                  </Card.Header>
+                  <Card.Content>
+                    <PapersList 
+                      papers={topPapersData} 
+                      loading={papersLoading}
+                      onPaperClick={handlePaperClick}
+                    />
+                    {papersError && (
+                      <div className={styles.error}>
+                        Error: {papersError}
+                        <span className={styles.retryInfo}> (Auto-retrying...)</span>
+                      </div>
+                    )}
+                  </Card.Content>
+                </Card>
               </div>
             </div>
           </div>
