@@ -1,4 +1,5 @@
 /* Global CSS - Import theme and set base styles */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
 @import url('./styles/theme.css');
 @import url('./components/ui/SearchBar/SearchBar.module.css');
 @import url('./components/ui/Pagination/Pagination.module.css');
@@ -120,6 +121,76 @@ ul, ol {
 input, textarea, select, button {
   font-family: inherit;
   font-size: inherit;
+}
+
+/* Global Animation Classes */
+.animate-fadeIn {
+  animation: fadeIn 0.8s ease-out;
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.animate-slideInLeft {
+  animation: slideInLeft 0.8s ease-out;
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.8s ease-out;
+}
+
+.animate-delay-1 { animation-delay: 0.2s; animation-fill-mode: both; }
+.animate-delay-2 { animation-delay: 0.4s; animation-fill-mode: both; }
+.animate-delay-3 { animation-delay: 0.6s; animation-fill-mode: both; }
+.animate-delay-4 { animation-delay: 0.8s; animation-fill-mode: both; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Enhanced hover effects for interactive elements */
+.card, .btn, [role="button"], button {
+  transition: all var(--transition-normal);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
 
 /* Utility classes for spacing */

@@ -47,17 +47,17 @@ const Faq = () => {
   return (
     <Layout>
       <div className={styles.pageContainer}>
-        <div className={styles.contentSection}>
+        <div className={`${styles.contentSection} animate-fadeInUp`}>
           <h1 className="text-heading-1">Frequently Asked Questions</h1>
           <p className="text-body-large mt-4 mb-6">
             Find answers to common questions about Preprint Commons, our data, and how to use our platform effectively.
           </p>
         </div>
         
-        <div className={styles.contentSection}>
+        <div className={`${styles.contentSection} animate-fadeInUp animate-delay-1`}>
           <div className="space-y-4">
             {faqs.map((faq, index) => (
-              <div key={index} className="card">
+              <div key={index} className={`card animate-fadeInUp`} style={{animationDelay: `${0.2 + index * 0.1}s`}}>
                 <button
                   className="w-full text-left card-content flex justify-between items-center"
                   onClick={() => toggleFaq(index)}
@@ -77,7 +77,7 @@ const Faq = () => {
           </div>
         </div>
         
-        <div className={styles.contentSection}>
+        <div className={`${styles.contentSection} animate-fadeInUp animate-delay-4`}>
           <div className="card card-content text-center">
             <h2 className="text-heading-3 mb-4">Still Have Questions?</h2>
             <p className="text-body mb-4">
