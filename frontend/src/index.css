@@ -21,6 +21,15 @@
 @import url('./components/analytics/SubjectDistributionChart/SubjectDistributionChart.module.css');
 @import url('./components/analytics/ServerDistributionChart/ServerDistributionChart.module.css');
 @import url('./components/analytics/AnalyticsDashboard/AnalyticsDashboard.module.css');
+@import url('./components/analytics/AuthorAnalyticsCard/AuthorAnalyticsCard.module.css');
+@import url('./components/analytics/SubjectAnalyticsCard/SubjectAnalyticsCard.module.css');
+@import url('./components/analytics/GeographicAnalyticsCard/GeographicAnalyticsCard.module.css');
+@import url('./components/analytics/EnhancedFilterControls/EnhancedFilterControls.module.css');
+@import url('./components/analytics/CitationTrendsCard/CitationTrendsCard.module.css');
+@import url('./components/analytics/AuthorNetworkCard/AuthorNetworkCard.module.css');
+@import url('./components/analytics/QualityMetricsCard/QualityMetricsCard.module.css');
+@import url('./components/analytics/AdvancedCorrelationsCard/AdvancedCorrelationsCard.module.css');
+@import url('./components/analytics/ComprehensiveAnalyticsDashboard/ComprehensiveAnalyticsDashboard.module.css');
 @import url('./pages/Paper.module.css');
 @import url('./pages/CitationAnalysis.module.css');
 

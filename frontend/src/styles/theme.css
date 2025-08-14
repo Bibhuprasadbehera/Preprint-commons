@@ -121,6 +121,34 @@
   --z-modal: 1050;
   --z-popover: 1060;
   --z-tooltip: 1070;
+  
+  /* Enhanced analytics color scheme */
+  --color-author-analytics: #3b82f6;
+  --color-subject-analytics: #10b981;
+  --color-geographic-analytics: #8b5cf6;
+  --color-velocity-analytics: #f59e0b;
+  
+  /* Author analytics styling */
+  --color-author-background: #eff6ff;
+  --color-author-primary: #3b82f6;
+  
+  /* Subject analytics styling */
+  --color-subject-background: #ecfdf5;
+  --color-subject-primary: #10b981;
+  
+  /* Geographic analytics styling */
+  --color-geographic-background: #faf5ff;
+  --color-geographic-primary: #8b5cf6;
+  
+  /* Velocity analytics styling */
+  --color-velocity-background: #fffbeb;
+  --color-velocity-primary: #f59e0b;
+  
+  /* Chart colors for enhanced analytics */
+  --chart-author-primary: #3b82f6;
+  --chart-subject-primary: #10b981;
+  --chart-geographic-primary: #8b5cf6;
+  --chart-velocity-primary: #f59e0b;
 }
 
 /* Typography Classes */
@@ -362,4 +390,51 @@
 
 .gradient-hero {
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 50%, var(--color-secondary) 100%);
+}
+
+/* Enhanced analytics card variants */
+.analytics-card-author {
+  background: var(--color-author-background);
+  border-left: 4px solid var(--color-author-primary);
+}
+
+.analytics-card-subject {
+  background: var(--color-subject-background);
+  border-left: 4px solid var(--color-subject-primary);
+}
+
+.analytics-card-geographic {
+  background: var(--color-geographic-background);
+  border-left: 4px solid var(--color-geographic-primary);
+}
+
+.analytics-card-velocity {
+  background: var(--color-velocity-background);
+  border-left: 4px solid var(--color-velocity-primary);
+}
+
+/* Enhanced analytics layout classes */
+.analytics-enhanced-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: var(--spacing-xl);
+  margin-top: var(--spacing-xl);
+}
+
+.analytics-card-enhanced {
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  transition: box-shadow var(--transition-normal);
+}
+
+.analytics-card-enhanced:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.analytics-chart-container {
+  height: 300px;
+  min-height: 250px;
+  position: relative;
 }
