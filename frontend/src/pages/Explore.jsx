@@ -4,7 +4,6 @@ import Layout from '../components/layout/Layout/Layout';
 import Button from '../components/ui/Button/Button';
 import SearchBar from '../components/ui/SearchBar/SearchBar';
 import Pagination from '../components/ui/Pagination/Pagination';
-import { PaperCard } from '../components/Paper';
 import MapContainer from '../components/ui/MapContainer/MapContainer';
 import Header from '../components/ui/Header/Header';
 import Card from '../components/ui/Card/Card';
@@ -363,15 +362,11 @@ const Explore = () => {
                 
                 {!isLoading && searchResults.length > 0 && (
                   <>
-                    <div className={styles.resultsGrid}>
-                      {searchResults.map(item => (
-                        <PaperCard 
-                          key={item.PPC_Id} 
-                          paper={item}
-                          className={styles.resultCard}
-                        />
-                      ))}
-                    </div>
+                    <PapersList 
+                      papers={searchResults}
+                      loading={false}
+                      onPaperClick={(paper) => console.log('Paper clicked:', paper)}
+                    />
                     
                     {totalPages > 1 && (
                       <Pagination
