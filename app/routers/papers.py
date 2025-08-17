@@ -2,11 +2,14 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import JSONResponse
 import sqlite3
 import pandas as pd
-from typing import Optional
+from typing import Optional, Dict, Any
 from app.database import get_db_connection
 from app.models import Paper, SearchResponse, PaperSummary
 from app.config import settings
+from app.cache import get_cache
+from cachetools import Cache
 import logging
+import json
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/papers", tags=["papers"])
@@ -16,9 +19,14 @@ def search_papers(
     query: str = Query(..., min_length=1, description="Search query"),
     page: int = Query(1, ge=1, description="Page number"),
     page_size: int = Query(10, ge=1, le=settings.max_page_size, description="Items per page"),
-    conn: sqlite3.Connection = Depends(get_db_connection)
+    conn: sqlite3.Connection = Depends(get_db_connection),
+    cache: Cache = Depends(get_cache)
 ):
     """Search papers with pagination"""
+    cache_key = f"search_{query}_{page}_{page_size}"
+    if cache_key in cache:
+        return cache[cache_key]
+
     try:
         offset = (page - 1) * page_size
         
@@ -46,21 +54,27 @@ def search_papers(
         
         has_next = offset + page_size < total
         
-        return SearchResponse(
+        response = SearchResponse(
             papers=df.to_dict("records"),
             total=total,
             page=page,
             page_size=page_size,
             has_next=has_next
         )
+        cache[cache_key] = response
+        return response
         
     except Exception as e:
         logger.error(f"Search error: {e}")
         raise HTTPException(status_code=500, detail="Search failed")
 
 @router.get("/{ppc_id}")
-def get_paper(ppc_id: str, conn: sqlite3.Connection = Depends(get_db_connection)):
+def get_paper(ppc_id: str, conn: sqlite3.Connection = Depends(get_db_connection), cache: Cache = Depends(get_cache)):
     """Get a specific paper by PPC_Id"""
+    cache_key = f"paper_{ppc_id}"
+    if cache_key in cache:
+        return cache[cache_key]
+
     try:
         query = "SELECT * FROM papers WHERE PPC_Id = ?"
         df = pd.read_sql_query(query, conn, params=(ppc_id,))
@@ -68,7 +82,9 @@ def get_paper(ppc_id: str, conn: sqlite3.Connection = Depends(get_db_connection)
         if df.empty:
             raise HTTPException(status_code=404, detail="Paper not found")
             
-        return Paper(**df.iloc[0].to_dict())
+        paper = Paper(**df.iloc[0].to_dict())
+        cache[cache_key] = paper
+        return paper
         
     except HTTPException:
         raise
@@ -83,9 +99,15 @@ def fetch_papers(
     subject: Optional[str] = None,
     page: int = Query(1, ge=1),
     page_size: int = Query(10, ge=1, le=settings.max_page_size),
-    conn: sqlite3.Connection = Depends(get_db_connection)
+    conn: sqlite3.Connection = Depends(get_db_connection),
+    cache: Cache = Depends(get_cache)
 ):
     """Fetch papers with filters and pagination"""
+    params_dict = {"country": country, "year": year, "subject": subject, "page": page, "page_size": page_size}
+    cache_key = "fetch_" + json.dumps(params_dict, sort_keys=True)
+    if cache_key in cache:
+        return cache[cache_key]
+
     try:
         # Build dynamic query
         conditions = []
@@ -122,13 +144,15 @@ def fetch_papers(
         
         has_next = offset + page_size < total
         
-        return SearchResponse(
+        response = SearchResponse(
             papers=df.to_dict("records"),
             total=total,
             page=page,
             page_size=page_size,
             has_next=has_next
         )
+        cache[cache_key] = response
+        return response
         
     except Exception as e:
         logger.error(f"Fetch papers error: {e}")
