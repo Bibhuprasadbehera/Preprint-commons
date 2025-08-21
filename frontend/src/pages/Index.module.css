@@ -1,8 +1,4 @@
-/* Data Snapshot Section - Tighter spacing */
-.dataSnapshot {
-  padding: var(--spacing-3xl) 0;
-  background: var(--color-bg-primary);
-}
+/* Enhanced Homepage with Animations */
 
 .container {
   max-width: var(--breakpoint-xl);
@@ -13,6 +9,7 @@
 .sectionHeader {
   text-align: center;
   margin-bottom: var(--spacing-2xl);
+  animation: fadeInUp 0.8s ease-out;
 }
 
 .sectionTitle {
@@ -31,9 +28,14 @@
   line-height: var(--line-height-relaxed);
 }
 
-/* Map styles are now handled by MapContainer component */
+/* Data Snapshot Section */
+.dataSnapshot {
+  padding: var(--spacing-3xl) 0;
+  background: var(--color-bg-primary);
+  animation: fadeIn 1s ease-out;
+}
 
-/* How It Works Section - Tighter spacing */
+/* How It Works Section */
 .howItWorks {
   padding: var(--spacing-3xl) 0;
   background: var(--color-bg-secondary);
@@ -61,6 +63,17 @@
 .processStep {
   text-align: center;
   position: relative;
+  animation: fadeInUp 0.8s ease-out;
+  animation-fill-mode: both;
+  transition: transform var(--transition-normal);
+}
+
+.processStep:nth-child(1) { animation-delay: 0.2s; }
+.processStep:nth-child(2) { animation-delay: 0.4s; }
+.processStep:nth-child(3) { animation-delay: 0.6s; }
+
+.processStep:hover {
+  transform: translateY(-5px);
 }
 
 .stepNumber {
@@ -79,6 +92,7 @@
   box-shadow: var(--shadow-lg);
   position: relative;
   overflow: hidden;
+  transition: transform var(--transition-normal);
 }
 
 .stepNumber::before {
@@ -90,6 +104,10 @@
   height: 100%;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
   transition: left var(--transition-slow);
+}
+
+.processStep:hover .stepNumber {
+  transform: scale(1.1);
 }
 
 .processStep:hover .stepNumber::before {
@@ -110,7 +128,7 @@
   font-size: var(--font-size-base);
 }
 
-/* Testimonials Section - Tighter spacing */
+/* Testimonials Section */
 .testimonials {
   padding: var(--spacing-3xl) 0;
   background: var(--color-bg-primary);
@@ -123,14 +141,15 @@
   margin-bottom: var(--spacing-2xl);
 }
 
+/* CTA Section */
 .ctaSection {
   text-align: center;
   padding: var(--spacing-4xl) var(--spacing-2xl);
   background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-  border-radius: var(--radius-2xl);
   color: var(--color-text-inverse);
   position: relative;
   overflow: hidden;
+  animation: fadeInUp 0.8s ease-out;
 }
 
 .ctaSection::before {
@@ -143,21 +162,22 @@
   background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
 }
 
+.ctaContent {
+  position: relative;
+  z-index: 2;
+}
+
 .ctaTitle {
   font-family: var(--font-family-display);
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-bold);
   margin-bottom: var(--spacing-md);
-  position: relative;
-  z-index: 2;
 }
 
 .ctaDescription {
   font-size: var(--font-size-lg);
   margin-bottom: var(--spacing-2xl);
   opacity: 0.9;
-  position: relative;
-  z-index: 2;
 }
 
 .ctaButtons {
@@ -165,11 +185,80 @@
   gap: var(--spacing-lg);
   justify-content: center;
   flex-wrap: wrap;
-  position: relative;
-  z-index: 2;
 }
 
-/* Responsive Design - Maintain tighter spacing */
+.ctaButton, .ctaButtonSecondary {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-lg) var(--spacing-2xl);
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.ctaButton {
+  background: white;
+  color: var(--color-primary);
+}
+
+.ctaButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(33, 150, 243, 0.1), transparent);
+  transition: left var(--transition-slow);
+}
+
+.ctaButton:hover::before {
+  left: 100%;
+}
+
+.ctaButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.ctaButtonSecondary {
+  background: transparent;
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.ctaButtonSecondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Animation Keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
   .dataSnapshot,
   .howItWorks,
@@ -180,8 +269,6 @@
   .sectionTitle {
     font-size: var(--font-size-3xl);
   }
-  
-  /* Map responsive styles handled by MapContainer component */
   
   .processGrid {
     grid-template-columns: 1fr;
@@ -211,8 +298,6 @@
   .sectionTitle {
     font-size: var(--font-size-2xl);
   }
-  
-  /* Map responsive styles handled by MapContainer component */
   
   .ctaSection {
     padding: var(--spacing-2xl) var(--spacing-lg);

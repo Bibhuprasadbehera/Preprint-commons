@@ -1,8 +1,8 @@
+/* Enhanced Features Section with Animations */
 .features {
-  padding: var(--spacing-5xl) 0;
+  padding: var(--spacing-4xl) 0;
   background: var(--color-bg-secondary);
   position: relative;
-  overflow: hidden;
 }
 
 .features::before {
@@ -10,10 +10,10 @@
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at 20% 80%, rgba(52, 152, 219, 0.05) 0%, transparent 50%),
-              radial-gradient(circle at 80% 20%, rgba(230, 126, 34, 0.05) 0%, transparent 50%);
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 70% 30%, rgba(52, 152, 219, 0.05) 0%, transparent 50%);
+  z-index: 1;
 }
 
 .container {
@@ -27,6 +27,7 @@
 .header {
   text-align: center;
   margin-bottom: var(--spacing-4xl);
+  animation: fadeInUp 0.8s ease-out;
 }
 
 .title {
@@ -40,43 +41,51 @@
 .subtitle {
   font-size: var(--font-size-lg);
   color: var(--color-text-secondary);
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
   line-height: var(--line-height-relaxed);
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: var(--spacing-2xl);
-  margin-bottom: var(--spacing-3xl);
+  margin-bottom: var(--spacing-4xl);
 }
 
 .featureCard {
   background: var(--color-bg-primary);
-  border-radius: var(--radius-2xl);
   padding: var(--spacing-2xl);
+  border-radius: var(--radius-xl);
+  text-align: center;
   box-shadow: var(--shadow-md);
   transition: all var(--transition-normal);
+  animation: fadeInUp 0.8s ease-out;
+  animation-fill-mode: both;
   position: relative;
   overflow: hidden;
-  text-align: center;
 }
+
+.featureCard:nth-child(1) { animation-delay: 0.2s; }
+.featureCard:nth-child(2) { animation-delay: 0.4s; }
+.featureCard:nth-child(3) { animation-delay: 0.6s; }
 
 .featureCard::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
-  transform: scaleX(0);
-  transition: transform var(--transition-normal);
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, 
+    rgba(33, 150, 243, 0.02) 0%, 
+    rgba(156, 39, 176, 0.02) 100%);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
 }
 
 .featureCard:hover::before {
-  transform: scaleX(1);
+  opacity: 1;
 }
 
 .featureCard:hover {
@@ -84,45 +93,23 @@
   box-shadow: var(--shadow-xl);
 }
 
-.featureCard:nth-child(1) .iconWrapper {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
-}
-
-.featureCard:nth-child(2) .iconWrapper {
-  background: linear-gradient(135deg, var(--color-secondary), var(--color-secondary-light));
-}
-
-.featureCard:nth-child(3) .iconWrapper {
-  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-light));
-}
-
 .iconWrapper {
   width: 80px;
   height: 80px;
   margin: 0 auto var(--spacing-lg);
-  border-radius: var(--radius-2xl);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-text-inverse);
-  font-size: var(--font-size-3xl);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-2xl);
+  transition: transform var(--transition-normal);
   position: relative;
-  overflow: hidden;
+  z-index: 2;
 }
 
-.iconWrapper::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left var(--transition-slow);
-}
-
-.featureCard:hover .iconWrapper::before {
-  left: 100%;
+.featureCard:hover .iconWrapper {
+  transform: scale(1.1) rotate(5deg);
 }
 
 .featureTitle {
@@ -131,73 +118,107 @@
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
   margin-bottom: var(--spacing-md);
+  position: relative;
+  z-index: 2;
 }
 
 .featureDescription {
   color: var(--color-text-secondary);
   line-height: var(--line-height-relaxed);
-  font-size: var(--font-size-base);
+  position: relative;
+  z-index: 2;
 }
 
-/* Additional Features Section */
 .additionalFeatures {
-  margin-top: var(--spacing-4xl);
-  padding-top: var(--spacing-3xl);
-  border-top: 1px solid var(--color-neutral-200);
+  animation: fadeInUp 0.8s ease-out 0.8s both;
 }
 
 .additionalGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--spacing-xl);
+  gap: var(--spacing-lg);
 }
 
 .miniFeature {
   display: flex;
-  align-items: flex-start;
-  gap: var(--spacing-md);
+  align-items: center;
+  gap: var(--spacing-lg);
   padding: var(--spacing-lg);
   background: var(--color-bg-primary);
   border-radius: var(--radius-lg);
-  transition: all var(--transition-fast);
+  transition: all var(--transition-normal);
+  animation: fadeInUp 0.6s ease-out;
+  animation-fill-mode: both;
 }
 
+.miniFeature:nth-child(1) { animation-delay: 1s; }
+.miniFeature:nth-child(2) { animation-delay: 1.1s; }
+.miniFeature:nth-child(3) { animation-delay: 1.2s; }
+.miniFeature:nth-child(4) { animation-delay: 1.3s; }
+.miniFeature:nth-child(5) { animation-delay: 1.4s; }
+.miniFeature:nth-child(6) { animation-delay: 1.5s; }
+
 .miniFeature:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  transform: translateX(5px);
+  box-shadow: var(--shadow-lg);
 }
 
 .miniIcon {
-  width: 40px;
-  height: 40px;
-  background: var(--color-neutral-100);
-  border-radius: var(--radius-md);
+  width: 50px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-primary);
+  background: var(--color-neutral-100);
+  border-radius: var(--radius-lg);
   font-size: var(--font-size-lg);
   flex-shrink: 0;
+  transition: all var(--transition-normal);
+}
+
+.miniFeature:hover .miniIcon {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  transform: scale(1.1);
 }
 
 .miniContent h4 {
   font-family: var(--font-family-display);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
-  margin-bottom: var(--spacing-xs);
+  margin: 0 0 var(--spacing-xs) 0;
 }
 
 .miniContent p {
-  color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
   line-height: var(--line-height-normal);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .features {
-    padding: var(--spacing-4xl) 0;
+    padding: var(--spacing-3xl) 0;
+  }
+  
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+  
+  .title {
+    font-size: var(--font-size-3xl);
   }
   
   .grid {
@@ -205,36 +226,12 @@
     gap: var(--spacing-xl);
   }
   
-  .title {
-    font-size: var(--font-size-3xl);
-  }
-  
   .additionalGrid {
     grid-template-columns: 1fr;
   }
   
-  .featureCard {
-    padding: var(--spacing-xl);
-  }
-  
-  .iconWrapper {
-    width: 64px;
-    height: 64px;
-    font-size: var(--font-size-2xl);
-  }
-}
-
-@media (max-width: 480px) {
-  .container {
-    padding: 0 var(--spacing-md);
-  }
-  
-  .title {
-    font-size: var(--font-size-2xl);
-  }
-  
-  .grid {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-lg);
+  .miniFeature {
+    flex-direction: column;
+    text-align: center;
   }
 }

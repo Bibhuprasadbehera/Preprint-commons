@@ -102,7 +102,27 @@ const Index = () => {
                 author="Dr. Emma Thompson, Science Policy Analyst"
               />
             </div>
+          </div>
+        </section>
+
+        {/* Call to Action Section */}
+        <section className={styles.ctaSection}>
+          <div className={styles.container}>
+            <div className={styles.ctaContent}>
+              <h2 className={styles.ctaTitle}>Ready to Explore?</h2>
+              <p className={styles.ctaDescription}>
+                Start discovering insights in the global preprint landscape today.
+              </p>
+              <div className={styles.ctaButtons}>
+                <Link to="/explore" className={styles.ctaButton}>
+                  Explore Data
+                </Link>
+                <Link to="/about" className={styles.ctaButtonSecondary}>
+                  Learn More
+                </Link>
+              </div>
             </div>
+          </div>
         </section>
     </Layout>
   );

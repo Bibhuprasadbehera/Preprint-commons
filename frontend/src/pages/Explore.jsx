@@ -4,7 +4,6 @@ import Layout from '../components/layout/Layout/Layout';
 import Button from '../components/ui/Button/Button';
 import SearchBar from '../components/ui/SearchBar/SearchBar';
 import Pagination from '../components/ui/Pagination/Pagination';
-import { PaperCard } from '../components/Paper';
 import MapContainer from '../components/ui/MapContainer/MapContainer';
 import Header from '../components/ui/Header/Header';
 import Card from '../components/ui/Card/Card';
@@ -14,7 +13,18 @@ import CitationTrendsChart from '../components/charts/CitationTrendsChart';
 import CitationHeatmap from '../components/charts/CitationHeatmap';
 import PapersList from '../components/ui/PapersList/PapersList';
 import DynamicSectionTitle from '../components/ui/DynamicSectionTitle/DynamicSectionTitle';
+import AnalyticsDashboard from '../components/analytics/AnalyticsDashboard/AnalyticsDashboard';
+import AuthorAnalyticsCard from '../components/analytics/AuthorAnalyticsCard/AuthorAnalyticsCard';
+import SubjectAnalyticsCard from '../components/analytics/SubjectAnalyticsCard/SubjectAnalyticsCard';
+import GeographicAnalyticsCard from '../components/analytics/GeographicAnalyticsCard/GeographicAnalyticsCard';
+import EnhancedFilterControls from '../components/analytics/EnhancedFilterControls/EnhancedFilterControls';
+import CitationTrendsCard from '../components/analytics/CitationTrendsCard/CitationTrendsCard';
+import AuthorNetworkCard from '../components/analytics/AuthorNetworkCard/AuthorNetworkCard';
+import QualityMetricsCard from '../components/analytics/QualityMetricsCard/QualityMetricsCard';
+import AdvancedCorrelationsCard from '../components/analytics/AdvancedCorrelationsCard/AdvancedCorrelationsCard';
 import { useUnifiedCitationData } from '../hooks/useUnifiedCitationData';
+import { useEnhancedAnalytics } from '../hooks/useEnhancedAnalytics';
+import { useComprehensiveAnalytics } from '../hooks/useComprehensiveAnalytics';
 import layoutStyles from '../components/layout/Layout/Layout.module.css';
 import styles from './Explore.module.css';
 
@@ -31,14 +41,36 @@ const Explore = () => {
   // Citation Analysis state
   const [selectedTimeRange, setSelectedTimeRange] = useState('all');
   const [selectedSubject, setSelectedSubject] = useState(null);
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const [sortOption, setSortOption] = useState('citations_desc');
   const [isSearching, setIsSearching] = useState(false);
+  
+  // Analytics view mode state
+  const [analyticsViewMode, setAnalyticsViewMode] = useState('enhanced'); // 'basic', 'enhanced', 'comprehensive'
   
   const RESULTS_PER_PAGE = 10;
   const MAX_RESULTS = 100;
 
   // Initialize unified citation data hook
   const { data, loading, error, fetchAllData, clearAllData } = useUnifiedCitationData();
+  
+  // Initialize enhanced analytics hook
+  const { 
+    data: enhancedData, 
+    loading: enhancedLoading, 
+    error: enhancedError, 
+    fetchEnhancedAnalytics, 
+    clearAllData: clearEnhancedData 
+  } = useEnhancedAnalytics();
+  
+  // Initialize comprehensive analytics hook
+  const { 
+    data: comprehensiveData, 
+    loading: comprehensiveLoading, 
+    error: comprehensiveError, 
+    fetchComprehensiveAnalytics, 
+    clearAllData: clearComprehensiveData 
+  } = useComprehensiveAnalytics();
   
   const { impactData, trendsData, heatmapData, topPapersData } = data;
   const { impactData: impactLoading, trendsData: trendsLoading, heatmapData: heatmapLoading, topPapersData: papersLoading } = loading;
@@ -101,19 +133,62 @@ const Explore = () => {
     // Clear all existing data immediately to avoid showing stale results
     console.log('🔄 Starting new search - clearing existing data');
     clearAllData();
+    clearEnhancedData();
+    clearComprehensiveData();
     
     // Fetch all citation data using unified hook
     console.log('📊 Fetching all citation data with filters:', {
       timeRange: selectedTimeRange,
       subject: selectedSubject,
-      sortOption: sortOption
+      country: selectedCountry,
+      sortOption: sortOption,
+      viewMode: analyticsViewMode
     });
     
     try {
-      await fetchAllData(selectedTimeRange, selectedSubject, sortOption, 10);
-      console.log('🎉 All citation data fetch completed');
+      const fetchPromises = [
+        fetchAllData(selectedTimeRange, selectedSubject, sortOption, 10)
+      ];
+      
+      // Add enhanced analytics if in enhanced or comprehensive mode
+      if (analyticsViewMode === 'enhanced' || analyticsViewMode === 'comprehensive') {
+        fetchPromises.push(
+          fetchEnhancedAnalytics(
+            selectedTimeRange, 
+            selectedSubject, 
+            selectedCountry,
+            true, // includeAuthorData
+            true, // includeSubjectData
+            true, // includeGeographicData
+            false // includeVelocityData
+          )
+        );
+      }
+      
+      // Add comprehensive analytics if in comprehensive mode
+      if (analyticsViewMode === 'comprehensive') {
+        fetchPromises.push(
+          fetchComprehensiveAnalytics(
+            selectedTimeRange,
+            selectedSubject,
+            selectedCountry,
+            null, // server
+            'yearly', // granularity
+            true, // includeCitationTrends
+            true, // includeAuthorAnalytics
+            true, // includeGeographicInsights
+            true, // includeContentAnalysis
+            true, // includeQualityMetrics
+            true, // includeServerAnalytics
+            true  // includeCorrelations
+          )
+        );
+      }
+      
+      await Promise.all(fetchPromises);
+      console.log('🎉 All analytics data fetch completed');
     } catch (err) {
-      console.error('Citation data fetch failed:', err);
+      console.error('Analytics data fetch failed:', err);
     } finally {
       setIsSearching(false);
     }
@@ -124,18 +199,24 @@ const Explore = () => {
       filters: {
         timeRange: selectedTimeRange,
         subject: selectedSubject,
+        country: selectedCountry,
         sortOption: sortOption
       },
-      impactData,
-      trendsData,
-      heatmapData,
-      topPapersData
+      citationData: {
+        impactData,
+        trendsData,
+        heatmapData,
+        topPapersData
+      },
+      enhancedAnalytics: enhancedData,
+      comprehensiveAnalytics: comprehensiveData,
+      analyticsViewMode: analyticsViewMode
     };
     
     const dataStr = JSON.stringify(exportData, null, 2);
     const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
     
-    const exportFileDefaultName = `citation-analysis-${new Date().toISOString().split('T')[0]}.json`;
+    const exportFileDefaultName = `enhanced-citation-analysis-${new Date().toISOString().split('T')[0]}.json`;
     
     const linkElement = document.createElement('a');
     linkElement.setAttribute('href', dataUri);
@@ -184,6 +265,13 @@ const Explore = () => {
             className={styles.tabButton}
           >
             Citation Analytics
+          </Button>
+          <Button
+            variant={activeTab === 'dashboard' ? 'primary' : 'outline'}
+            onClick={() => openTab('dashboard')}
+            className={styles.tabButton}
+          >
+            Analytics Dashboard
           </Button>
         </div>
         
@@ -274,15 +362,11 @@ const Explore = () => {
                 
                 {!isLoading && searchResults.length > 0 && (
                   <>
-                    <div className={styles.resultsGrid}>
-                      {searchResults.map(item => (
-                        <PaperCard 
-                          key={item.PPC_Id} 
-                          paper={item}
-                          className={styles.resultCard}
-                        />
-                      ))}
-                    </div>
+                    <PapersList 
+                      papers={searchResults}
+                      loading={false}
+                      onPaperClick={(paper) => console.log('Paper clicked:', paper)}
+                    />
                     
                     {totalPages > 1 && (
                       <Pagination
@@ -322,6 +406,15 @@ const Explore = () => {
           </div>
         )}
         
+        {/* Analytics Dashboard Tab */}
+        {activeTab === 'dashboard' && (
+          <div className="container">
+            <div className={layoutStyles.contentSection}>
+              <AnalyticsDashboard />
+            </div>
+          </div>
+        )}
+        
         {/* Citation Analytics Tab */}
         {activeTab === 'analytics' && (
           <div className="container">
@@ -333,12 +426,47 @@ const Explore = () => {
                 size="medium"
               />
 
-              <FilterControls
+              {/* Analytics View Mode Selector */}
+              <Card className={styles.viewModeSelector}>
+                <Card.Content>
+                  <div className={styles.viewModeHeader}>
+                    <h4 className={styles.viewModeTitle}>Analytics View Mode</h4>
+                    <p className={styles.viewModeSubtitle}>Choose your analysis depth</p>
+                  </div>
+                  <div className={styles.viewModeButtons}>
+                    <Button
+                      variant={analyticsViewMode === 'basic' ? 'primary' : 'outline'}
+                      onClick={() => setAnalyticsViewMode('basic')}
+                      className={styles.viewModeButton}
+                    >
+                      Basic Analytics
+                    </Button>
+                    <Button
+                      variant={analyticsViewMode === 'enhanced' ? 'primary' : 'outline'}
+                      onClick={() => setAnalyticsViewMode('enhanced')}
+                      className={styles.viewModeButton}
+                    >
+                      Enhanced Analytics
+                    </Button>
+                    <Button
+                      variant={analyticsViewMode === 'comprehensive' ? 'primary' : 'outline'}
+                      onClick={() => setAnalyticsViewMode('comprehensive')}
+                      className={styles.viewModeButton}
+                    >
+                      Comprehensive Analytics
+                    </Button>
+                  </div>
+                </Card.Content>
+              </Card>
+
+              <EnhancedFilterControls
                 selectedTimeRange={selectedTimeRange}
                 selectedSubject={selectedSubject}
+                selectedCountry={selectedCountry}
                 sortOption={sortOption}
                 onTimeRangeChange={setSelectedTimeRange}
                 onSubjectChange={setSelectedSubject}
+                onCountryChange={setSelectedCountry}
                 onSortChange={setSortOption}
                 onSearchClick={handleSearchClick}
                 onExportData={handleExportData}
@@ -346,6 +474,56 @@ const Explore = () => {
                 isSearching={isSearching}
               />
 
+              {/* Enhanced Analytics Grid - Show in enhanced and comprehensive modes */}
+              {(analyticsViewMode === 'enhanced' || analyticsViewMode === 'comprehensive') && (
+                <div className={styles.enhancedAnalyticsGrid}>
+                  <AuthorAnalyticsCard 
+                    data={enhancedData.authorAnalytics} 
+                    loading={enhancedLoading.authorAnalytics}
+                  />
+                  
+                  <SubjectAnalyticsCard 
+                    data={enhancedData.enhancedSubjectAnalysis} 
+                    loading={enhancedLoading.enhancedSubjectAnalysis}
+                  />
+                  
+                  <GeographicAnalyticsCard 
+                    data={enhancedData.geographicAnalytics} 
+                    loading={enhancedLoading.geographicAnalytics}
+                  />
+                </div>
+              )}
+
+              {/* Comprehensive Analytics Grid - Show only in comprehensive mode */}
+              {analyticsViewMode === 'comprehensive' && (
+                <div className={styles.comprehensiveAnalyticsGrid}>
+                  <div className={styles.fullWidthSection}>
+                    <CitationTrendsCard 
+                      data={comprehensiveData.citationTrends} 
+                      loading={comprehensiveLoading.citationTrends}
+                    />
+                  </div>
+                  
+                  <AuthorNetworkCard 
+                    data={comprehensiveData.authorInstitutionAnalytics} 
+                    loading={comprehensiveLoading.authorInstitutionAnalytics}
+                  />
+                  
+                  <QualityMetricsCard 
+                    data={comprehensiveData.qualityImpactMetrics} 
+                    loading={comprehensiveLoading.qualityImpactMetrics}
+                  />
+                  
+                  <div className={styles.fullWidthSection}>
+                    <AdvancedCorrelationsCard 
+                      data={comprehensiveData.advancedCorrelations} 
+                      loading={comprehensiveLoading.advancedCorrelations}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Basic Charts Grid - Always show */}
               <div className={styles.chartsGrid}>
                 <Card className={styles.chartCard}>
                   <Card.Header>

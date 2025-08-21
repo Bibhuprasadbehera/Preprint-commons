@@ -19,10 +19,13 @@ A comprehensive platform for tracking, analyzing, and visualizing preprint resea
 ## 🏗️ Architecture
 
 ### Backend (FastAPI + SQLite)
-- **FastAPI** web framework for high-performance API
-- **SQLite** database for storing preprint metadata
-- **Pandas** for data processing and analysis
-- **CORS** enabled for frontend integration
+- **FastAPI** web framework with modular router structure
+- **SQLite** database with connection pooling and error handling
+- **Pandas** for efficient data processing and analysis
+- **Pydantic** models for request/response validation
+- **Environment-based configuration** for different deployment stages
+- **Comprehensive logging** and health monitoring
+- **Docker support** for containerized deployment
 
 ### Frontend (React + Vite)
 - **React 19** with modern hooks and components
@@ -38,6 +41,7 @@ A comprehensive platform for tracking, analyzing, and visualizing preprint resea
 - **Python 3.10+**
 - **Node.js 18+**
 - **npm** or **yarn**
+- **Docker** (optional, for containerized deployment)
 
 ### Installation
 
@@ -50,7 +54,7 @@ A comprehensive platform for tracking, analyzing, and visualizing preprint resea
 2. **Set up the Python backend**
    ```bash
    # Install Python dependencies
-   pip install fastapi uvicorn pandas sqlite3
+   pip install -r requirements.txt
 
    # Create the database (requires combined_db_with_ppc_id.csv)
    python create_db.py
@@ -64,30 +68,39 @@ A comprehensive platform for tracking, analyzing, and visualizing preprint resea
 
 ### Running the Application
 
-#### Option 1: Run Both Servers Concurrently (Recommended)
+#### Option 1: Simple Development Setup (Recommended)
 ```bash
+# Backend (from project root)
+python run_simple.py
+
+# Frontend (in new terminal)
 cd frontend
-npm run dev:all
+npm run dev
+```
+
+#### Option 2: Using the Improved Backend Structure
+```bash
+# Backend with new modular structure
+python run.py
+
+# Frontend (in new terminal)
+cd frontend
+npm run dev
+```
+
+#### Option 3: Docker Deployment (Production)
+```bash
+# Build and run with Docker
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
 ```
 
 This will start:
 - Frontend development server at `http://localhost:5173`
 - Backend API server at `http://localhost:8000`
-
-#### Option 2: Run Servers Separately
-
-**Backend:**
-```bash
-# From project root
-uvicorn main:app --reload
-```
-
-**Frontend:**
-```bash
-# From frontend directory
-cd frontend
-npm run dev
-```
+- API Documentation at `http://localhost:8000/docs`
 
 ## 📊 Database Setup
 
@@ -104,53 +117,90 @@ This will create a SQLite database (`ppc.db`) with the papers table.
 ### Project Structure
 ```
 PPC-Backend-main/
-├── main.py                 # FastAPI backend application
+├── main.py                 # Legacy FastAPI backend (still works)
+├── run_simple.py          # Simple runner for main.py
 ├── create_db.py           # Database setup script
+├── requirements.txt       # Python dependencies
+├── .env                   # Environment configuration
 ├── ppc.db                 # SQLite database (created after setup)
-├── frontend/              # React frontend application
+├── app/                   # Improved modular backend structure
+│   ├── __init__.py
+│   ├── main.py           # New FastAPI app with better structure
+│   ├── config.py         # Configuration management
+│   ├── database.py       # Database connection handling
+│   ├── models.py         # Pydantic models
+│   └── routers/          # API route modules
+│       ├── papers.py     # Paper-related endpoints
+│       ├── analytics.py  # Analytics endpoints
+│       └── health.py     # Health check endpoints
+├── Dockerfile            # Docker configuration
+├── docker-compose.yml    # Docker Compose setup
+├── nginx.conf           # Nginx reverse proxy config
+├── frontend/            # React frontend application
 │   ├── src/
-│   │   ├── components/    # Reusable UI components
-│   │   ├── pages/         # Page components
-│   │   ├── styles/        # Global styles and themes
-│   │   └── App.jsx        # Main application component
-│   ├── public/            # Static assets
-│   └── package.json       # Frontend dependencies
-└── README.md              # This file
+│   │   ├── components/  # Reusable UI components
+│   │   ├── pages/       # Page components
+│   │   ├── styles/      # Global styles and themes
+│   │   └── App.jsx      # Main application component
+│   ├── public/          # Static assets
+│   └── package.json     # Frontend dependencies
+└── README.md            # This file
 ```
 
 ### Available Scripts
 
+**Backend:**
+- `python run_simple.py` - Start simple backend (main.py)
+- `python run.py` - Start improved modular backend
+- `python create_db.py` - Initialize database
+- `docker-compose up -d` - Run with Docker
+
 **Frontend:**
 - `npm run dev` - Start development server
-- `npm run dev:all` - Start both frontend and backend
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
 
-**Backend:**
-- `uvicorn main:app --reload` - Start development server
-- `python create_db.py` - Initialize database
-
 ## 🌐 API Endpoints
 
+### Legacy Endpoints (main.py)
 | Endpoint | Method | Description |
 |----------|--------|-------------|
 | `/country-data` | GET | Get preprint counts by country and year |
 | `/papers` | GET | Fetch papers by country and year |
 | `/search` | GET | Search papers by title or DOI |
 | `/paper/{ppc_id}` | GET | Get specific paper details |
+| `/analytics-data` | GET | Get comprehensive analytics data |
+| `/subjects` | GET | Get all unique subject areas |
+| `/citation-data-unified` | GET | Get unified citation data |
+
+### New API Endpoints (app/main.py)
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/health/` | GET | Health check endpoint |
+| `/api/papers/search` | GET | Search papers with pagination |
+| `/api/papers/{ppc_id}` | GET | Get specific paper details |
+| `/api/papers/` | GET | Fetch papers with filters and pagination |
+| `/api/analytics/country-data` | GET | Country-wise paper distribution |
+| `/api/analytics/subjects` | GET | All unique subject areas |
+| `/api/analytics/dashboard` | GET | Comprehensive analytics data |
+| `/api/analytics/citations` | GET | Unified citation data |
 
 ### Example API Usage
 
 ```bash
-# Get country data
+# Legacy endpoints
 curl http://localhost:8000/country-data
-
-# Search papers
 curl "http://localhost:8000/search?query=covid"
-
-# Get papers by country and year
 curl "http://localhost:8000/papers?country=United States&year=2023"
+
+# New endpoints with better features
+curl http://localhost:8000/api/health
+curl "http://localhost:8000/api/papers/search?query=covid&page=1&page_size=10"
+curl http://localhost:8000/api/analytics/dashboard
+
+# Interactive API documentation
+open http://localhost:8000/docs
 ```
 
 ## 🎨 Frontend Pages
@@ -164,16 +214,39 @@ curl "http://localhost:8000/papers?country=United States&year=2023"
 
 ## 🔧 Configuration
 
-### CORS Settings
-The backend is configured to accept requests from:
-- `http://127.0.0.1:8000`
-- `http://localhost:8000`
-- `http://localhost:5173`
+### Environment Variables (.env)
+```bash
+# Environment
+ENVIRONMENT=development
+DEBUG=True
+
+# Database
+DATABASE_URL=sqlite:///./ppc.db
+DATABASE_NAME=ppc.db
+
+# API
+API_HOST=0.0.0.0
+API_PORT=8000
+API_RELOAD=True
+
+# CORS
+ALLOWED_ORIGINS=["http://127.0.0.1:8000", "http://localhost:8000", "http://localhost:5173"]
+
+# Pagination
+DEFAULT_PAGE_SIZE=10
+MAX_PAGE_SIZE=100
+```
 
 ### Database Configuration
 - Database file: `ppc.db`
 - Table: `papers`
 - Required CSV: `combined_db_with_ppc_id.csv`
+- Connection pooling and error handling included
+
+### Deployment Options
+1. **Development**: `python run_simple.py`
+2. **Production**: `docker-compose up -d`
+3. **Manual**: `gunicorn app.main:app -w 4 -k uvicorn.workers.UnicornWorker`
 
 ## 📈 Data Sources
 
@@ -202,11 +275,52 @@ If you encounter any issues or have questions:
 2. Open an issue on GitHub
 3. Contact the development team
 
-## 🔮 Future Roadmap
+## 🚀 Recent Improvements
 
-- [ ] Advanced search page
-- [ ] Export functionality for research data
-- [ ] Integration with more preprint repositories (qbio)
+### Backend Enhancements
+- ✅ **Modular Architecture**: Organized code into logical modules
+- ✅ **Better Error Handling**: Comprehensive exception handling
+- ✅ **Environment Configuration**: Flexible settings management
+- ✅ **API Documentation**: Auto-generated interactive docs
+- ✅ **Health Monitoring**: Database and application health checks
+- ✅ **Docker Support**: Containerized deployment ready
+- ✅ **Pagination**: Efficient handling of large datasets
+- ✅ **Logging**: Structured logging for debugging and monitoring
+
+### Production Ready Features
+- ✅ **Nginx Reverse Proxy**: Load balancing and security
+- ✅ **Docker Compose**: Multi-container orchestration
+- ✅ **Security Headers**: XSS protection and security hardening
+- ✅ **Rate Limiting**: API abuse prevention
+- ✅ **Backward Compatibility**: Legacy endpoints still work
+
+## 🔮 Future Roadmap
+- [ ] GeographicAnalyticsCard`
+- [ ] AuthorAnalyticsCard`
+- [ ] SubjectAnalyticsCard`
+- [ ] CitationTrendsCard`
+- [ ] AuthorNetworkCard`
+- [ ] QualityMetricsCard`
+- [ ] AdvancedCorrelationsCard
+
+- [ ] retraction watch
+- [ ] API rate limiting and caching
+- [ ] Pickel search
+- [ ] Update the rest of the pages with static text
+
+- [ ] make clickable papers everywhere
+- [ ] fix the country dropdown in explore page citation analystics
+- [ ] update the citation heatmap based on the subject
+- [ ] make the analytics daashboard to have stacked publication timeline
+- [ ] fix subject distribution with others as well 
+- [ ] add a slider to citation impact visualiser  
+- [ ] 
+
+- [ ] Author network
+- [ ] Integration with more preprint repositories (
+- [ ] Real-time data updates
+- [ ] Authentication and user management
+- [ ] Advanced analytics and machine learning insights
 
 ---
 

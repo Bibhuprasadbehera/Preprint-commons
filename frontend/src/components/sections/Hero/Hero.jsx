@@ -8,7 +8,7 @@ const Hero = () => {
     <section className={styles.hero}>
       {/* Floating background elements */}
       <div className={styles.floatingElements}>
-        {[...Array(9)].map((_, i) => (
+        {[...Array(6)].map((_, i) => (
           <div key={i} className={styles.floatingElement}></div>
         ))}
       </div>
@@ -50,7 +50,7 @@ const Hero = () => {
               <span className={styles.statLabel}>Institutions Tracked</span>
             </div>
             <div className={styles.stat}>
-              <span className={styles.statNumber}>Frequent</span>
+              <span className={styles.statNumber}>Daily</span>
               <span className={styles.statLabel}>Data Updates</span>
             </div>
           </div>

@@ -6,7 +6,7 @@ const Contact = () => {
   return (
     <Layout>
       <div className={styles.pageContainer}>
-        <div className={styles.contentSection}>
+        <div className={`${styles.contentSection} animate-fadeInUp`}>
           <h1 className="text-heading-1">Contact Us</h1>
           <div className="mt-4">
             <p className="text-body-large mb-6">
@@ -17,10 +17,10 @@ const Contact = () => {
         </div>
         
         <div className="grid md:grid-cols-2 gap-6">
-          <div className={styles.contentSection}>
+          <div className={`${styles.contentSection} animate-fadeInUp animate-delay-1`}>
             <h2 className="text-heading-3 mb-4">Get in Touch</h2>
             <div className="space-y-4">
-              <div className="card card-content">
+              <div className="card card-content animate-slideInLeft animate-delay-2">
                 <h3 className="text-heading-4 mb-2">General Inquiries</h3>
                 <p className="text-body mb-2">
                   For general questions about Preprint Commons
@@ -30,7 +30,7 @@ const Contact = () => {
                 </a>
               </div>
               
-              <div className="card card-content">
+              <div className="card card-content animate-slideInLeft animate-delay-3">
                 <h3 className="text-heading-4 mb-2">Technical Support</h3>
                 <p className="text-body mb-2">
                   For technical issues or API questions
@@ -40,7 +40,7 @@ const Contact = () => {
                 </a>
               </div>
               
-              <div className="card card-content">
+              <div className="card card-content animate-slideInLeft animate-delay-4">
                 <h3 className="text-heading-4 mb-2">Partnerships</h3>
                 <p className="text-body mb-2">
                   For collaboration and partnership opportunities
@@ -52,10 +52,10 @@ const Contact = () => {
             </div>
           </div>
           
-          <div className={styles.contentSection}>
+          <div className={`${styles.contentSection} animate-fadeInUp animate-delay-1`}>
             <h2 className="text-heading-3 mb-4">Connect With Us</h2>
             <div className="space-y-4">
-              <div className="card card-content">
+              <div className="card card-content animate-slideInRight animate-delay-2">
                 <h3 className="text-heading-4 mb-2">Social Media</h3>
                 <div className="flex gap-4 mt-3">
                   <a href="https://twitter.com/preprintcommons" className="text-primary hover:text-primary-dark">
@@ -70,7 +70,7 @@ const Contact = () => {
                 </div>
               </div>
               
-              <div className="card card-content">
+              <div className="card card-content animate-slideInRight animate-delay-3">
                 <h3 className="text-heading-4 mb-2">Newsletter</h3>
                 <p className="text-body mb-3">
                   Stay updated with the latest features and insights
@@ -80,7 +80,7 @@ const Contact = () => {
                 </button>
               </div>
               
-              <div className="card card-content">
+              <div className="card card-content animate-slideInRight animate-delay-4">
                 <h3 className="text-heading-4 mb-2">Community</h3>
                 <p className="text-body mb-3">
                   Join our community of researchers and data enthusiasts
@@ -93,7 +93,7 @@ const Contact = () => {
           </div>
         </div>
         
-        <div className={styles.contentSection}>
+        <div className={`${styles.contentSection} animate-fadeInUp animate-delay-4`}>
           <div className="card card-content text-center">
             <h2 className="text-heading-3 mb-4">Office Hours</h2>
             <p className="text-body">
