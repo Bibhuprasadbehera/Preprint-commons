@@ -6,7 +6,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
-import { formatNumber } from '../AnalyticsDashboardMockData';
+import { formatNumber } from '../analytics/AnalyticsDashboardMockData';
 import styles from './SubjectDistributionChart.module.css';
 
 ChartJS.register(ArcElement, Tooltip, Legend);

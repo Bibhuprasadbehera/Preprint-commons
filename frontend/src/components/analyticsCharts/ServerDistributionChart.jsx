@@ -3,36 +3,32 @@ import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend,
-  Filler,
 } from 'chart.js';
-import { Line } from 'react-chartjs-2';
-import { formatMonthYear } from '../AnalyticsDashboardMockData';
-import styles from './PublicationTimelineChart.module.css';
+import { Bar } from 'react-chartjs-2';
+import { formatNumber } from '../analytics/AnalyticsDashboardMockData';
+import styles from './ServerDistributionChart.module.css';
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
+  BarElement,
   Title,
   Tooltip,
-  Legend,
-  Filler
+  Legend
 );
 
-const PublicationTimelineChart = ({ data, loading = false }) => {
+const ServerDistributionChart = ({ data, loading = false }) => {
   const chartRef = useRef();
 
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
         <div className={styles.spinner}></div>
-        <p>Loading publication timeline...</p>
+        <p>Loading server distribution...</p>
       </div>
     );
   }
@@ -40,28 +36,39 @@ const PublicationTimelineChart = ({ data, loading = false }) => {
   if (!data || data.length === 0) {
     return (
       <div className={styles.emptyContainer}>
-        <p>No publication timeline data available.</p>
+        <p>No server distribution data available.</p>
         <p className={styles.emptyHint}>Try refreshing the data.</p>
       </div>
     );
   }
 
+  const colors = [
+    'rgba(59, 130, 246, 0.8)',   // Blue
+    'rgba(249, 115, 22, 0.8)',   // Orange
+    'rgba(34, 197, 94, 0.8)',    // Green
+    'rgba(168, 85, 247, 0.8)',   // Purple
+    'rgba(245, 158, 11, 0.8)',   // Yellow
+  ];
+
+  const borderColors = [
+    'rgba(59, 130, 246, 1)',
+    'rgba(249, 115, 22, 1)',
+    'rgba(34, 197, 94, 1)',
+    'rgba(168, 85, 247, 1)',
+    'rgba(245, 158, 11, 1)',
+  ];
+
   const chartData = {
-    labels: data.map(item => formatMonthYear(item.month + '-01')),
+    labels: data.map(item => item.server),
     datasets: [
       {
-        label: 'Submissions',
-        data: data.map(item => item.submissions),
-        borderColor: 'rgba(59, 130, 246, 1)',
-        backgroundColor: 'rgba(59, 130, 246, 0.1)',
-        borderWidth: 3,
-        fill: true,
-        tension: 0.4,
-        pointBackgroundColor: 'rgba(59, 130, 246, 1)',
-        pointBorderColor: '#fff',
-        pointBorderWidth: 2,
-        pointRadius: 5,
-        pointHoverRadius: 7,
+        label: 'Papers Count',
+        data: data.map(item => item.count),
+        backgroundColor: colors.slice(0, data.length),
+        borderColor: borderColors.slice(0, data.length),
+        borderWidth: 2,
+        borderRadius: 8,
+        borderSkipped: false,
       },
     ],
   };
@@ -80,11 +87,14 @@ const PublicationTimelineChart = ({ data, loading = false }) => {
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         titleColor: '#fff',
         bodyColor: '#fff',
-        borderColor: 'rgba(59, 130, 246, 1)',
         borderWidth: 1,
         callbacks: {
           label: function(context) {
-            return `Submissions: ${context.parsed.y.toLocaleString()}`;
+            const dataItem = data[context.dataIndex];
+            return [
+              `Count: ${formatNumber(context.parsed.y)}`,
+              `Percentage: ${dataItem.percentage}%`,
+            ];
           },
         },
       },
@@ -93,23 +103,24 @@ const PublicationTimelineChart = ({ data, loading = false }) => {
       x: {
         title: {
           display: true,
-          text: 'Time Period',
+          text: 'Preprint Servers',
           font: {
             size: 14,
             weight: 'bold',
           },
         },
         grid: {
-          color: 'rgba(0, 0, 0, 0.1)',
+          display: false,
         },
         ticks: {
-          maxTicksLimit: 8,
+          maxRotation: 45,
+          minRotation: 0,
         },
       },
       y: {
         title: {
           display: true,
-          text: 'Number of Submissions',
+          text: 'Number of Papers',
           font: {
             size: 14,
             weight: 'bold',
@@ -121,22 +132,23 @@ const PublicationTimelineChart = ({ data, loading = false }) => {
         beginAtZero: true,
         ticks: {
           callback: function(value) {
-            return value.toLocaleString();
+            return formatNumber(value);
           },
         },
       },
     },
-    interaction: {
-      intersect: false,
-      mode: 'index',
+    elements: {
+      bar: {
+        borderRadius: 8,
+      },
     },
   };
 
   return (
     <div className={styles.chartContainer}>
-      <Line ref={chartRef} data={chartData} options={options} />
+      <Bar ref={chartRef} data={chartData} options={options} />
     </div>
   );
 };
 
-export default PublicationTimelineChart;
+export default ServerDistributionChart;

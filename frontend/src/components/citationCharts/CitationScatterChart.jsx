@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import ZoomControls from './ZoomControls/ZoomControls';
-import PanSlider from '../ui/PanSlider/PanSlider';
+import ZoomControls from './chartsFeatures/ZoomControls/ZoomControls';
+import PanSlider from './chartsFeatures/PanSlider/PanSlider';
 import styles from './CitationScatterChart.module.css';
 
 const CitationScatterChart = ({ data, loading = false }) => {
