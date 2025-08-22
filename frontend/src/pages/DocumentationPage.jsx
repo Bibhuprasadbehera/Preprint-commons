@@ -8,9 +8,9 @@ import ApiEndpoint from '../components/sections/ApiEndpoint/ApiEndpoint';
 import DataSourceCard from '../components/sections/DataSourceCard/DataSourceCard';
 import MethodologyFlow from '../components/sections/MethodologyFlow/MethodologyFlow';
 import ResearchPaper from '../components/sections/ResearchPaper/ResearchPaper';
-import styles from './Documentation.module.css';
+import styles from './DocumentationPage.module.css';
 
-const Documentation = () => {
+const DocumentationPage = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const location = useLocation();
 
@@ -485,4 +485,4 @@ const Documentation = () => {
   );
 };
 
-export default Documentation;
+export default DocumentationPage;

@@ -6,9 +6,9 @@ import Card from '../components/ui/Card/Card';
 import Button from '../components/ui/Button/Button';
 import { PaperMetadata } from '../components/Paper';
 import layoutStyles from '../components/layout/Layout/Layout.module.css';
-import styles from './Paper.module.css';
+import styles from './PaperDetailsPage.module.css';
 
-const Paper = () => {
+const PaperDetailsPage = () => {
   const { id } = useParams();
   const [paper, setPaper] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -223,4 +223,4 @@ const Paper = () => {
   );
 };
 
-export default Paper;
+export default PaperDetailsPage;

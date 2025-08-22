@@ -1,0 +1,178 @@
+/* ExplorePage specific styles */
+.tabNavigation {
+  display: flex;
+  gap: 1rem;
+  margin: 2rem 0;
+  padding: 0 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tabButton {
+  min-width: 150px;
+}
+
+.exploreMapContainer {
+  margin: 2rem 0;
+}
+
+.searchHeader {
+  margin-bottom: 2rem;
+}
+
+.searchLimit {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.searchSection {
+  margin-bottom: 2rem;
+}
+
+.searchBar {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.searchActions {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.clearButton {
+  color: #64748b;
+}
+
+.resultsSection {
+  min-height: 400px;
+}
+
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+}
+
+.loadingSpinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e2e8f0;
+  border-top: 4px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+}
+
+.emptyIcon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.welcomeState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+}
+
+.welcomeIcon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.searchTips {
+  background: #f8fafc;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+  text-align: left;
+  max-width: 400px;
+}
+
+.tipsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tipsList li {
+  padding: 0.25rem 0;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.tipsList li:before {
+  content: "•";
+  color: #3b82f6;
+  margin-right: 0.5rem;
+}
+
+.pagination {
+  margin-top: 2rem;
+}
+
+.chartsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xl);
+  margin-top: var(--spacing-2xl);
+}
+
+.chartCard {
+  min-height: 400px;
+  width: 100%;
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+}
+
+.chartCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.chartTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.chartSubtitle {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+}
+
+.error {
+  color: #dc2626;
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 1rem;
+}
+
+.retryInfo {
+  color: #64748b;
+  font-style: italic;
+}

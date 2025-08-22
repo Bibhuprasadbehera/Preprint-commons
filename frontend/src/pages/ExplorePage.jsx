@@ -16,9 +16,9 @@ import DynamicSectionTitle from '../components/ui/DynamicSectionTitle/DynamicSec
 import AnalyticsDashboard from '../components/analytics/AnalyticsDashboard/AnalyticsDashboard';
 import { useUnifiedCitationData } from '../hooks/useUnifiedCitationData';
 import layoutStyles from '../components/layout/Layout/Layout.module.css';
-import styles from './Explore.module.css';
+import styles from './ExplorePage.module.css';
 
-const Explore = () => {
+const ExplorePage = () => {
   const [activeTab, setActiveTab] = useState('map');
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -442,4 +442,4 @@ const Explore = () => {
   );
 };
 
-export default Explore;
+export default ExplorePage;

@@ -1,13 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Layout from '../components/layout/Layout/Layout';
 import Hero from '../components/sections/Hero/Hero';
 import Features from '../components/sections/Features/Features';
 import Card from '../components/ui/Card/Card';
 import MapContainer from '../components/ui/MapContainer/MapContainer';
-import { Link } from 'react-router-dom';
-import styles from './Index.module.css';
+import styles from './HomePage.module.css';
 
-const Index = () => {
+const HomePage = () => {
   return (
     <Layout>
         <Hero />
@@ -128,4 +128,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default HomePage;

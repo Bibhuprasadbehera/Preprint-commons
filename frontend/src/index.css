@@ -24,6 +24,7 @@
 @import url('./components/analytics/AnalyticsDashboard/AnalyticsDashboard.module.css');
 @import url('./pages/Paper.module.css');
 @import url('./pages/CitationAnalysis.module.css');
+@import url('./pages/DocumentationPage.module.css');
 
 /* CSS Reset and Base Styles */
 *,
