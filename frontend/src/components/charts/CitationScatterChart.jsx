@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import ZoomControls from './ZoomControls/ZoomControls';
+import PanSlider from '../ui/PanSlider/PanSlider';
 import styles from './CitationScatterChart.module.css';
 
 const CitationScatterChart = ({ data, loading = false }) => {
@@ -14,6 +15,7 @@ const CitationScatterChart = ({ data, loading = false }) => {
     minCitations: null,
     maxCitations: null
   });
+  const [panPosition, setPanPosition] = useState(50); // 0-100 percentage for pan position
   const [hoveredPoint, setHoveredPoint] = useState(null);
   const [tooltip, setTooltip] = useState({ show: false, x: 0, y: 0, data: null });
 
@@ -259,6 +261,54 @@ const CitationScatterChart = ({ data, loading = false }) => {
     setTooltip({ show: false, x: 0, y: 0, data: null });
   }, []);
 
+  // Calculate pan range based on zoom level
+  const calculatePanRange = useCallback(() => {
+    if (!zoomState.originalMinDate || !zoomState.originalMaxDate) return { min: 0, max: 100 };
+    
+    const originalRange = zoomState.originalMaxDate - zoomState.originalMinDate;
+    const currentRange = zoomState.maxDate - zoomState.minDate;
+    const zoomRatio = currentRange / originalRange;
+    
+    // If fully zoomed out, no panning needed
+    if (zoomRatio >= 1) return { min: 50, max: 50 };
+    
+    // Calculate how much we can pan
+    const maxPanRange = originalRange - currentRange;
+    const currentPanOffset = zoomState.minDate - zoomState.originalMinDate;
+    const panPercentage = maxPanRange > 0 ? (currentPanOffset / maxPanRange) * 100 : 50;
+    
+    return { min: 0, max: 100, current: Math.max(0, Math.min(100, panPercentage)) };
+  }, [zoomState]);
+
+  // Update pan position when zoom changes
+  useEffect(() => {
+    const panRange = calculatePanRange();
+    setPanPosition(panRange.current || 50);
+  }, [calculatePanRange]);
+
+  // Handle pan slider change
+  const handlePanChange = useCallback((newPanPosition) => {
+    if (!zoomState.originalMinDate || !zoomState.originalMaxDate) return;
+    
+    const originalRange = zoomState.originalMaxDate - zoomState.originalMinDate;
+    const currentRange = zoomState.maxDate - zoomState.minDate;
+    const maxPanRange = originalRange - currentRange;
+    
+    if (maxPanRange <= 0) return; // Can't pan if not zoomed
+    
+    const panOffset = (newPanPosition / 100) * maxPanRange;
+    const newMinDate = zoomState.originalMinDate + panOffset;
+    const newMaxDate = newMinDate + currentRange;
+    
+    setZoomState(prev => ({
+      ...prev,
+      minDate: newMinDate,
+      maxDate: newMaxDate
+    }));
+    
+    setPanPosition(newPanPosition);
+  }, [zoomState]);
+
   // Zoom handlers
   const handleZoomIn = useCallback(() => {
     const currentRange = zoomState.maxDate - zoomState.minDate;
@@ -293,6 +343,7 @@ const CitationScatterChart = ({ data, loading = false }) => {
       minDate: prev.originalMinDate,
       maxDate: prev.originalMaxDate
     }));
+    setPanPosition(50);
   }, []);
 
   // Loading state
@@ -317,6 +368,9 @@ const CitationScatterChart = ({ data, loading = false }) => {
 
   const isZoomedIn = zoomState.minDate !== zoomState.originalMinDate || 
                      zoomState.maxDate !== zoomState.originalMaxDate;
+  
+  const panRange = calculatePanRange();
+  const canPan = panRange.max > panRange.min;
 
   return (
     <div className={styles.chartContainer} ref={containerRef}>
@@ -332,6 +386,21 @@ const CitationScatterChart = ({ data, loading = false }) => {
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       />
+      {isZoomedIn && canPan && (
+        <div className={styles.panSliderContainer}>
+          <PanSlider
+            min={0}
+            max={100}
+            value={panPosition}
+            onChange={handlePanChange}
+            orientation="horizontal"
+            disabled={loading || !canPan}
+            label="Pan Timeline"
+            showValue={false}
+            step={0.1}
+          />
+        </div>
+      )}
       {isZoomedIn && (
         <div className={styles.zoomInfo}>
           Showing dates {new Date(zoomState.minDate).toLocaleDateString()} - {new Date(zoomState.maxDate).toLocaleDateString()}

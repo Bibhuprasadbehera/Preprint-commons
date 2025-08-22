@@ -313,11 +313,11 @@ If you encounter any issues or have questions:
 - [ ] update the citation heatmap based on the subject
 - [ ] make the analytics daashboard to have stacked publication timeline
 - [ ] fix subject distribution with others as well 
-- [ ] add a slider to citation impact visualiser  
+- [x] Make the existing slider better in citation impact visualiser  
 - [ ] 
 
 - [ ] Author network
-- [ ] Integration with more preprint repositories (
+- [ ] Integration with more preprint repositories
 - [ ] Real-time data updates
 - [ ] Authentication and user management
 - [ ] Advanced analytics and machine learning insights
