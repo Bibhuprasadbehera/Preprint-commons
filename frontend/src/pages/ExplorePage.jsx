@@ -59,13 +59,14 @@ const ExplorePage = () => {
     setActiveTab(tabName);
   };
 
-  const handleSearch = async (page = 1) => {
+  const handleSearch = async (page = 1, attemptNumber = 1) => {
     if (!searchQuery.trim()) return;
 
     setIsLoading(true);
     setCurrentPage(page);
 
     try {
+      console.log(`Searching papers: "${searchQuery}" page ${page} (attempt ${attemptNumber})`);
       const data = await ApiService.searchPapers(searchQuery, page, RESULTS_PER_PAGE);
       console.log('Search results:', data);
 
@@ -78,12 +79,23 @@ const ExplorePage = () => {
       setHasSearched(true);
       setIsLoading(false);
     } catch (error) {
-      console.error('Search error:', error);
-      setSearchResults([]);
-      setTotalResults(0);
-      setTotalPages(0);
-      setHasSearched(true);
-      setIsLoading(false);
+      console.error(`Search error (attempt ${attemptNumber}):`, error);
+      
+      // Auto-retry up to 3 times with exponential backoff
+      if (attemptNumber < 3) {
+        const delay = Math.pow(2, attemptNumber - 1) * 1000; // 1s, 2s, 4s
+        console.log(`Retrying search in ${delay}ms...`);
+        
+        setTimeout(() => {
+          handleSearch(page, attemptNumber + 1);
+        }, delay);
+      } else {
+        setSearchResults([]);
+        setTotalResults(0);
+        setTotalPages(0);
+        setHasSearched(true);
+        setIsLoading(false);
+      }
     }
   };
 
@@ -164,13 +176,14 @@ const ExplorePage = () => {
   };
 
   // Author search handlers
-  const handleAuthorSearch = async (page = 1) => {
+  const handleAuthorSearch = async (page = 1, attemptNumber = 1) => {
     if (!authorQuery.trim()) return;
 
     setIsAuthorLoading(true);
     setAuthorCurrentPage(page);
 
     try {
+      console.log(`Searching authors: "${authorQuery}" page ${page} (attempt ${attemptNumber})`);
       const data = await ApiService.searchAuthors(authorQuery, page, RESULTS_PER_PAGE);
       console.log('Author search results:', data);
 
@@ -183,12 +196,23 @@ const ExplorePage = () => {
       setHasAuthorSearched(true);
       setIsAuthorLoading(false);
     } catch (error) {
-      console.error('Author search error:', error);
-      setAuthorResults([]);
-      setAuthorTotalResults(0);
-      setAuthorTotalPages(0);
-      setHasAuthorSearched(true);
-      setIsAuthorLoading(false);
+      console.error(`Author search error (attempt ${attemptNumber}):`, error);
+      
+      // Auto-retry up to 3 times with exponential backoff
+      if (attemptNumber < 3) {
+        const delay = Math.pow(2, attemptNumber - 1) * 1000; // 1s, 2s, 4s
+        console.log(`Retrying author search in ${delay}ms...`);
+        
+        setTimeout(() => {
+          handleAuthorSearch(page, attemptNumber + 1);
+        }, delay);
+      } else {
+        setAuthorResults([]);
+        setAuthorTotalResults(0);
+        setAuthorTotalPages(0);
+        setHasAuthorSearched(true);
+        setIsAuthorLoading(false);
+      }
     }
   };
 

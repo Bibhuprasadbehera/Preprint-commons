@@ -13,22 +13,56 @@ const PaperDetailsPage = () => {
   const { id } = useParams();
   const [paper, setPaper] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
   const chartRef = useRef(null);
+
+  const fetchPaper = async (attemptNumber = 1) => {
+    try {
+      console.log(`Fetching paper with ID: ${id} (attempt ${attemptNumber})`);
+      setError(null);
+      
+      const data = await ApiService.getPaper(id);
+      console.log('Paper data received:', data);
+      
+      if (!data) {
+        throw new Error('No paper data received');
+      }
+      
+      setPaper(data);
+      setIsLoading(false);
+      setRetryCount(0);
+    } catch (error) {
+      console.error(`Error fetching paper (attempt ${attemptNumber}):`, error);
+      
+      // Auto-retry up to 2 times with exponential backoff
+      if (attemptNumber < 3) {
+        const delay = Math.pow(2, attemptNumber - 1) * 1000; // 1s, 2s, 4s
+        console.log(`Retrying in ${delay}ms...`);
+        
+        setTimeout(() => {
+          fetchPaper(attemptNumber + 1);
+        }, delay);
+      } else {
+        setError('Failed to load paper information');
+        setIsLoading(false);
+        setRetryCount(attemptNumber - 1);
+      }
+    }
+  };
+
+  const handleManualRetry = () => {
+    setIsLoading(true);
+    setPaper(null);
+    setError(null);
+    fetchPaper(1);
+  };
 
   useEffect(() => {
     setIsLoading(true);
-    console.log('Fetching paper with ID:', id);
-
-    ApiService.getPaper(id)
-      .then(data => {
-        console.log('Paper data received:', data);
-        setPaper(data);
-        setIsLoading(false);
-      })
-      .catch(error => {
-        console.error('Error fetching paper:', error);
-        setIsLoading(false);
-      });
+    setPaper(null);
+    setError(null);
+    fetchPaper(1);
   }, [id]);
 
   useEffect(() => {
@@ -88,17 +122,38 @@ const PaperDetailsPage = () => {
     );
   }
 
-  if (!paper) {
+  if (error || (!paper && !isLoading)) {
     return (
       <Layout>
         <div className={layoutStyles.pageContainer}>
           <div className={styles.errorContainer}>
             <div className={styles.errorIcon}>📄</div>
-            <h1 className="text-heading-2 mb-4">Paper Not Found</h1>
-            <p className="text-body mb-6">The requested paper could not be found in our database.</p>
+            <h1 className="text-heading-2 mb-4">
+              {error ? 'Failed to Load Paper' : 'Paper Not Found'}
+            </h1>
+            <p className="text-body mb-4">
+              {error 
+                ? `We encountered an issue loading this paper. ${retryCount > 0 ? `We tried ${retryCount + 1} times.` : ''}`
+                : 'The requested paper could not be found in our database.'
+              }
+            </p>
+            {error && (
+              <p className="text-body-small mb-6" style={{ color: 'var(--color-text-secondary)' }}>
+                Paper ID: {id}
+              </p>
+            )}
             <div className={styles.errorActions}>
+              {error && (
+                <Button 
+                  variant="primary" 
+                  onClick={handleManualRetry}
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Retrying...' : 'Try Again'}
+                </Button>
+              )}
               <Link to="/explore">
-                <Button variant="primary">
+                <Button variant={error ? "outline" : "primary"}>
                   Search Papers
                 </Button>
               </Link>

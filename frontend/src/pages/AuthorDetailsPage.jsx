@@ -22,42 +22,54 @@ const AuthorDetailsPage = () => {
     setIsLoading(true);
     setError(null);
 
-    // Fetch author's papers
-    ApiService.getAuthorPapers(authorName)
-      .then(data => {
-        console.log('Author papers data received:', data);
+    // Decode the author name to handle both encoded (%20) and non-encoded spaces
+    const decodedAuthorName = decodeURIComponent(authorName);
+    
+    // Try the API call with the decoded name first
+    const tryApiCall = (nameToTry) => {
+      return ApiService.getAuthorPapers(nameToTry)
+        .then(data => {
+          console.log('Author papers data received:', data);
 
-        if (!data || !data.papers || data.papers.length === 0) {
-          setError('No papers found for this author');
+          if (!data || !data.papers || data.papers.length === 0) {
+            throw new Error('No papers found for this author');
+          }
+
+          const papersList = data.papers;
+          setPapers(papersList);
+
+          // Calculate author statistics
+          const totalPapers = papersList.length;
+          const totalCitations = papersList.reduce((sum, paper) => sum + (paper.total_citation || 0), 0);
+
+          // Get author metadata from the first paper
+          const firstPaper = papersList[0];
+          const institution = firstPaper.corresponding_institution || 'Not available';
+          const country = firstPaper.country_name || 'Not available';
+
+          setAuthorData({
+            name: decodedAuthorName,
+            totalPapers,
+            totalCitations,
+            institution,
+            country,
+            papersOverTime: calculatePapersOverTime(papersList)
+          });
+
           setIsLoading(false);
-          return;
-        }
-
-        const papersList = data.papers;
-        setPapers(papersList);
-
-        // Calculate author statistics
-        const totalPapers = papersList.length;
-        const totalCitations = papersList.reduce((sum, paper) => sum + (paper.total_citation || 0), 0);
-
-        // Get author metadata from the first paper
-        const firstPaper = papersList[0];
-        const institution = firstPaper.corresponding_institution || 'Not available';
-        const country = firstPaper.country_name || 'Not available';
-
-        setAuthorData({
-          name: decodeURIComponent(authorName),
-          totalPapers,
-          totalCitations,
-          institution,
-          country,
-          papersOverTime: calculatePapersOverTime(papersList)
+          return data;
         });
+    };
 
-        setIsLoading(false);
+    // Try with decoded name first, then with original if that fails
+    tryApiCall(decodedAuthorName)
+      .catch(error => {
+        console.log('First attempt failed, trying with original parameter:', error.message);
+        // If decoded name fails, try with the original parameter
+        return tryApiCall(authorName);
       })
       .catch(error => {
-        console.error('Error fetching author papers:', error);
+        console.error('Both API attempts failed:', error);
         setError('Failed to load author information');
         setIsLoading(false);
       });
