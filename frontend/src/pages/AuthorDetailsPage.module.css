@@ -70,36 +70,45 @@
   flex: 1;
 }
 
-.authorName {
-  font-size: var(--font-size-4xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
-  margin: 0 0 var(--spacing-xl) 0;
-  font-family: var(--font-family-display);
-  background: linear-gradient(135deg, var(--color-text-primary), var(--color-primary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
+/* Author Statistics Styles */
 .authorStats {
   display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: var(--spacing-lg);
+}
+
+/* Grid layout when country is present */
+.statsGridWithCountry {
+  grid-template-columns: 1fr 1fr;
   grid-template-areas:
     "papers citations"
     "institution institution"
     "country country";
 }
 
+/* Grid layout when country is not present - more balanced */
+.statsGridWithoutCountry {
+  grid-template-columns: 1fr 1fr 2fr;
+  grid-template-areas:
+    "papers citations institution"
+    "papers citations institution";
+}
+
 @media (min-width: 1024px) {
-  .authorStats {
+  .statsGridWithCountry {
     grid-template-columns: 1fr 1fr 2fr;
     grid-template-rows: auto auto;
     gap: var(--spacing-xl);
     grid-template-areas:
       "papers citations institution"
       "country country institution";
+  }
+  
+  .statsGridWithoutCountry {
+    grid-template-columns: 1fr 1fr 2fr;
+    grid-template-rows: auto;
+    gap: var(--spacing-xl);
+    grid-template-areas:
+      "papers citations institution";
   }
 }
 
@@ -175,6 +184,19 @@
   letter-spacing: 0.1em;
   font-weight: var(--font-weight-semibold);
 }
+
+.authorName {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-xl) 0;
+  font-family: var(--font-family-display);
+  background: linear-gradient(135deg, var(--color-text-primary), var(--color-primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 
 .chartCard {
   background: var(--color-bg-primary);
@@ -339,9 +361,11 @@
     padding: var(--spacing-xl);
   }
 
-  .authorStats {
+  .statsGridWithCountry,
+  .statsGridWithoutCountry {
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
+    grid-template-areas: none;
   }
 
   .statItem {

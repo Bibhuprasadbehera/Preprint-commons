@@ -230,25 +230,36 @@ const AuthorDetailsPage = () => {
             <div className={styles.authorInfo}>
               <h1 className={styles.authorName}>{authorData?.name}</h1>
 
-                        <div className={styles.authorStats}>
+              <div className={`${styles.authorStats} ${
+                authorData?.country && authorData.country !== 'Not available' && authorData.country.trim() !== '' 
+                  ? styles.statsGridWithCountry 
+                  : styles.statsGridWithoutCountry
+              }`}>
                 <div className={`${styles.statItem} ${styles.papersItem}`}>
                   <span className={styles.statNumber}>{authorData?.totalPapers}</span>
                   <span className={styles.statLabel}>Papers</span>
                 </div>
+                
                 <div className={`${styles.statItem} ${styles.citationsItem}`}>
-                  <span className={styles.statNumber}>{authorData?.totalCitations.toLocaleString()}</span>
+                  <span className={styles.statNumber}>{authorData?.totalCitations?.toLocaleString()}</span>
                   <span className={styles.statLabel}>Citations</span>
                 </div>
+                
                 <div className={`${styles.statItem} ${styles.institutionItem}`}>
                   <span className={styles.statNumber}>
-                    {authorData?.institution}
+                    {authorData?.institution && authorData.institution !== 'Not available' 
+                      ? authorData.institution 
+                      : 'Not specified'}
                   </span>
                   <span className={styles.statLabel}>Institution</span>
                 </div>
-                <div className={`${styles.statItem} ${styles.countryItem}`}>
-                  <span className={styles.statNumber}>{authorData?.country}</span>
-                  <span className={styles.statLabel}>Country</span>
-                </div>
+                
+                {authorData?.country && authorData.country !== 'Not available' && authorData.country.trim() !== '' && (
+                  <div className={`${styles.statItem} ${styles.countryItem}`}>
+                    <span className={styles.statNumber}>{authorData.country}</span>
+                    <span className={styles.statLabel}>Country</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
