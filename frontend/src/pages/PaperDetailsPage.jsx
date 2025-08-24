@@ -4,7 +4,8 @@ import Chart from 'chart.js/auto';
 import Layout from '../components/layout/Layout/Layout';
 import Card from '../components/ui/Card/Card';
 import Button from '../components/ui/Button/Button';
-import { PaperMetadata } from '../components/Paper';
+import PaperMetadata from '../components/Paper/PaperMetadata';
+import ApiService from '../services/api';
 import layoutStyles from '../components/layout/Layout/Layout.module.css';
 import styles from './PaperDetailsPage.module.css';
 
@@ -16,9 +17,11 @@ const PaperDetailsPage = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    fetch(`/paper/${id}`)
-      .then(response => response.json())
+    console.log('Fetching paper with ID:', id);
+
+    ApiService.getPaper(id)
       .then(data => {
+        console.log('Paper data received:', data);
         setPaper(data);
         setIsLoading(false);
       })

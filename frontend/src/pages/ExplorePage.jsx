@@ -15,6 +15,7 @@ import PapersList from '../components/ui/PapersList/PapersList';
 import DynamicSectionTitle from '../components/ui/DynamicSectionTitle/DynamicSectionTitle';
 import AnalyticsDashboard from '../components/analytics/AnalyticsDashboard/AnalyticsDashboard';
 import { useUnifiedCitationData } from '../hooks/useUnifiedCitationData';
+import ApiService from '../services/api';
 import layoutStyles from '../components/layout/Layout/Layout.module.css';
 import styles from './ExplorePage.module.css';
 
@@ -27,6 +28,15 @@ const ExplorePage = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [totalResults, setTotalResults] = useState(0);
   const [hasSearched, setHasSearched] = useState(false);
+
+  // Author search state
+  const [authorQuery, setAuthorQuery] = useState('');
+  const [authorResults, setAuthorResults] = useState([]);
+  const [isAuthorLoading, setIsAuthorLoading] = useState(false);
+  const [authorCurrentPage, setAuthorCurrentPage] = useState(1);
+  const [authorTotalPages, setAuthorTotalPages] = useState(0);
+  const [authorTotalResults, setAuthorTotalResults] = useState(0);
+  const [hasAuthorSearched, setHasAuthorSearched] = useState(false);
   
   // Citation Analysis state
   const [selectedTimeRange, setSelectedTimeRange] = useState('all');
@@ -49,36 +59,32 @@ const ExplorePage = () => {
     setActiveTab(tabName);
   };
 
-  const handleSearch = (page = 1) => {
+  const handleSearch = async (page = 1) => {
     if (!searchQuery.trim()) return;
-    
+
     setIsLoading(true);
     setCurrentPage(page);
-    
-    const offset = (page - 1) * RESULTS_PER_PAGE;
-    const limit = Math.min(RESULTS_PER_PAGE, MAX_RESULTS - offset);
-    
-    fetch(`/search?query=${encodeURIComponent(searchQuery)}&limit=${limit}&offset=${offset}`)
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        const results = Array.isArray(data) ? data : data.results || [];
-        const total = Math.min(data.total || results.length, MAX_RESULTS);
-        
-        setSearchResults(results);
-        setTotalResults(total);
-        setTotalPages(Math.ceil(total / RESULTS_PER_PAGE));
-        setHasSearched(true);
-        setIsLoading(false);
-      })
-      .catch(error => {
-        console.error('Search error:', error);
-        setSearchResults([]);
-        setTotalResults(0);
-        setTotalPages(0);
-        setHasSearched(true);
-        setIsLoading(false);
-      });
+
+    try {
+      const data = await ApiService.searchPapers(searchQuery, page, RESULTS_PER_PAGE);
+      console.log('Search results:', data);
+
+      const results = data.papers || [];
+      const total = Math.min(data.total || results.length, MAX_RESULTS);
+
+      setSearchResults(results);
+      setTotalResults(total);
+      setTotalPages(Math.ceil(total / RESULTS_PER_PAGE));
+      setHasSearched(true);
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Search error:', error);
+      setSearchResults([]);
+      setTotalResults(0);
+      setTotalPages(0);
+      setHasSearched(true);
+      setIsLoading(false);
+    }
   };
 
   const handlePageChange = (page) => {
@@ -157,6 +163,50 @@ const ExplorePage = () => {
     // Navigation is handled by the PapersList component
   };
 
+  // Author search handlers
+  const handleAuthorSearch = async (page = 1) => {
+    if (!authorQuery.trim()) return;
+
+    setIsAuthorLoading(true);
+    setAuthorCurrentPage(page);
+
+    try {
+      const data = await ApiService.searchAuthors(authorQuery, page, RESULTS_PER_PAGE);
+      console.log('Author search results:', data);
+
+      const results = data.papers || [];
+      const total = Math.min(data.total || results.length, MAX_RESULTS);
+
+      setAuthorResults(results);
+      setAuthorTotalResults(total);
+      setAuthorTotalPages(Math.ceil(total / RESULTS_PER_PAGE));
+      setHasAuthorSearched(true);
+      setIsAuthorLoading(false);
+    } catch (error) {
+      console.error('Author search error:', error);
+      setAuthorResults([]);
+      setAuthorTotalResults(0);
+      setAuthorTotalPages(0);
+      setHasAuthorSearched(true);
+      setIsAuthorLoading(false);
+    }
+  };
+
+  const handleAuthorPageChange = (page) => {
+    handleAuthorSearch(page);
+    // Scroll to top of results
+    document.getElementById('author-search-results')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const resetAuthorSearch = () => {
+    setAuthorQuery('');
+    setAuthorResults([]);
+    setAuthorCurrentPage(1);
+    setAuthorTotalPages(0);
+    setAuthorTotalResults(0);
+    setHasAuthorSearched(false);
+  };
+
   return (
     <Layout>
       <div className="centered-page">
@@ -189,6 +239,13 @@ const ExplorePage = () => {
             className={styles.tabButton}
           >
             Citation Analytics
+          </Button>
+          <Button
+            variant={activeTab === 'authors' ? 'primary' : 'outline'}
+            onClick={() => openTab('authors')}
+            className={styles.tabButton}
+          >
+            Search Authors
           </Button>
           <Button
             variant={activeTab === 'dashboard' ? 'primary' : 'outline'}
@@ -433,6 +490,114 @@ const ExplorePage = () => {
                     )}
                   </Card.Content>
                 </Card>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Authors Search Tab */}
+        {activeTab === 'authors' && (
+          <div className="container">
+            <div className={layoutStyles.contentSection}>
+              <Header
+                title="Search Authors"
+                subtitle={
+                  <>
+                    Search through our database of authors using the submission contact information.
+                    <span className={styles.searchLimit}> Limited to {MAX_RESULTS} results for optimal performance.</span>
+                  </>
+                }
+                variant="section"
+                size="medium"
+                className={styles.searchHeader}
+              />
+
+              <div className={styles.searchSection}>
+                <SearchBar
+                  value={authorQuery}
+                  onChange={(e) => setAuthorQuery(e.target.value)}
+                  onSearch={() => handleAuthorSearch(1)}
+                  placeholder="Search by author name..."
+                  isLoading={isAuthorLoading}
+                  className={styles.searchBar}
+                />
+
+                {hasAuthorSearched && authorQuery && (
+                  <div className={styles.searchActions}>
+                    <Button
+                      variant="ghost"
+                      size="small"
+                      onClick={resetAuthorSearch}
+                      className={styles.clearButton}
+                    >
+                      Clear Search
+                    </Button>
+                  </div>
+                )}
+              </div>
+
+              <div id="author-search-results" className={styles.resultsSection}>
+                {isAuthorLoading && (
+                  <div className={styles.loadingState}>
+                    <div className={styles.loadingSpinner}></div>
+                    <p className="text-body">Searching through authors...</p>
+                  </div>
+                )}
+
+                {!isAuthorLoading && hasAuthorSearched && authorResults.length === 0 && (
+                  <div className={styles.emptyState}>
+                    <div className={styles.emptyIcon}>👤</div>
+                    <h3 className="text-heading-4 mb-2">No Results Found</h3>
+                    <p className="text-body mb-4">
+                      No authors match your search query "{authorQuery}".
+                    </p>
+                    <p className="text-body-small text-neutral-600">
+                      Try different author names or check your spelling.
+                    </p>
+                  </div>
+                )}
+
+                {!isAuthorLoading && authorResults.length > 0 && (
+                  <>
+                    <PapersList
+                      papers={authorResults}
+                      loading={false}
+                      onPaperClick={(paper) => console.log('Author paper clicked:', paper)}
+                    />
+
+                    {authorTotalPages > 1 && (
+                      <Pagination
+                        currentPage={authorCurrentPage}
+                        totalPages={authorTotalPages}
+                        onPageChange={handleAuthorPageChange}
+                        hasNextPage={authorCurrentPage < authorTotalPages}
+                        hasPrevPage={authorCurrentPage > 1}
+                        totalResults={authorTotalResults}
+                        resultsPerPage={RESULTS_PER_PAGE}
+                        className={styles.pagination}
+                      />
+                    )}
+                  </>
+                )}
+
+                {!hasAuthorSearched && (
+                  <div className={styles.welcomeState}>
+                    <div className={styles.welcomeIcon}>👥</div>
+                    <h3 className="text-heading-4 mb-2">Search Authors</h3>
+                    <p className="text-body mb-4">
+                      Enter an author name to find all papers associated with that author in our preprint database.
+                    </p>
+                    <div className={styles.searchTips}>
+                      <h4 className="text-body-small font-medium mb-2">Search Tips:</h4>
+                      <ul className={styles.tipsList}>
+                        <li>Search by full name or surname</li>
+                        <li>Try common variations of names</li>
+                        <li>Use exact matches for better results</li>
+                        <li>Results are based on submission contact information</li>
+                      </ul>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

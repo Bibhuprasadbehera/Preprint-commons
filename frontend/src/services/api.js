@@ -58,6 +58,19 @@ class ApiService {
     return this.get(`/analytics/citations?${params}`);
   }
 
+  // Authors API
+  static async searchAuthors(query, page = 1, pageSize = 10) {
+    return this.get(`/authors/search?query=${encodeURIComponent(query)}&page=${page}&page_size=${pageSize}`);
+  }
+
+  static async listAuthors(page = 1, pageSize = 50) {
+    return this.get(`/authors/list?page=${page}&page_size=${pageSize}`);
+  }
+
+  static async getAuthorPapers(authorName, page = 1, pageSize = 10) {
+    return this.get(`/authors/${encodeURIComponent(authorName)}/papers?page=${page}&page_size=${pageSize}`);
+  }
+
   // Health API
   static async getHealth() {
     return this.get('/health/');
