@@ -84,8 +84,23 @@
 
 .authorStats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: var(--spacing-xl);
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+  grid-template-areas:
+    "papers citations"
+    "institution institution"
+    "country country";
+}
+
+@media (min-width: 1024px) {
+  .authorStats {
+    grid-template-columns: 1fr 1fr 2fr;
+    grid-template-rows: auto auto;
+    gap: var(--spacing-xl);
+    grid-template-areas:
+      "papers citations institution"
+      "country country institution";
+  }
 }
 
 .statItem {
@@ -119,6 +134,29 @@
 
 .statItem:hover::before {
   transform: scaleX(1);
+}
+
+.papersItem {
+  grid-area: papers;
+}
+
+.citationsItem {
+  grid-area: citations;
+}
+
+.institutionItem {
+  grid-area: institution;
+}
+
+.countryItem {
+  grid-area: country;
+}
+
+.institutionItem .statNumber {
+  white-space: normal;
+  word-break: break-word;
+  font-size: clamp(1.25rem, 5vw, 2.25rem);
+  line-height: 1.2;
 }
 
 .statNumber {

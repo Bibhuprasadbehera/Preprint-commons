@@ -230,20 +230,22 @@ const AuthorDetailsPage = () => {
             <div className={styles.authorInfo}>
               <h1 className={styles.authorName}>{authorData?.name}</h1>
 
-              <div className={styles.authorStats}>
-                <div className={styles.statItem}>
+                        <div className={styles.authorStats}>
+                <div className={`${styles.statItem} ${styles.papersItem}`}>
                   <span className={styles.statNumber}>{authorData?.totalPapers}</span>
                   <span className={styles.statLabel}>Papers</span>
                 </div>
-                <div className={styles.statItem}>
+                <div className={`${styles.statItem} ${styles.citationsItem}`}>
                   <span className={styles.statNumber}>{authorData?.totalCitations.toLocaleString()}</span>
                   <span className={styles.statLabel}>Citations</span>
                 </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statNumber}>{authorData?.institution}</span>
+                <div className={`${styles.statItem} ${styles.institutionItem}`}>
+                  <span className={styles.statNumber}>
+                    {authorData?.institution}
+                  </span>
                   <span className={styles.statLabel}>Institution</span>
                 </div>
-                <div className={styles.statItem}>
+                <div className={`${styles.statItem} ${styles.countryItem}`}>
                   <span className={styles.statNumber}>{authorData?.country}</span>
                   <span className={styles.statLabel}>Country</span>
                 </div>
