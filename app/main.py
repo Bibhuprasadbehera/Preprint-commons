@@ -6,7 +6,7 @@ import sys
 from contextlib import asynccontextmanager
 
 from app.config import settings
-from app.routers import papers, analytics, health
+from app.routers import papers, analytics, health, authors
 
 # Configure logging
 logging.basicConfig(
@@ -59,6 +59,7 @@ app.add_middleware(
 app.include_router(health.router)
 app.include_router(papers.router)
 app.include_router(analytics.router)
+app.include_router(authors.router)
 
 # Legacy endpoints for backward compatibility
 @app.get("/country-data")

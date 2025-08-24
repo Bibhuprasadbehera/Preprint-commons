@@ -1,8 +1,12 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, Query
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import sqlite3
 import pandas as pd
+from typing import Optional
+import logging
+
+logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
@@ -323,6 +327,243 @@ def get_analytics_data(conn: sqlite3.Connection = Depends(get_db_connection)):
         
     except Exception as e:
         print(f"❌ Analytics Data Error: {str(e)}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+@app.get("/api/authors/search")
+def search_authors(
+    query: str = Query(..., min_length=1, description="Search query for authors"),
+    page: int = Query(1, ge=1, description="Page number"),
+    page_size: int = Query(10, ge=1, le=100, description="Items per page"),
+    conn: sqlite3.Connection = Depends(get_db_connection)
+):
+    """Search papers by author name using submission_contact field"""
+    logger.info(f"🚀 Author search API called with query='{query}', page={page}, page_size={page_size}")
+
+    try:
+        offset = (page - 1) * page_size
+
+        # Count total results - search in submission_contact field
+        count_query = """
+            SELECT COUNT(*) as total
+            FROM papers
+            WHERE submission_contact LIKE ?
+        """
+        count_df = pd.read_sql_query(count_query, conn, params=(f"%{query}%",))
+        total = int(count_df.iloc[0]['total'])
+
+        # Get paginated results
+        search_query = """
+            SELECT PPC_Id, preprint_title, preprint_doi, submission_contact,
+                   preprint_submission_date, total_citation, preprint_server,
+                   preprint_subject, country_name
+            FROM papers
+            WHERE submission_contact LIKE ?
+            ORDER BY total_citation DESC
+            LIMIT ? OFFSET ?
+        """
+        df = pd.read_sql_query(
+            search_query,
+            conn,
+            params=(f"%{query}%", page_size, offset)
+        )
+
+        conn.close()
+
+        has_next = offset + page_size < total
+
+        response = {
+            "papers": df.to_dict("records"),
+            "total": total,
+            "page": page,
+            "page_size": page_size,
+            "has_next": has_next
+        }
+
+        logger.info(f"✅ Author search: Returning {len(df)} papers out of {total} total results")
+        return JSONResponse(content=response)
+
+    except Exception as e:
+        logger.error(f"❌ Author search error: {e}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+@app.get("/api/authors/list")
+def list_authors(
+    page: int = Query(1, ge=1, description="Page number"),
+    page_size: int = Query(50, ge=1, le=200, description="Items per page"),
+    conn: sqlite3.Connection = Depends(get_db_connection)
+):
+    """Get a list of unique authors for autocomplete/suggestions"""
+    logger.info(f"🚀 List authors API called with page={page}, page_size={page_size}")
+
+    try:
+        offset = (page - 1) * page_size
+
+        # Count total unique authors
+        count_query = """
+            SELECT COUNT(DISTINCT submission_contact) as total
+            FROM papers
+            WHERE submission_contact IS NOT NULL AND submission_contact != ''
+        """
+        count_df = pd.read_sql_query(count_query, conn)
+        total = int(count_df.iloc[0]['total'])
+
+        # Get paginated list of unique authors with paper counts
+        query = """
+            SELECT submission_contact as author_name,
+                   COUNT(*) as paper_count,
+                   MAX(total_citation) as max_citations
+            FROM papers
+            WHERE submission_contact IS NOT NULL AND submission_contact != ''
+            GROUP BY submission_contact
+            ORDER BY paper_count DESC
+            LIMIT ? OFFSET ?
+        """
+        df = pd.read_sql_query(query, conn, params=(page_size, offset))
+
+        conn.close()
+
+        has_next = offset + page_size < total
+
+        response = {
+            "authors": df.to_dict("records"),
+            "total": total,
+            "page": page,
+            "page_size": page_size,
+            "has_next": has_next
+        }
+
+        logger.info(f"✅ List authors: Returning {len(df)} authors out of {total} total")
+        return JSONResponse(content=response)
+
+    except Exception as e:
+        logger.error(f"❌ List authors error: {e}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+@app.get("/api/authors/{author_name}/papers")
+def get_author_papers(
+    author_name: str,
+    page: int = Query(1, ge=1, description="Page number"),
+    page_size: int = Query(10, ge=1, le=100, description="Items per page"),
+    conn: sqlite3.Connection = Depends(get_db_connection)
+):
+    """Get all papers by a specific author"""
+    logger.info(f"🚀 Get author papers API called for author='{author_name}', page={page}, page_size={page_size}")
+
+    try:
+        offset = (page - 1) * page_size
+
+        # Count total papers by this author
+        count_query = """
+            SELECT COUNT(*) as total
+            FROM papers
+            WHERE submission_contact LIKE ?
+        """
+        count_df = pd.read_sql_query(count_query, conn, params=(f"%{author_name}%",))
+        total = int(count_df.iloc[0]['total'])
+
+        # Get paginated results
+        query = """
+            SELECT * FROM papers
+            WHERE submission_contact LIKE ?
+            ORDER BY total_citation DESC
+            LIMIT ? OFFSET ?
+        """
+        df = pd.read_sql_query(query, conn, params=(f"%{author_name}%", page_size, offset))
+
+        conn.close()
+
+        has_next = offset + page_size < total
+
+        response = {
+            "papers": df.to_dict("records"),
+            "total": total,
+            "page": page,
+            "page_size": page_size,
+            "has_next": has_next
+        }
+
+        logger.info(f"✅ Get author papers: Returning {len(df)} papers out of {total} total for author '{author_name}'")
+        return JSONResponse(content=response)
+
+    except Exception as e:
+        logger.error(f"❌ Get author papers error: {e}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+@app.get("/api/papers/search")
+def api_search_papers(
+    query: str = Query(..., min_length=1, description="Search query"),
+    page: int = Query(1, ge=1, description="Page number"),
+    page_size: int = Query(10, ge=1, le=100, description="Items per page"),
+    conn: sqlite3.Connection = Depends(get_db_connection)
+):
+    """Search papers with pagination - API version"""
+    logger.info(f"🚀 API papers search called with query='{query}', page={page}, page_size={page_size}")
+
+    try:
+        offset = (page - 1) * page_size
+
+        # Count total results
+        count_query = """
+            SELECT COUNT(*) as total
+            FROM papers
+            WHERE preprint_title LIKE ? OR preprint_doi LIKE ? OR all_authors LIKE ?
+        """
+        count_df = pd.read_sql_query(count_query, conn, params=(f"%{query}%", f"%{query}%", f"%{query}%"))
+        total = int(count_df.iloc[0]['total'])
+
+        # Get paginated results
+        search_query = """
+            SELECT * FROM papers
+            WHERE preprint_title LIKE ? OR preprint_doi LIKE ? OR all_authors LIKE ?
+            ORDER BY total_citation DESC
+            LIMIT ? OFFSET ?
+        """
+        df = pd.read_sql_query(
+            search_query,
+            conn,
+            params=(f"%{query}%", f"%{query}%", f"%{query}%", page_size, offset)
+        )
+
+        conn.close()
+
+        has_next = offset + page_size < total
+
+        response = {
+            "papers": df.to_dict("records"),
+            "total": total,
+            "page": page,
+            "page_size": page_size,
+            "has_next": has_next
+        }
+
+        logger.info(f"✅ API papers search: Returning {len(df)} papers out of {total} total results")
+        return JSONResponse(content=response)
+
+    except Exception as e:
+        logger.error(f"❌ API papers search error: {e}")
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+@app.get("/api/papers/{ppc_id}")
+def api_get_paper(ppc_id: str, conn: sqlite3.Connection = Depends(get_db_connection)):
+    """Get a specific paper by PPC_Id - API version"""
+    logger.info(f"🚀 API get paper called for PPC_Id='{ppc_id}'")
+
+    try:
+        query = "SELECT * FROM papers WHERE PPC_Id = ?"
+        df = pd.read_sql_query(query, conn, params=(ppc_id,))
+
+        conn.close()
+
+        if df.empty:
+            logger.warning(f"❌ Paper not found: PPC_Id='{ppc_id}'")
+            return JSONResponse(content={"error": "Paper not found"}, status_code=404)
+
+        paper = df.iloc[0].to_dict()
+        logger.info(f"✅ API get paper: Returning paper '{paper.get('preprint_title', '')[:50]}...'")
+        return JSONResponse(content=paper)
+
+    except Exception as e:
+        logger.error(f"❌ API get paper error: {e}")
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 #bibhu backend
