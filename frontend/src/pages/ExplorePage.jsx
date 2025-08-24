@@ -45,8 +45,8 @@ const ExplorePage = () => {
   const [sortOption, setSortOption] = useState('citations_desc');
   const [isSearching, setIsSearching] = useState(false);
   
-  const RESULTS_PER_PAGE = 10;
-  const MAX_RESULTS = 100;
+  const RESULTS_PER_PAGE = 20;
+  const MAX_RESULTS = 200;
 
   // Initialize unified citation data hook
   const { data, loading, error, fetchAllData, clearAllData } = useUnifiedCitationData();
@@ -358,6 +358,7 @@ const ExplorePage = () => {
                         hasPrevPage={currentPage > 1}
                         totalResults={totalResults}
                         resultsPerPage={RESULTS_PER_PAGE}
+                        variant="enhanced"
                         className={styles.pagination}
                       />
                     )}
@@ -574,6 +575,7 @@ const ExplorePage = () => {
                         hasPrevPage={authorCurrentPage > 1}
                         totalResults={authorTotalResults}
                         resultsPerPage={RESULTS_PER_PAGE}
+                        variant="enhanced"
                         className={styles.pagination}
                       />
                     )}

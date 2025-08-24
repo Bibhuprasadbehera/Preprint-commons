@@ -27,7 +27,7 @@ class ApiService {
   }
 
   // Papers API
-  static async searchPapers(query, page = 1, pageSize = 10) {
+  static async searchPapers(query, page = 1, pageSize = 20) {
     return this.get(`/papers/search?query=${encodeURIComponent(query)}&page=${page}&page_size=${pageSize}`);
   }
 
@@ -59,7 +59,7 @@ class ApiService {
   }
 
   // Authors API
-  static async searchAuthors(query, page = 1, pageSize = 10) {
+  static async searchAuthors(query, page = 1, pageSize = 20) {
     return this.get(`/authors/search?query=${encodeURIComponent(query)}&page=${page}&page_size=${pageSize}`);
   }
 
@@ -67,7 +67,7 @@ class ApiService {
     return this.get(`/authors/list?page=${page}&page_size=${pageSize}`);
   }
 
-  static async getAuthorPapers(authorName, page = 1, pageSize = 10) {
+  static async getAuthorPapers(authorName, page = 1, pageSize = 20) {
     return this.get(`/authors/${encodeURIComponent(authorName)}/papers?page=${page}&page_size=${pageSize}`);
   }
 
