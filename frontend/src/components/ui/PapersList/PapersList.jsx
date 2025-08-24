@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../Card/Card';
 import styles from './PapersList.module.css';
+import Button from '../Button/Button';
 
 // Formatter functions moved here since they're only used in this component
 const formatCitationCount = (count) => {
@@ -22,24 +23,59 @@ const formatPublicationDate = (dateString) => {
   });
 };
 
-const formatAuthors = (authorsArray) => {
+const formatAuthors = (authorsArray, navigate) => {
   if (!authorsArray || authorsArray.length === 0) return 'Unknown authors';
-  
+
   try {
-    const authors = typeof authorsArray === 'string' 
-      ? JSON.parse(authorsArray) 
+    const authors = typeof authorsArray === 'string'
+      ? JSON.parse(authorsArray)
       : authorsArray;
-    
-    const authorNames = authors
-      .filter(author => author.author_name && author.author_name.trim())
-      .map(author => author.author_name.trim());
-    
-    if (authorNames.length === 0) return 'Unknown authors';
-    if (authorNames.length === 1) return authorNames[0];
-    if (authorNames.length === 2) return `${authorNames[0]} and ${authorNames[1]}`;
-    if (authorNames.length <= 3) return `${authorNames.slice(0, -1).join(', ')}, and ${authorNames[authorNames.length - 1]}`;
-    
-    return `${authorNames[0]} et al.`;
+
+    const validAuthors = authors
+      .filter(author => author.author_name && author.author_name.trim());
+
+    if (validAuthors.length === 0) return 'Unknown authors';
+
+    // Get submission_contact for author linking
+    const submissionContact = validAuthors[0]?.submission_contact || validAuthors[0]?.author_name;
+
+    const handleAuthorClick = (e, authorName) => {
+      e.stopPropagation(); // Prevent paper click
+      if (submissionContact) {
+        navigate(`/author/${encodeURIComponent(submissionContact)}`);
+      }
+    };
+
+    const authorElements = validAuthors.map((author, index) => (
+      <span key={index}>
+        <span
+          className={styles.authorLink}
+          onClick={(e) => handleAuthorClick(e, author.author_name)}
+          title={`View papers by ${author.author_name}`}
+        >
+          {author.author_name.trim()}
+        </span>
+        {index < validAuthors.length - 2 && ', '}
+        {index === validAuthors.length - 2 && ' and '}
+      </span>
+    ));
+
+    if (validAuthors.length > 3) {
+      return (
+        <>
+          <span
+            className={styles.authorLink}
+            onClick={(e) => handleAuthorClick(e, validAuthors[0].author_name)}
+            title={`View papers by ${validAuthors[0].author_name}`}
+          >
+            {validAuthors[0].author_name.trim()}
+          </span>
+          {' et al.'}
+        </>
+      );
+    }
+
+    return <span>{authorElements}</span>;
   } catch (error) {
     return 'Unknown authors';
   }
@@ -97,7 +133,7 @@ const PapersList = ({ papers, loading = false, onPaperClick }) => {
             
             <div className={styles.paperMeta}>
               <p className={styles.authors}>
-                {formatAuthors(paper.all_authors)}
+                {formatAuthors(paper.all_authors, navigate)}
               </p>
               <div className={styles.metaRow}>
                 <span className={styles.subject}>

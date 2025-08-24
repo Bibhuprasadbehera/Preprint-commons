@@ -73,6 +73,19 @@
   margin: 0;
 }
 
+.authorLink {
+  color: var(--color-primary);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  font-weight: var(--font-weight-semibold);
+}
+
+.authorLink:hover {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
 .metaRow {
   display: flex;
   justify-content: space-between;

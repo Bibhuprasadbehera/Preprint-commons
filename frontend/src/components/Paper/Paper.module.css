@@ -228,6 +228,20 @@
   border-bottom-color: var(--color-primary-dark);
 }
 
+.authorLink {
+  color: var(--color-primary);
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: var(--font-weight-medium);
+  transition: color var(--transition-fast);
+  border-bottom: 1px solid transparent;
+}
+
+.authorLink:hover {
+  color: var(--color-primary-dark);
+  border-bottom-color: var(--color-primary-dark);
+}
+
 .authorsList {
   display: grid;
   gap: var(--spacing-md);

@@ -1,13 +1,43 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Card from '../ui/Card/Card';
 import styles from './Paper.module.css';
 
 const PaperMetadata = ({ paper }) => {
+  const navigate = useNavigate();
+  const metadataRef = useRef(null);
+
+  const handleAuthorClick = (authorName) => {
+    if (authorName && authorName.trim()) {
+      navigate(`/author/${encodeURIComponent(authorName)}`);
+    }
+  };
+
+  useEffect(() => {
+    const handleClick = (e) => {
+      const target = e.target;
+      if (target.classList.contains(styles.authorLink) && target.dataset.author) {
+        e.preventDefault();
+        handleAuthorClick(target.dataset.author);
+      }
+    };
+
+    const metadataElement = metadataRef.current;
+    if (metadataElement) {
+      metadataElement.addEventListener('click', handleClick);
+      return () => metadataElement.removeEventListener('click', handleClick);
+    }
+  }, [navigate]);
+
   const meta = [
     { k: 'preprint_doi', l: 'DOI', v: d => `<a href="https://doi.org/${d}" target="_blank" rel="noopener noreferrer" class="${styles.externalLink}">${d}</a>` },
     { k: 'preprint_submission_date', l: 'Submission Date', v: d => new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) },
     { k: 'preprint_server', l: 'Preprint Server' },
-    { k: 'submission_contact', l: 'Submission Contact' },
+    {
+      k: 'submission_contact',
+      l: 'Submission Contact',
+      v: (d) => `<span class="${styles.authorLink}" data-author="${d}" title="View papers by ${d}">${d}</span>`
+    },
     { k: 'corresponding_institution', l: 'Corresponding Institution' },
     { k: 'country_name', l: 'Country' },
     { k: 'versions', l: 'Versions', v: d => {
@@ -28,7 +58,7 @@ const PaperMetadata = ({ paper }) => {
   const authors = paper.all_authors ? JSON.parse(paper.all_authors) : [];
 
   return (
-    <div className={styles.metadataContainer}>
+    <div className={styles.metadataContainer} ref={metadataRef}>
       <Card className={styles.metadataCard}>
         <Card.Header>
           <h3 className={styles.sectionTitle}>Paper Details</h3>
