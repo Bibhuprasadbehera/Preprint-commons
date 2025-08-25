@@ -1,112 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import Chart from 'chart.js/auto';
+import { usePaperDetails } from '../hooks/usePaperDetails';
 import Layout from '../components/layout/Layout/Layout';
 import Card from '../components/ui/Card/Card';
 import Button from '../components/ui/Button/Button';
 import PaperMetadata from '../components/Paper/PaperMetadata';
-import ApiService from '../services/api';
+import CitationChart from '../components/Paper/CitationChart';
 import layoutStyles from '../components/layout/Layout/Layout.module.css';
 import styles from './PaperDetailsPage.module.css';
 
 const PaperDetailsPage = () => {
   const { id } = useParams();
-  const [paper, setPaper] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [retryCount, setRetryCount] = useState(0);
-  const chartRef = useRef(null);
-
-  const fetchPaper = async (attemptNumber = 1) => {
-    try {
-      console.log(`Fetching paper with ID: ${id} (attempt ${attemptNumber})`);
-      setError(null);
-      
-      const data = await ApiService.getPaper(id);
-      console.log('Paper data received:', data);
-      
-      if (!data) {
-        throw new Error('No paper data received');
-      }
-      
-      setPaper(data);
-      setIsLoading(false);
-      setRetryCount(0);
-    } catch (error) {
-      console.error(`Error fetching paper (attempt ${attemptNumber}):`, error);
-      
-      // Auto-retry up to 2 times with exponential backoff
-      if (attemptNumber < 3) {
-        const delay = Math.pow(2, attemptNumber - 1) * 1000; // 1s, 2s, 4s
-        console.log(`Retrying in ${delay}ms...`);
-        
-        setTimeout(() => {
-          fetchPaper(attemptNumber + 1);
-        }, delay);
-      } else {
-        setError('Failed to load paper information');
-        setIsLoading(false);
-        setRetryCount(attemptNumber - 1);
-      }
-    }
-  };
-
-  const handleManualRetry = () => {
-    setIsLoading(true);
-    setPaper(null);
-    setError(null);
-    fetchPaper(1);
-  };
-
-  useEffect(() => {
-    setIsLoading(true);
-    setPaper(null);
-    setError(null);
-    fetchPaper(1);
-  }, [id]);
-
-  useEffect(() => {
-    if (paper && paper.citation && chartRef.current) {
-      try {
-        const citations = JSON.parse(paper.citation);
-        const ctx = document.createElement('canvas');
-        chartRef.current.innerHTML = '';
-        chartRef.current.appendChild(ctx);
-        
-        new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: citations.map(c => c.year),
-            datasets: [{
-              label: 'Citations per year',
-              data: citations.map(c => c.value),
-              backgroundColor: 'rgba(54, 162, 235, 0.7)',
-              borderColor: 'rgba(54, 162, 235, 1)',
-              borderWidth: 1
-            }]
-          },
-          options: {
-            responsive: true,
-            plugins: { 
-              legend: { display: false },
-              title: {
-                display: true,
-                text: 'Citation History'
-              }
-            },
-            scales: { 
-              y: { 
-                beginAtZero: true, 
-                ticks: { precision: 0 } 
-              } 
-            }
-          }
-        });
-      } catch (error) {
-        console.error('Error creating chart:', error);
-      }
-    }
-  }, [paper]);
+  const { paper, isLoading, error, retryCount, handleManualRetry } = usePaperDetails(id);
 
   if (isLoading) {
     return (
@@ -182,7 +87,6 @@ const PaperDetailsPage = () => {
   return (
     <Layout>
       <div className={layoutStyles.pageContainer}>
-        {/* Breadcrumb Navigation */}
         <div className={styles.breadcrumb}>
           <Link to="/" className={styles.breadcrumbLink}>Home</Link>
           <span className={styles.breadcrumbSeparator}>›</span>
@@ -192,9 +96,7 @@ const PaperDetailsPage = () => {
         </div>
 
         <div className={styles.paperContainer}>
-          {/* Main Content */}
           <div className={styles.mainContent}>
-            {/* Paper Header */}
             <div className={styles.paperHeader}>
               <div className={styles.paperBadge}>
                 <span className={styles.badgeText}>Preprint</span>
@@ -220,7 +122,6 @@ const PaperDetailsPage = () => {
               </div>
             </div>
             
-            {/* Abstract Section */}
             {paper.preprint_abstract && (
               <Card className={styles.abstractCard}>
                 <Card.Header>
@@ -232,19 +133,17 @@ const PaperDetailsPage = () => {
               </Card>
             )}
             
-            {/* Citation Chart */}
             {paper.citation && (
               <Card className={styles.chartCard}>
                 <Card.Header>
                   <h2 className={styles.sectionTitle}>Citation History</h2>
                 </Card.Header>
                 <Card.Content>
-                  <div ref={chartRef} className={styles.chartContainer}></div>
+                  <CitationChart paper={paper} />
                 </Card.Content>
               </Card>
             )}
             
-            {/* Action Buttons */}
             <div className={styles.actionButtons}>
               {paper.preprint_doi && (
                 <a 
@@ -271,7 +170,6 @@ const PaperDetailsPage = () => {
             </div>
           </div>
           
-          {/* Metadata Sidebar */}
           <div className={styles.sidebar}>
             <PaperMetadata paper={paper} />
           </div>
