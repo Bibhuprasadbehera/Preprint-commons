@@ -82,7 +82,17 @@ def get_paper(ppc_id: str, conn: sqlite3.Connection = Depends(get_db_connection)
         if df.empty:
             raise HTTPException(status_code=404, detail="Paper not found")
             
-        paper = Paper(**df.iloc[0].to_dict())
+        row = df.iloc[0].to_dict()
+        # Ensure all expected fields exist (fallbacks)
+        row.setdefault('publication_date', row.get('preprint_submission_date'))
+        row.setdefault('preprint_abstract', row.get('preprint_abstract'))
+        row.setdefault('citation', row.get('citation'))
+        row.setdefault('versions', row.get('versions'))
+        row.setdefault('submission_contact', row.get('submission_contact'))
+        row.setdefault('corresponding_institution', row.get('corresponding_institution'))
+        row.setdefault('published_DOI', row.get('published_DOI'))
+
+        paper = Paper(**row)
         cache[cache_key] = paper
         return paper
         
@@ -135,7 +145,7 @@ def fetch_papers(
         # Get paginated results
         offset = (page - 1) * page_size
         query = f"""
-            SELECT PPC_Id, preprint_title, total_citation, preprint_submission_date, all_authors
+            SELECT PPC_Id, preprint_title, total_citation, preprint_submission_date, all_authors, preprint_subject, preprint_server, country_name
             FROM papers{where_clause}
             ORDER BY total_citation DESC
             LIMIT ? OFFSET ?

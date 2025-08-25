@@ -304,17 +304,17 @@ If you encounter any issues or have questions:
 - [ ] AdvancedCorrelationsCard
 
 - [ ] retraction watch
-- [ ] API rate limiting and caching
+- [X] API rate limiting and caching
 - [ ] Pickel search
 - [ ] Update the rest of the pages with static text
 
 - [ ] make clickable papers everywhere
-- [ ] fix the country dropdown in explore page citation analystics
+- [X] fix the country dropdown in explore page citation analystics
 - [ ] update the citation heatmap based on the subject
 - [ ] make the analytics daashboard to have stacked publication timeline
 - [ ] fix subject distribution with others as well 
 - [x] Make the existing slider better in citation impact visualiser  
-- [ ] 
+- [X] Author page
 
 - [ ] Author network
 - [ ] Integration with more preprint repositories

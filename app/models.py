@@ -9,9 +9,18 @@ class PaperBase(BaseModel):
     preprint_subject: Optional[str] = None
     preprint_server: Optional[str] = None
     preprint_submission_date: Optional[str] = None
+    preprint_abstract: Optional[str] = None
     all_authors: Optional[str] = None
-    total_citation: Optional[int] = None
+    submission_contact: Optional[str] = None
+    corresponding_institution: Optional[str] = None
     country_name: Optional[str] = None
+    versions: Optional[str] = None  # JSON array string
+    submission_type: Optional[str] = None
+    submission_license: Optional[str] = None
+    published_DOI: Optional[str] = None
+    publication_date: Optional[str] = None
+    citation: Optional[str] = None  # JSON array string
+    total_citation: Optional[int] = None
 
 class Paper(PaperBase):
     """Complete paper model"""

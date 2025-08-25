@@ -6,6 +6,7 @@ import ContactPage from '../pages/ContactPage';
 import FaqPage from '../pages/FaqPage';
 import ExplorePage from '../pages/ExplorePage';
 import PaperDetailsPage from '../pages/PaperDetailsPage';
+import AuthorDetailsPage from '../pages/AuthorDetailsPage';
 import DocumentationPage from '../pages/DocumentationPage';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
       <Route path="/faq" element={<FaqPage />} />
       <Route path="/explore" element={<ExplorePage />} />
       <Route path="/paper/:id" element={<PaperDetailsPage />} />
+      <Route path="/author/:authorName" element={<AuthorDetailsPage />} />
       <Route path="/documentation" element={<DocumentationPage />} />
       <Route path="*" element={<HomePage />} />
     </Routes>

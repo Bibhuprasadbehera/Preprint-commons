@@ -4,62 +4,104 @@ import Button from '../Button/Button';
 import { API_BASE_URL } from '../../../utils/api';
 import styles from './FilterControls.module.css';
 
-// useSubjects hook moved here since it's only used in this component
+// useSubjects hook with automatic retry and caching
 const useSubjects = () => {
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
+  const [lastFetchTime, setLastFetchTime] = useState(0);
 
-  useEffect(() => {
-    const fetchSubjects = async () => {
-      setLoading(true);
+  // Cache subjects for 5 minutes to avoid unnecessary refetches
+  const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+  const MAX_RETRIES = 3;
+
+  const fetchSubjects = async (isRetry = false) => {
+    // Check if we have cached data that's still valid
+    const now = Date.now();
+    if (!isRetry && subjects.length > 1 && (now - lastFetchTime) < CACHE_DURATION) {
+      console.log('📋 Using cached subjects data');
+      return;
+    }
+
+    setLoading(true);
+    if (!isRetry) {
       setError(null);
+      setRetryCount(0);
+    }
+    
+    try {
+      const response = await fetch(`${API_BASE_URL}/subjects`);
       
-      try {
-        const response = await fetch(`${API_BASE_URL}/subjects`);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
+      const result = await response.json();
+      console.log('✅ Subjects data received:', result);
+      
+      // Transform subjects into options format
+      const subjectOptions = [
+        { value: '', label: 'All Subjects' },
+        ...result.data.map(subject => ({
+          value: subject,
+          label: subject.split(' ').map(word => 
+            word.charAt(0).toUpperCase() + word.slice(1)
+          ).join(' ')
+        }))
+      ];
+      
+      setSubjects(subjectOptions);
+      setLastFetchTime(now);
+      setError(null);
+      setRetryCount(0);
+    } catch (err) {
+      console.error('💥 Subjects fetch error:', err);
+      setError(err.message);
+      
+      // Auto-retry with exponential backoff
+      if (retryCount < MAX_RETRIES) {
+        const delay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
+        console.log(`🔄 Retrying subjects fetch in ${delay}ms... (attempt ${retryCount + 1}/${MAX_RETRIES})`);
         
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-        
-        const result = await response.json();
-        console.log('✅ Subjects data received:', result);
-        
-        // Transform subjects into options format
-        const subjectOptions = [
-          { value: '', label: 'All Subjects' },
-          ...result.data.map(subject => ({
-            value: subject,
-            label: subject.split(' ').map(word => 
-              word.charAt(0).toUpperCase() + word.slice(1)
-            ).join(' ')
-          }))
-        ];
-        
-        setSubjects(subjectOptions);
-      } catch (err) {
-        console.error('💥 Subjects fetch error:', err);
-        setError(err.message);
-        
-        // Fallback to hardcoded subjects if API fails
+        setTimeout(() => {
+          setRetryCount(prev => prev + 1);
+          fetchSubjects(true);
+        }, delay);
+      } else {
+        // Fallback to hardcoded subjects if all retries fail
+        console.log('🔄 All retries failed, using fallback subjects');
         const fallbackSubjects = [
           { value: '', label: 'All Subjects' },
           { value: 'bioinformatics', label: 'Bioinformatics' },
           { value: 'molecular biology', label: 'Molecular Biology' },
           { value: 'neuroscience', label: 'Neuroscience' },
           { value: 'genomics', label: 'Genomics' },
-          { value: 'immunology', label: 'Immunology' }
+          { value: 'immunology', label: 'Immunology' },
+          { value: 'biochemistry', label: 'Biochemistry' },
+          { value: 'genetics', label: 'Genetics' },
+          { value: 'cell biology', label: 'Cell Biology' },
+          { value: 'microbiology', label: 'Microbiology' }
         ];
         setSubjects(fallbackSubjects);
-      } finally {
-        setLoading(false);
+        setLastFetchTime(now);
       }
-    };
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchSubjects();
   }, []);
 
-  return { subjects, loading, error };
+  // Manual refresh function
+  const refreshSubjects = () => {
+    setLastFetchTime(0); // Force refresh by invalidating cache
+    fetchSubjects();
+  };
+
+  return { subjects, loading, error, refreshSubjects, retryCount };
 };
 
 const FilterControls = ({
@@ -76,7 +118,7 @@ const FilterControls = ({
   showRefreshButton = true,
   isSearching = false,
 }) => {
-  const { subjects: subjectOptions, loading: subjectsLoading, error: subjectsError } = useSubjects();
+  const { subjects: subjectOptions, loading: subjectsLoading, error: subjectsError, refreshSubjects, retryCount } = useSubjects();
   
   const timeRangeOptions = [
     { value: 'all', label: 'All Time' },
@@ -107,19 +149,42 @@ const FilterControls = ({
         </div>
 
         <div className={styles.filterGroup}>
-          <label className={styles.filterLabel}>Subject</label>
+          <div className={styles.filterLabelRow}>
+            <label className={styles.filterLabel}>Subject</label>
+            {subjectsError && (
+              <Button
+                variant="ghost"
+                size="small"
+                onClick={refreshSubjects}
+                disabled={subjectsLoading}
+                className={styles.refreshButton}
+                title="Refresh subjects list"
+              >
+                🔄
+              </Button>
+            )}
+          </div>
           <Select
             options={subjectOptions}
             value={selectedSubject || ''}
             onChange={(value) => onSubjectChange(value || null)}
             className={styles.filterSelect}
             disabled={subjectsLoading}
-            placeholder={subjectsLoading ? "Loading subjects..." : "Select subject"}
+            placeholder={subjectsLoading ? 
+              (retryCount > 0 ? `Retrying... (${retryCount}/3)` : "Loading subjects...") : 
+              "Select subject"
+            }
           />
           {subjectsError && (
-            <span className={styles.errorText}>
-              Failed to load subjects: {subjectsError}
-            </span>
+            <div className={styles.errorContainer}>
+              <span className={styles.errorText}>
+                Failed to load subjects
+                {retryCount > 0 && ` (retried ${retryCount}/3 times)`}
+              </span>
+              <span className={styles.errorHint}>
+                Using fallback subjects. Click 🔄 to retry.
+              </span>
+            </div>
           )}
         </div>
 

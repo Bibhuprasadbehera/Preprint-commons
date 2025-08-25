@@ -72,7 +72,6 @@ Language/Writing Style Analysis: Text analysis of abstracts and titles
 Goal: Deep dive into research content and trends
 
 Subject Evolution: How research areas have grown over time
-Abstract Word Cloud: Most common terms in abstracts
 Subject Citation Analysis: Which subjects get cited most
 Version Analysis: Papers with multiple versions
 

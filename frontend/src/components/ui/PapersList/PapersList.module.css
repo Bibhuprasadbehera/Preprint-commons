@@ -63,7 +63,31 @@
 .paperMeta {
   display: flex;
   flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.authorsSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.authorsRow,
+.contactRow {
+  display: flex;
+  align-items: flex-start;
   gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  min-width: 60px;
+  flex-shrink: 0;
 }
 
 .authors {
@@ -71,14 +95,62 @@
   color: var(--color-text-secondary);
   font-weight: var(--font-weight-medium);
   margin: 0;
+  flex: 1;
 }
 
-.metaRow {
+.authorLink {
+  color: var(--color-primary);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  font-weight: var(--font-weight-semibold);
+}
+
+.authorLink:hover {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
+.contactInfo {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: var(--spacing-xs);
+  flex: 1;
+}
+
+.contactLink {
+  color: var(--color-secondary);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  font-weight: var(--font-weight-semibold);
+}
+
+.contactLink:hover {
+  color: var(--color-secondary-dark);
+  text-decoration: underline;
+}
+
+.paperDetails {
+  display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.detailItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  color: var(--color-text-tertiary);
+  flex-shrink: 0;
 }
 
 .subject {
@@ -92,9 +164,35 @@
 }
 
 .date {
+  font-weight: var(--font-weight-medium);
+}
+
+.institution {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.country {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.countryFlag {
+  font-size: var(--font-size-base);
+}
+
+.abstractPreview {
+  margin-top: var(--spacing-sm);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--color-neutral-200);
+}
+
+.abstract {
   font-size: var(--font-size-sm);
-  color: var(--color-text-tertiary);
-  font-weight: var(--font-weight-normal);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+  font-style: italic;
 }
 
 .loadingContainer {

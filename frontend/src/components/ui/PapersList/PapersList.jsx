@@ -2,6 +2,43 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../Card/Card';
 import styles from './PapersList.module.css';
+import Button from '../Button/Button';
+
+// Icon components
+const ContactIcon = () => (
+  <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+    <circle cx="12" cy="7" r="4"></circle>
+  </svg>
+);
+
+const InstitutionIcon = () => (
+  <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M3 21h18"></path>
+    <path d="M5 21V7l8-4v18"></path>
+    <path d="M19 21V11l-6-4"></path>
+    <path d="M9 9v.01"></path>
+    <path d="M9 12v.01"></path>
+    <path d="M9 15v.01"></path>
+    <path d="M9 18v.01"></path>
+  </svg>
+);
+
+const CalendarIcon = () => (
+  <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+    <line x1="16" y1="2" x2="16" y2="6"></line>
+    <line x1="8" y1="2" x2="8" y2="6"></line>
+    <line x1="3" y1="10" x2="21" y2="10"></line>
+  </svg>
+);
+
+const TagIcon = () => (
+  <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+    <line x1="7" y1="7" x2="7.01" y2="7"></line>
+  </svg>
+);
 
 // Formatter functions moved here since they're only used in this component
 const formatCitationCount = (count) => {
@@ -22,27 +59,80 @@ const formatPublicationDate = (dateString) => {
   });
 };
 
-const formatAuthors = (authorsArray) => {
+const formatAuthors = (authorsArray, submissionContact, navigate) => {
   if (!authorsArray || authorsArray.length === 0) return 'Unknown authors';
-  
+
   try {
-    const authors = typeof authorsArray === 'string' 
-      ? JSON.parse(authorsArray) 
+    const authors = typeof authorsArray === 'string'
+      ? JSON.parse(authorsArray)
       : authorsArray;
-    
-    const authorNames = authors
-      .filter(author => author.author_name && author.author_name.trim())
-      .map(author => author.author_name.trim());
-    
-    if (authorNames.length === 0) return 'Unknown authors';
-    if (authorNames.length === 1) return authorNames[0];
-    if (authorNames.length === 2) return `${authorNames[0]} and ${authorNames[1]}`;
-    if (authorNames.length <= 3) return `${authorNames.slice(0, -1).join(', ')}, and ${authorNames[authorNames.length - 1]}`;
-    
-    return `${authorNames[0]} et al.`;
+
+    const validAuthors = authors
+      .filter(author => author.author_name && author.author_name.trim());
+
+    if (validAuthors.length === 0) return 'Unknown authors';
+
+    const handleAuthorClick = (e, authorName) => {
+      e.stopPropagation(); // Prevent paper click
+      // Use submission_contact for navigation if available, otherwise use the clicked author name
+      const contactToUse = submissionContact || authorName;
+      if (contactToUse) {
+        navigate(`/author/${encodeURIComponent(contactToUse)}`);
+      }
+    };
+
+    const authorElements = validAuthors.map((author, index) => (
+      <span key={index}>
+        <span
+          className={styles.authorLink}
+          onClick={(e) => handleAuthorClick(e, author.author_name)}
+          title={`View papers by ${author.author_name}`}
+        >
+          {author.author_name.trim()}
+        </span>
+        {index < validAuthors.length - 2 && ', '}
+        {index === validAuthors.length - 2 && ' and '}
+      </span>
+    ));
+
+    if (validAuthors.length > 3) {
+      return (
+        <>
+          <span
+            className={styles.authorLink}
+            onClick={(e) => handleAuthorClick(e, validAuthors[0].author_name)}
+            title={`View papers by ${validAuthors[0].author_name}`}
+          >
+            {validAuthors[0].author_name.trim()}
+          </span>
+          {' et al.'}
+        </>
+      );
+    }
+
+    return <span>{authorElements}</span>;
   } catch (error) {
     return 'Unknown authors';
   }
+};
+
+const formatSubmissionContact = (contact, navigate) => {
+  if (!contact || !contact.trim()) return null;
+  
+  const handleContactClick = (e) => {
+    e.stopPropagation(); // Prevent paper click
+    navigate(`/author/${encodeURIComponent(contact)}`);
+  };
+
+  return (
+    <span
+      className={styles.contactLink}
+      onClick={handleContactClick}
+      title={`View papers by ${contact}`}
+    >
+      {contact.trim()}
+    </span>
+  );
 };
 
 const PapersList = ({ papers, loading = false, onPaperClick }) => {
@@ -96,17 +186,65 @@ const PapersList = ({ papers, loading = false, onPaperClick }) => {
             </h3>
             
             <div className={styles.paperMeta}>
-              <p className={styles.authors}>
-                {formatAuthors(paper.all_authors)}
-              </p>
-              <div className={styles.metaRow}>
-                <span className={styles.subject}>
-                  {paper.preprint_subject}
-                </span>
-                <span className={styles.date}>
-                  {formatPublicationDate(paper.publication_date)}
-                </span>
+              <div className={styles.authorsSection}>
+                <div className={styles.authorsRow}>
+                
+                </div>
+                {paper.submission_contact && (
+                  <div className={styles.contactRow}>
+                    <span className={styles.label}>Contact:</span>
+                    <span className={styles.contactInfo}>
+                      <ContactIcon />
+                      {formatSubmissionContact(paper.submission_contact, navigate)}
+                    </span>
+                  </div>
+                )}
               </div>
+              
+              <div className={styles.paperDetails}>
+                <div className={styles.detailItem}>
+                  <TagIcon />
+                  <span className={styles.subject}>
+                    {paper.preprint_subject || 'General'}
+                  </span>
+                </div>
+                
+                <div className={styles.detailItem}>
+                  <CalendarIcon />
+                  <span className={styles.date}>
+                    {formatPublicationDate(paper.publication_date || paper.preprint_submission_date)}
+                  </span>
+                </div>
+                
+                {paper.corresponding_institution && (
+                  <div className={styles.detailItem}>
+                    <InstitutionIcon />
+                    <span className={styles.institution}>
+                      {paper.corresponding_institution}
+                    </span>
+                  </div>
+                )}
+                
+                {paper.country_name && (
+                  <div className={styles.detailItem}>
+                    <span className={styles.countryFlag}>🌍</span>
+                    <span className={styles.country}>
+                      {paper.country_name}
+                    </span>
+                  </div>
+                )}
+              </div>
+              
+              {paper.preprint_abstract && (
+                <div className={styles.abstractPreview}>
+                  <p className={styles.abstract}>
+                    {paper.preprint_abstract.length > 200 
+                      ? `${paper.preprint_abstract.substring(0, 200)}...` 
+                      : paper.preprint_abstract
+                    }
+                  </p>
+                </div>
+              )}
             </div>
           </Card.Content>
         </Card>
