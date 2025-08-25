@@ -180,7 +180,20 @@ const ExplorePage = () => {
     setHasSearched(false);
   };
 
-  const handleSearchClick = async () => {
+  const handleSearchClick = async (forceRefresh = false) => {
+    const currentFilters = {
+      timeRange: selectedTimeRange,
+      subject: selectedSubject,
+      country: selectedCountry,
+      sortOption: sortOption
+    };
+
+    // Check if we need to fetch new data
+    if (!forceRefresh && !filtersChanged(currentFilters, lastAnalyticsFilters) && analyticsDataCached) {
+      console.log('📋 Using cached analytics data');
+      return;
+    }
+
     setIsSearching(true);
     
     // Clear all existing data immediately to avoid showing stale results
@@ -188,18 +201,16 @@ const ExplorePage = () => {
     clearAllData();
     
     // Fetch all citation data using unified hook
-    console.log('📊 Fetching all citation data with filters:', {
-      timeRange: selectedTimeRange,
-      subject: selectedSubject,
-      country: selectedCountry,
-      sortOption: sortOption
-    });
+    console.log('📊 Fetching all citation data with filters:', currentFilters);
     
     try {
       await fetchAllData(selectedTimeRange, selectedSubject, sortOption, 10);
-      console.log('🎉 All analytics data fetch completed');
+      setLastAnalyticsFilters(currentFilters);
+      setAnalyticsDataCached(true);
+      console.log('✅ Analytics data cached');
     } catch (err) {
       console.error('Analytics data fetch failed:', err);
+      setAnalyticsDataCached(false);
     } finally {
       setIsSearching(false);
     }
@@ -233,7 +244,7 @@ const ExplorePage = () => {
   };
 
   const handleRefreshData = () => {
-    handleSearchClick();
+    handleSearchClick(true); // Force refresh
   };
 
   const handlePaperClick = (paper) => {
