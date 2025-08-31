@@ -16,16 +16,16 @@ const ContactPage = () => {
           textAlign: 'center'
         }}>
           <h1 className="text-display-2" style={{ color: 'white', marginBottom: 'var(--spacing-lg)' }}>
-            Contact Us
+            Connect with Our Research Team
           </h1>
           <p className="text-body-large" style={{ 
             color: 'rgba(255, 255, 255, 0.9)', 
-            maxWidth: '700px', 
+            maxWidth: '800px', 
             margin: '0 auto',
             lineHeight: 'var(--line-height-relaxed)'
           }}>
-            We'd love to hear from you! Whether you have questions about our data, 
-            suggestions for improvements, or collaboration opportunities, don't hesitate to reach out.
+            Get in touch with the academic research team behind Preprint Commons. Whether you have questions about our methodology, 
+            data access, research collaboration opportunities, or technical implementation, we're here to support your work.
           </p>
         </div>
         
@@ -46,24 +46,24 @@ const ContactPage = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)' }}>
               {[
                 {
-                  icon: '📧',
-                  title: 'General Inquiries',
-                  desc: 'For general questions about Preprint Commons',
-                  email: 'contact@preprintcommons.org',
+                  icon: '🔬',
+                  title: 'Research Inquiries',
+                  desc: 'Questions about methodology, data quality, and research applications',
+                  email: 'research@preprintcommons.org',
                   delay: '0.2s'
                 },
                 {
-                  icon: '🛠️',
-                  title: 'Technical Support',
-                  desc: 'For technical issues or API questions',
-                  email: 'support@preprintcommons.org',
+                  icon: '🤖',
+                  title: 'Technical & API Support',
+                  desc: 'API access, technical implementation, and data integration support',
+                  email: 'api@preprintcommons.org',
                   delay: '0.3s'
                 },
                 {
                   icon: '🤝',
-                  title: 'Partnerships',
-                  desc: 'For collaboration and partnership opportunities',
-                  email: 'partnerships@preprintcommons.org',
+                  title: 'Academic Collaborations',
+                  desc: 'Research partnerships, institutional collaborations, and joint projects',
+                  email: 'collaborate@preprintcommons.org',
                   delay: '0.4s'
                 }
               ].map((contact, index) => (
@@ -269,12 +269,12 @@ const ContactPage = () => {
           </div>
         </div>
         
-        {/* Office Hours Section */}
+        {/* Research Team Section */}
         <div className={`${styles.contentSection} animate-fadeInUp animate-delay-4`}>
           <div style={{
             background: 'var(--color-bg-secondary)',
-            borderRadius: 'var(--radius-xl)',
-            padding: 'var(--spacing-3xl)',
+            borderRadius: 'var(--radius-2xl)',
+            padding: 'var(--spacing-4xl)',
             textAlign: 'center',
             border: '1px solid var(--color-neutral-200)'
           }}>
@@ -289,19 +289,103 @@ const ContactPage = () => {
               margin: '0 auto var(--spacing-xl)',
               fontSize: 'var(--font-size-3xl)'
             }}>
-              🕒
+              👥
             </div>
             <h2 className="text-heading-2" style={{ marginBottom: 'var(--spacing-lg)' }}>
-              Office Hours
+              Meet the Research Team
             </h2>
             <p className="text-body" style={{ 
-              maxWidth: '600px',
-              margin: '0 auto',
+              maxWidth: '700px',
+              margin: '0 auto var(--spacing-xl)',
               lineHeight: 'var(--line-height-relaxed)',
               color: 'var(--color-text-secondary)'
             }}>
-              Our team is available Monday through Friday, 9:00 AM to 5:00 PM (UTC).
-              We typically respond to emails within 24 hours during business days.
+              Preprint Commons is developed by academic researchers with institutional support from leading research organizations.
+            </p>
+            
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+              gap: 'var(--spacing-xl)',
+              marginTop: 'var(--spacing-2xl)'
+            }}>
+              <div style={{
+                background: 'var(--color-bg-primary)',
+                borderRadius: 'var(--radius-xl)',
+                padding: 'var(--spacing-xl)',
+                border: '1px solid var(--color-neutral-200)'
+              }}>
+                <h3 className="text-heading-4" style={{ marginBottom: 'var(--spacing-md)' }}>
+                  Bibhu Prasad Behera
+                </h3>
+                <p className="text-body-small" style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--spacing-sm)' }}>
+                  Lead Researcher & Co-Author
+                </p>
+                <p className="text-body-small" style={{ color: 'var(--color-text-secondary)' }}>
+                  Jawaharlal Nehru University (JNU)
+                </p>
+              </div>
+              
+              <div style={{
+                background: 'var(--color-bg-primary)',
+                borderRadius: 'var(--radius-xl)',
+                padding: 'var(--spacing-xl)',
+                border: '1px solid var(--color-neutral-200)'
+              }}>
+                <h3 className="text-heading-4" style={{ marginBottom: 'var(--spacing-md)' }}>
+                  Binay Panda
+                </h3>
+                <p className="text-body-small" style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--spacing-sm)' }}>
+                  Co-Author & Research Supervisor
+                </p>
+                <p className="text-body-small" style={{ color: 'var(--color-text-secondary)' }}>
+                  Jawaharlal Nehru University (JNU)
+                </p>
+              </div>
+            </div>
+            
+            <div style={{
+              marginTop: 'var(--spacing-2xl)',
+              padding: 'var(--spacing-xl)',
+              background: 'var(--color-bg-primary)',
+              borderRadius: 'var(--radius-xl)',
+              border: '1px solid var(--color-neutral-200)'
+            }}>
+              <h3 className="text-heading-4" style={{ marginBottom: 'var(--spacing-md)' }}>
+                Institutional Support
+              </h3>
+              <div style={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                gap: 'var(--spacing-2xl)', 
+                flexWrap: 'wrap',
+                alignItems: 'center'
+              }}>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontWeight: 'var(--font-weight-semibold)', marginBottom: 'var(--spacing-xs)' }}>
+                    Jawaharlal Nehru University
+                  </div>
+                  <div style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)' }}>
+                    (JNU)
+                  </div>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontWeight: 'var(--font-weight-semibold)', marginBottom: 'var(--spacing-xs)' }}>
+                    Centre for Development of Advanced Computing
+                  </div>
+                  <div style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)' }}>
+                    (C-DAC)
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <p className="text-body-small" style={{ 
+              marginTop: 'var(--spacing-xl)',
+              color: 'var(--color-text-secondary)'
+            }}>
+              We typically respond to research inquiries within 48 hours. For urgent technical issues, 
+              please include "URGENT" in your subject line.
             </p>
           </div>
         </div>

@@ -306,6 +306,8 @@ If you encounter any issues or have questions:
 - [ ] retraction watch
 - [X] API rate limiting and caching
 - [ ] Pickel search
+- [ ] similar papers
+- [ ] similar authors
 - [ ] Update the rest of the pages with static text
 
 - [ ] make clickable papers everywhere
