@@ -11,44 +11,64 @@ const FaqPage = () => {
 
   const faqs = [
     {
-      question: "What is Preprint Commons?",
-      answer: "Preprint Commons is a comprehensive platform that tracks, analyzes, and visualizes preprint data from major repositories worldwide. We provide insights into research trends, collaborations, and the impact of open science.",
+      question: "What is Preprint Commons and what makes it unique?",
+      answer: "Preprint Commons is the first dedicated database and analytical platform for large-scale preprint meta-analysis, featuring over 344,000 curated preprints. Built on rigorous academic research by Bibhu Prasad Behera and Binay Panda with institutional support from JNU and C-DAC, it addresses the critical gap in preprint ecosystem analysis through AI-enhanced metadata extraction and comprehensive visualization tools.",
       category: "General"
     },
     {
-      question: "Which preprint servers do you track?",
-      answer: "We aggregate data from major preprint repositories including medRxiv, bioRxiv, arXiv (q-bio sections), and other leading platforms. Our coverage continues to expand as new repositories emerge.",
+      question: "Which preprint repositories are included in your database?",
+      answer: "Our database includes 344,843 preprints from three major repositories: bioRxiv (239,847 entries), medRxiv (55,695 entries), and arXiv q-bio section (49,301 entries). We focused on these sources due to their consistent, high-quality metadata available via robust APIs and thematic focus on life sciences.",
       category: "Data Sources"
     },
     {
-      question: "How often is the data updated?",
-      answer: "Our data is updated daily to ensure you have access to the most current information. We continuously monitor preprint servers for new submissions and updates to existing papers.",
+      question: "How do you use AI to enhance the preprint metadata?",
+      answer: "We employ the NVIDIA/Llama-3.1-Nemotron-70B-Instruct-HF model deployed across 8 A100-SXM4 GPUs to extract missing author affiliations and geographic information. The LLM processes the first two pages of each preprint using structured prompts to return JSON-formatted data including corresponding author details, affiliations, countries, and email addresses.",
+      category: "Technical"
+    },
+    {
+      question: "What are the known limitations of your data processing?",
+      answer: "We maintain transparency about our limitations: LLM processing is restricted to the first two pages due to computational constraints, which can result in 10-15% error rates when affiliations are located beyond this range. The model may also hallucinate plausible but incorrect information when relevant context is missing. We're working on securing resources for full-text processing in future iterations.",
+      category: "Quality Control"
+    },
+    {
+      question: "How accurate is your data and how do you validate it?",
+      answer: "Random sampling validation reveals 85-90% overall accuracy with a 10-15% error rate. We conduct comprehensive quality control through random sampling approaches due to the computational infeasibility of manual validation for all 344,000+ records. Primary error sources include LLM processing constraints and input truncation limitations.",
+      category: "Quality Control"
+    },
+    {
+      question: "What technical infrastructure powers Preprint Commons?",
+      answer: "Our platform uses a modern full-stack architecture: FastAPI backend with PostgreSQL database, React 19 frontend with Chart.js and D3.js visualizations, and high-performance computing infrastructure including 8 A100-SXM4 GPUs for AI processing. We provide 20+ RESTful API endpoints with automatic OpenAPI documentation generation.",
+      category: "Technical"
+    },
+    {
+      question: "How often is your database updated?",
+      answer: "Currently, our dataset includes preprints up to June 2024, with plans for quarterly updates. The research paper mentions a biennial refresh cycle to ensure the latest insights are incorporated while balancing computational resources and data quality maintenance.",
       category: "Data Sources"
     },
     {
-      question: "Is the data freely available?",
-      answer: "Yes! Preprint Commons is committed to open science. Our data and insights are freely available under a CC-BY license, promoting transparency and collaboration in the research community.",
+      question: "Can I access the complete dataset programmatically?",
+      answer: "Yes! In strict alignment with open science principles, we provide comprehensive public REST API access built using FastAPI. The API supports complex filtering, sorting, field selection, and pagination, returning structured JSON data. For large-scale analysis, the complete dataset is available for bulk download in JSON and CSV formats.",
       category: "Access"
     },
     {
-      question: "How do you handle missing metadata?",
-      answer: "We use advanced AI and language models to extract and enrich missing metadata such as author affiliations, funding information, and research classifications. This ensures comprehensive and accurate data representation.",
-      category: "Technical"
+      question: "What research applications does Preprint Commons support?",
+      answer: "Our platform enables various research applications including disciplinary adoption rate analysis, collaboration network mapping, geographic distribution studies, temporal trend modeling, comparative citation analysis, institutional impact assessment, and policy development for research funding and evaluation.",
+      category: "Research Applications"
     },
     {
-      question: "Can I access the data programmatically?",
-      answer: "Yes, we provide a comprehensive API that allows researchers and developers to access our data programmatically. Documentation and examples are available in our API section.",
-      category: "Technical"
+      question: "Who are the researchers behind Preprint Commons?",
+      answer: "Preprint Commons was developed by Bibhu Prasad Behera and Binay Panda, with institutional support from Jawaharlal Nehru University (JNU) and Centre for Development of Advanced Computing (C-DAC). The work includes acknowledgments to Ms. Neeraja K M for LLM script assistance and Sibabrata for backend prototyping.",
+      category: "Research Team"
     },
     {
-      question: "How can I contribute to the project?",
-      answer: "We welcome contributions from the research community! You can contribute by reporting data issues, suggesting new features, or participating in our open-source development on GitHub.",
-      category: "Community"
+      question: "How does your platform contribute to open science?",
+      answer: "Preprint Commons promotes transparency and collaboration by providing free access to comprehensive preprint analytics, enabling researchers to quantify the impact and evolution of preprints, and delivering actionable evidence for the scientific community's commitment to equity, transparency, and collaborative progress in scholarly communication.",
+      category: "Open Science"
     },
     {
-      question: "What makes your platform different?",
-      answer: "Our platform combines comprehensive data coverage with AI-enhanced metadata extraction and interactive visualizations. We focus on providing actionable insights for researchers, institutions, and policymakers.",
-      category: "General"
+      question: "What future developments are planned for the platform?",
+      answer: "Future development priorities include implementing author network analysis for collaboration mapping, developing content-based recommendation systems, enhancing metadata integration for less structured servers, employing topic modeling for research theme evolution tracking, and securing resources for full-text LLM processing to improve data accuracy.",
+      category: "Future Development"
     }
   ];
 

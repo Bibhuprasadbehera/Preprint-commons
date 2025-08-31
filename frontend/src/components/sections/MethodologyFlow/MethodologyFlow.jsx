@@ -7,7 +7,7 @@ const MethodologyFlow = () => {
     {
       id: 1,
       title: 'Data Collection',
-      description: 'Automated scraping and API integration with preprint repositories',
+      description: 'Scraping and API integration with preprint repositories',
       details: [
         'Daily synchronization with medRxiv, bioRxiv, and arXiv',
         'Metadata extraction and standardization',
@@ -103,28 +103,6 @@ const MethodologyFlow = () => {
         ))}
       </div>
 
-      <div className={styles.flowStats}>
-        <Card className={styles.statsCard}>
-          <div className={styles.statsGrid}>
-            <div className={styles.statItem}>
-              <div className={styles.statNumber}>24/7</div>
-              <div className={styles.statLabel}>Automated Processing</div>
-            </div>
-            <div className={styles.statItem}>
-              <div className={styles.statNumber}>95%</div>
-              <div className={styles.statLabel}>Data Accuracy</div>
-            </div>
-            <div className={styles.statItem}>
-              <div className={styles.statNumber}>~1hr</div>
-              <div className={styles.statLabel}>Processing Latency</div>
-            </div>
-            <div className={styles.statItem}>
-              <div className={styles.statNumber}>3</div>
-              <div className={styles.statLabel}>Quality Checks</div>
-            </div>
-          </div>
-        </Card>
-      </div>
     </div>
   );
 };

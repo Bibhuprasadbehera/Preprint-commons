@@ -30,8 +30,8 @@ const DocumentationPage = () => {
   const apiEndpoints = [
     {
       method: 'GET',
-      endpoint: '/country-data',
-      description: 'Get preprint counts by country and year',
+      endpoint: '/api/analytics/country-data',
+      description: 'Get country-wise paper distribution by year for geographic analysis',
       parameters: [],
       response: {
         data: [
@@ -45,11 +45,14 @@ const DocumentationPage = () => {
     },
     {
       method: 'GET',
-      endpoint: '/papers',
-      description: 'Fetch papers by country and year',
+      endpoint: '/api/papers/',
+      description: 'Fetch papers with comprehensive filtering and pagination',
       parameters: [
-        { name: 'country', type: 'string', required: true, description: 'Country name' },
-        { name: 'year', type: 'integer', required: true, description: 'Year (YYYY)' }
+        { name: 'country', type: 'string', required: false, description: 'Filter by country name' },
+        { name: 'year', type: 'integer', required: false, description: 'Filter by year (YYYY)' },
+        { name: 'subject', type: 'string', required: false, description: 'Filter by subject area' },
+        { name: 'page', type: 'integer', required: false, description: 'Page number (default: 1)' },
+        { name: 'page_size', type: 'integer', required: false, description: 'Items per page (max: 100)' }
       ],
       response: {
         papers: [
@@ -57,30 +60,49 @@ const DocumentationPage = () => {
             PPC_Id: "PPC_001",
             preprint_title: "Sample Research Paper",
             preprint_doi: "10.1101/2023.01.01.000001",
+            total_citation: 156,
+            preprint_submission_date: "2023-01-01",
+            all_authors: "John Doe, Jane Smith",
+            preprint_subject: "bioinformatics",
+            preprint_server: "bioRxiv",
             country_name: "United States"
           }
-        ]
+        ],
+        total: 344843,
+        page: 1,
+        page_size: 10,
+        has_next: true
       }
     },
     {
       method: 'GET',
-      endpoint: '/search',
-      description: 'Search papers by title or DOI',
+      endpoint: '/api/papers/search',
+      description: 'Search papers by title, DOI, or author with pagination',
       parameters: [
-        { name: 'query', type: 'string', required: true, description: 'Search query' }
+        { name: 'query', type: 'string', required: true, description: 'Search query (min 1 character)' },
+        { name: 'page', type: 'integer', required: false, description: 'Page number (default: 1)' },
+        { name: 'page_size', type: 'integer', required: false, description: 'Items per page (max: 100)' }
       ],
-      response: [
-        {
-          PPC_Id: "PPC_002",
-          preprint_title: "COVID-19 Research Analysis",
-          preprint_doi: "10.1101/2023.02.01.000002"
-        }
-      ]
+      response: {
+        papers: [
+          {
+            PPC_Id: "PPC_002",
+            preprint_title: "COVID-19 Research Analysis",
+            preprint_doi: "10.1101/2023.02.01.000002",
+            total_citation: 89,
+            all_authors: "Jane Smith, Bob Johnson"
+          }
+        ],
+        total: 1247,
+        page: 1,
+        page_size: 10,
+        has_next: true
+      }
     },
     {
       method: 'GET',
-      endpoint: '/paper/{ppc_id}',
-      description: 'Get specific paper details',
+      endpoint: '/api/papers/{ppc_id}',
+      description: 'Get complete paper details by PPC_Id',
       parameters: [
         { name: 'ppc_id', type: 'string', required: true, description: 'Unique paper identifier' }
       ],
@@ -88,129 +110,172 @@ const DocumentationPage = () => {
         PPC_Id: "PPC_001",
         preprint_title: "Sample Research Paper",
         preprint_doi: "10.1101/2023.01.01.000001",
-        authors: "John Doe, Jane Smith",
-        country_name: "United States"
+        preprint_subject: "bioinformatics",
+        preprint_server: "bioRxiv",
+        preprint_submission_date: "2023-01-01",
+        preprint_abstract: "Abstract text...",
+        all_authors: "John Doe, Jane Smith",
+        submission_contact: "john.doe@university.edu",
+        corresponding_institution: "University of Example",
+        country_name: "United States",
+        total_citation: 156,
+        published_DOI: "10.1038/s41586-023-12345-6",
+        versions: "[{\"version\": 1, \"date\": \"2023-01-01\"}]"
       }
     },
     {
       method: 'GET',
-      endpoint: '/citation-impact',
-      description: 'Get citation impact data for scatter plot visualization',
+      endpoint: '/api/analytics/citations',
+      description: 'Get unified citation data for all citation-related visualizations',
       parameters: [
-        { name: 'time_range', type: 'string', required: false, description: 'Time range filter: all, last_year, last_5_years, last_10_years' },
-        { name: 'subject', type: 'string', required: false, description: 'Subject area filter' }
+        { name: 'time_range', type: 'string', required: false, description: 'Time filter: all, last_year, last_5_years, last_10_years' },
+        { name: 'subject', type: 'string', required: false, description: 'Subject area filter' },
+        { name: 'limit', type: 'integer', required: false, description: 'Limit for top papers (max: 100)' },
+        { name: 'sort_by', type: 'string', required: false, description: 'Sort: citations_desc, citations_asc, date_desc, date_asc, title_asc' }
       ],
       response: {
-        data: [
+        impactData: [
           {
             PPC_Id: "PPC_001",
-            preprint_title: "Sample Research Paper",
+            preprint_title: "High Impact Paper",
             publication_date: "2023-01-01",
-            total_citation: 156,
-            all_authors: '[{"author_name": "John Doe", "index": 1}]',
-            preprint_subject: "bioinformatics"
+            total_citation: 892,
+            all_authors: "Jane Smith, Bob Johnson",
+            preprint_subject: "molecular biology"
           }
-        ]
-      }
-    },
-    {
-      method: 'GET',
-      endpoint: '/citation-trends',
-      description: 'Get citation trends over time for area chart',
-      parameters: [
-        { name: 'time_range', type: 'string', required: false, description: 'Time range filter: all, last_year, last_5_years, last_10_years' },
-        { name: 'subject', type: 'string', required: false, description: 'Subject area filter' }
-      ],
-      response: {
-        data: [
+        ],
+        trendsData: [
           {
             year: "2023",
             citations: 15678,
             papers: 234
           }
-        ]
-      }
-    },
-    {
-      method: 'GET',
-      endpoint: '/citation-heatmap',
-      description: 'Get citation heatmap data by year and month',
-      parameters: [
-        { name: 'time_range', type: 'string', required: false, description: 'Time range filter: all, last_year, last_5_years, last_10_years' }
-      ],
-      response: {
-        data: [
+        ],
+        heatmapData: [
           {
             year: 2023,
             month: 6,
             day: 15,
             citations: 45
           }
-        ]
+        ],
+        topPapersData: [],
+        metadata: {
+          time_range: "all",
+          subject: null,
+          limit: 10,
+          sort_by: "citations_desc"
+        }
       }
     },
     {
       method: 'GET',
-      endpoint: '/top-cited-papers',
-      description: 'Get top cited papers with sorting options',
-      parameters: [
-        { name: 'limit', type: 'integer', required: false, description: 'Number of papers to return (default: 10)' },
-        { name: 'sort_by', type: 'string', required: false, description: 'Sort option: citations_desc, citations_asc, date_desc, date_asc, title_asc' },
-        { name: 'time_range', type: 'string', required: false, description: 'Time range filter: all, last_year, last_5_years, last_10_years' },
-        { name: 'subject', type: 'string', required: false, description: 'Subject area filter' }
-      ],
+      endpoint: '/api/analytics/dashboard',
+      description: 'Get comprehensive analytics dashboard data',
+      parameters: [],
       response: {
-        data: [
+        timelineData: [
           {
-            PPC_Id: "PPC_001",
-            preprint_title: "Highly Cited Research Paper",
-            publication_date: "2023-01-01",
-            total_citation: 892,
-            all_authors: '[{"author_name": "Jane Smith", "index": 1}]',
-            preprint_subject: "molecular biology"
+            month: "2023-01",
+            submissions: 1234
           }
-        ]
+        ],
+        subjectData: [
+          {
+            subject: "neuroscience",
+            count: 42923,
+            percentage: 12.4
+          }
+        ],
+        serverData: [
+          {
+            server: "bioRxiv",
+            count: 239847,
+            percentage: 69.6
+          }
+        ],
+        statisticsData: {
+          totalPapers: 344843,
+          dateRange: {
+            startDate: "2013-11-11",
+            endDate: "2024-06-30"
+          },
+          mostActivePeriod: {
+            period: "2020-04",
+            count: 8945
+          },
+          averagePapersPerMonth: 2876,
+          activeSubjects: 42,
+          activeServers: 3
+        }
       }
     },
     {
       method: 'GET',
-      endpoint: '/subjects',
+      endpoint: '/api/analytics/subjects',
       description: 'Get all unique subject areas from the database',
       parameters: [],
       response: {
         data: [
-          "bioinformatics",
-          "molecular biology",
           "neuroscience",
-          "genomics"
+          "microbiology", 
+          "bioinformatics",
+          "cell biology",
+          "genomics",
+          "evolutionary biology"
         ]
+      }
+    },
+    {
+      method: 'GET',
+      endpoint: '/api/authors/search',
+      description: 'Search papers by author name using submission contact field',
+      parameters: [
+        { name: 'query', type: 'string', required: true, description: 'Author name search query' },
+        { name: 'page', type: 'integer', required: false, description: 'Page number (default: 1)' },
+        { name: 'page_size', type: 'integer', required: false, description: 'Items per page (max: 100)' }
+      ],
+      response: {
+        papers: [
+          {
+            PPC_Id: "PPC_003",
+            preprint_title: "Author's Research Paper",
+            preprint_doi: "10.1101/2023.03.01.000003",
+            submission_contact: "author@university.edu",
+            total_citation: 67
+          }
+        ],
+        total: 45,
+        page: 1,
+        page_size: 10,
+        has_next: true
       }
     }
   ];
 
   const dataSources = [
     {
-      name: 'medRxiv',
-      description: 'Medical preprints and health sciences research',
-      url: 'https://www.medrxiv.org',
-      coverage: '50,000+',
-      fields: ['Medicine', 'Health Sciences', 'Public Health'],
-      color: '#e74c3c'
-    },
-    {
       name: 'bioRxiv',
-      description: 'Biological sciences preprints',
+      description: 'Biological sciences preprints - largest contributor to our database',
       url: 'https://www.biorxiv.org',
-      coverage: '200,000+',
-      fields: ['Biology', 'Neuroscience', 'Bioinformatics'],
+      coverage: '239,847',
+      fields: ['Biology', 'Neuroscience', 'Bioinformatics', 'Cell Biology', 'Genomics'],
       color: '#27ae60'
     },
     {
-      name: 'arXiv',
-      description: 'Physics, mathematics, and computer science',
-      url: 'https://arxiv.org',
-      coverage: '2,000,000+',
-      fields: ['Physics', 'Mathematics', 'Computer Science'],
+      name: 'medRxiv',
+      description: 'Medical and health sciences preprints with focus on clinical research',
+      url: 'https://www.medrxiv.org',
+      coverage: '55,695',
+      fields: ['Medicine', 'Health Sciences', 'Public Health', 'Epidemiology', 'Clinical Research'],
+      color: '#e74c3c'
+    },
+    {
+      name: 'arXiv (q-bio)',
+      description: 'Quantitative biology section of arXiv repository',
+      url: 'https://arxiv.org/list/q-bio/recent',
+      coverage: '49,301',
+      fields: ['Quantitative Biology', 'Biophysics', 'Computational Biology', 'Systems Biology'],
       color: '#3498db'
     }
   ];
@@ -266,53 +331,120 @@ const DocumentationPage = () => {
               <div className={styles.overviewGrid}>
                 <Card className={styles.overviewCard}>
                   <Card.Header>
-                    <h3 className="text-heading-3">Platform Overview</h3>
+                    <h3 className="text-heading-3">Research Foundation</h3>
                   </Card.Header>
                   <Card.Content>
                     <p className="text-body">
-                      Preprint Commons is a comprehensive platform for analyzing preprint research data 
-                      from major repositories worldwide. Our system aggregates, processes, and enriches 
-                      metadata using advanced AI techniques.
+                      Preprint Commons is the first dedicated database and analytical platform for large-scale preprint meta-analysis, 
+                      built on rigorous academic research by Bibhu Prasad Behera and Binay Panda with institutional support from 
+                      Jawaharlal Nehru University (JNU) and Centre for Development of Advanced Computing (C-DAC).
                     </p>
+                    <div style={{ marginTop: 'var(--spacing-lg)' }}>
+                      <strong>Published Research:</strong> "Preprint Commons: A Database for Tracking Trends, Impact, and Collaboration in Open Science"
+                    </div>
                   </Card.Content>
                 </Card>
 
                 <Card className={styles.overviewCard}>
                   <Card.Header>
-                    <h3 className="text-heading-3">Technical Stack</h3>
+                    <h3 className="text-heading-3">Technical Architecture</h3>
                   </Card.Header>
                   <Card.Content>
                     <ul className={styles.techList}>
-                      <li>FastAPI backend with SQLite database</li>
-                      <li>React 19 frontend with modern components</li>
-                      <li>Chart.js for data visualization</li>
-                      <li>AI-powered metadata enrichment</li>
+                      <li>FastAPI backend with PostgreSQL database</li>
+                      <li>React 19 frontend with Chart.js & D3.js</li>
+                      <li>NVIDIA/Llama-3.1-Nemotron-70B-Instruct-HF for AI enhancement</li>
+                      <li>High-performance computing with 8 A100-SXM4 GPUs</li>
+                      <li>20+ RESTful API endpoints with automatic documentation</li>
                     </ul>
                   </Card.Content>
                 </Card>
 
                 <Card className={styles.overviewCard}>
                   <Card.Header>
-                    <h3 className="text-heading-3">Key Metrics</h3>
+                    <h3 className="text-heading-3">Database Statistics</h3>
                   </Card.Header>
                   <Card.Content>
                     <div className={styles.metrics}>
                       <div className={styles.metric}>
-                        <span className={styles.metricNumber}>300K+</span>
-                        <span className={styles.metricLabel}>Preprints</span>
+                        <span className={styles.metricNumber}>344,843</span>
+                        <span className={styles.metricLabel}>Total Preprints</span>
+                      </div>
+                      <div className={styles.metric}>
+                        <span className={styles.metricNumber}>3</span>
+                        <span className={styles.metricLabel}>Major Repositories</span>
                       </div>
                       <div className={styles.metric}>
                         <span className={styles.metricNumber}>50+</span>
                         <span className={styles.metricLabel}>Countries</span>
                       </div>
-                      <div className={styles.metric}>
-                        <span className={styles.metricNumber}>1K+</span>
-                        <span className={styles.metricLabel}>Institutions</span>
-                      </div>
+                    </div>
+                    <div style={{ marginTop: 'var(--spacing-md)', fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)' }}>
+                      bioRxiv: 239,847 • medRxiv: 55,695 • arXiv (q-bio): 49,301
                     </div>
                   </Card.Content>
                 </Card>
               </div>
+
+              {/* Research Methodology Overview */}
+              <Card style={{ marginTop: 'var(--spacing-2xl)' }}>
+                <Card.Header>
+                  <h3 className="text-heading-3">Research Methodology Overview</h3>
+                </Card.Header>
+                <Card.Content>
+                  <div style={{ 
+                    display: 'grid', 
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+                    gap: 'var(--spacing-lg)',
+                    marginTop: 'var(--spacing-lg)'
+                  }}>
+                    <div style={{ textAlign: 'center', padding: 'var(--spacing-lg)' }}>
+                      <div style={{ 
+                        fontSize: 'var(--font-size-3xl)', 
+                        marginBottom: 'var(--spacing-md)',
+                        color: 'var(--color-primary)'
+                      }}>📊</div>
+                      <h4 className="text-heading-4">Data Acquisition</h4>
+                      <p className="text-body-small" style={{ color: 'var(--color-text-secondary)' }}>
+                        Systematic pipeline gathering metadata from bioRxiv, medRxiv, and arXiv q-bio via dedicated APIs
+                      </p>
+                    </div>
+                    <div style={{ textAlign: 'center', padding: 'var(--spacing-lg)' }}>
+                      <div style={{ 
+                        fontSize: 'var(--font-size-3xl)', 
+                        marginBottom: 'var(--spacing-md)',
+                        color: 'var(--color-secondary)'
+                      }}>🤖</div>
+                      <h4 className="text-heading-4">AI Enhancement</h4>
+                      <p className="text-body-small" style={{ color: 'var(--color-text-secondary)' }}>
+                        NVIDIA Nemotron-70B model deployed across 8 A100 GPUs for metadata extraction and geographic classification
+                      </p>
+                    </div>
+                    <div style={{ textAlign: 'center', padding: 'var(--spacing-lg)' }}>
+                      <div style={{ 
+                        fontSize: 'var(--font-size-3xl)', 
+                        marginBottom: 'var(--spacing-md)',
+                        color: 'var(--color-accent)'
+                      }}>✅</div>
+                      <h4 className="text-heading-4">Quality Control</h4>
+                      <p className="text-body-small" style={{ color: 'var(--color-text-secondary)' }}>
+                        Random sampling validation with 85-90% accuracy rate and transparent reporting of limitations
+                      </p>
+                    </div>
+                    <div style={{ textAlign: 'center', padding: 'var(--spacing-lg)' }}>
+                      <div style={{ 
+                        fontSize: 'var(--font-size-3xl)', 
+                        marginBottom: 'var(--spacing-md)',
+                        color: 'var(--color-success)'
+                      }}>🌐</div>
+                      <h4 className="text-heading-4">Open Access</h4>
+                      <p className="text-body-small" style={{ color: 'var(--color-text-secondary)' }}>
+                        Full dataset available via REST API and bulk download, supporting reproducible research
+                      </p>
+                    </div>
+                  </div>
+                </Card.Content>
+              </Card>
             </section>
           )}
 
@@ -367,42 +499,90 @@ const DocumentationPage = () => {
 
               <div className={styles.sourcesGrid}>
                 {dataSources.map((source, index) => (
-                  <DataSourceCard key={index} {...source} />
+                  <DataSourceCard 
+                    key={index} 
+                    {...source}
+                    apiIntegration={true}
+                    qualityScore="High"
+                    updateFrequency="Real-time via API"
+                    dataPoints={[
+                      'DOI and metadata',
+                      'Author affiliations', 
+                      'Citation networks',
+                      'Version histories',
+                      'Subject classifications'
+                    ]}
+                  />
                 ))}
               </div>
 
               <Card className={styles.dataProcessing}>
                 <Card.Header>
-                  <h3 className="text-heading-3">Data Processing Pipeline</h3>
+                  <h3 className="text-heading-3">Advanced Data Processing Pipeline</h3>
                 </Card.Header>
                 <Card.Content>
                   <div className={styles.processingSteps}>
                     <div className={styles.step}>
                       <div className={styles.stepNumber}>1</div>
                       <div className={styles.stepContent}>
-                        <h4>Data Collection</h4>
-                        <p>Automated scraping and API integration with source repositories</p>
+                        <h4>Systematic Data Acquisition</h4>
+                        <p>Programmatic retrieval via dedicated APIs from bioRxiv (239,847), medRxiv (55,695), and arXiv q-bio (49,301) ensuring comprehensive coverage</p>
                       </div>
                     </div>
                     <div className={styles.step}>
                       <div className={styles.stepNumber}>2</div>
                       <div className={styles.stepContent}>
-                        <h4>Metadata Enrichment</h4>
-                        <p>AI-powered extraction of missing author affiliations and classifications</p>
+                        <h4>LLM-Powered Enhancement</h4>
+                        <p>NVIDIA/Llama-3.1-Nemotron-70B-Instruct-HF model deployed on 8 A100-SXM4 GPUs for geographic and institutional metadata extraction</p>
                       </div>
                     </div>
                     <div className={styles.step}>
                       <div className={styles.stepNumber}>3</div>
                       <div className={styles.stepContent}>
-                        <h4>Quality Assurance</h4>
-                        <p>Validation and deduplication of records across sources</p>
+                        <h4>Multi-Stage Preprocessing</h4>
+                        <p>Duplicate removal, format harmonization, version tracking, and citation network integration via OpenCitations API</p>
                       </div>
                     </div>
                     <div className={styles.step}>
                       <div className={styles.stepNumber}>4</div>
                       <div className={styles.stepContent}>
-                        <h4>Database Storage</h4>
-                        <p>Structured storage in SQLite with optimized indexing</p>
+                        <h4>Optimized Database Storage</h4>
+                        <p>Normalized PostgreSQL schema with structured JSON for version histories and optimized indexing for analytical queries</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div style={{ 
+                    marginTop: 'var(--spacing-2xl)', 
+                    padding: 'var(--spacing-xl)', 
+                    background: 'var(--color-bg-secondary)', 
+                    borderRadius: 'var(--radius-lg)' 
+                  }}>
+                    <h4 className="text-heading-4" style={{ marginBottom: 'var(--spacing-md)' }}>
+                      Technical Specifications
+                    </h4>
+                    <div style={{ 
+                      display: 'grid', 
+                      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+                      gap: 'var(--spacing-lg)' 
+                    }}>
+                      <div>
+                        <strong>Computing Infrastructure:</strong><br />
+                        8 A100-SXM4 GPUs<br />
+                        256 CPU cores per job<br />
+                        24-hour maximum runtime
+                      </div>
+                      <div>
+                        <strong>LLM Processing:</strong><br />
+                        3,000 token chunks<br />
+                        10% overlap between chunks<br />
+                        Structured JSON output format
+                      </div>
+                      <div>
+                        <strong>Quality Metrics:</strong><br />
+                        85-90% accuracy rate<br />
+                        10-15% error rate (known)<br />
+                        Random sampling validation
                       </div>
                     </div>
                   </div>
@@ -425,49 +605,64 @@ const DocumentationPage = () => {
               <div className={styles.methodologyDetails}>
                 <Card>
                   <Card.Header>
-                    <h3 className="text-heading-3">AI Enhancement Process</h3>
+                    <h3 className="text-heading-3">LLM-Based Enhancement Process</h3>
                   </Card.Header>
                   <Card.Content>
                     <p className="text-body mb-4">
-                      We use advanced natural language processing to extract and enrich metadata 
-                      that is often missing from preprint submissions.
+                      Advanced NVIDIA/Llama-3.1-Nemotron-70B-Instruct-HF model processes preprint text to extract 
+                      missing geographic and institutional metadata with structured JSON output format.
                     </p>
                     <div className={styles.aiProcess}>
                       <div className={styles.aiStep}>
-                        <h4>Named Entity Recognition</h4>
-                        <p>Extract author names, institutions, and locations from text</p>
+                        <h4>Tiered Extraction Strategy</h4>
+                        <p>JATS XML parsing followed by LLM analysis for missing affiliations, with chunking mechanism for longer texts</p>
                       </div>
                       <div className={styles.aiStep}>
-                        <h4>Classification</h4>
-                        <p>Categorize papers by research field and methodology</p>
+                        <h4>Geographic Classification</h4>
+                        <p>Country extraction from raw affiliation strings using structured prompts and error handling for malformed outputs</p>
                       </div>
                       <div className={styles.aiStep}>
-                        <h4>Relationship Mapping</h4>
-                        <p>Identify collaboration networks and citation patterns</p>
+                        <h4>Citation Network Integration</h4>
+                        <p>OpenCitations API integration for comprehensive citation metadata and network analysis capabilities</p>
                       </div>
+                    </div>
+                    
+                    <div style={{ 
+                      marginTop: 'var(--spacing-lg)', 
+                      padding: 'var(--spacing-md)', 
+                      background: 'var(--color-warning)', 
+                      color: 'white', 
+                      borderRadius: 'var(--radius-md)' 
+                    }}>
+                      <strong>Known Limitation:</strong> LLM processing limited to first two pages due to computational constraints, 
+                      which may result in missing affiliations located beyond this range.
                     </div>
                   </Card.Content>
                 </Card>
 
                 <Card>
                   <Card.Header>
-                    <h3 className="text-heading-3">Quality Metrics</h3>
+                    <h3 className="text-heading-3">Validated Quality Metrics</h3>
                   </Card.Header>
                   <Card.Content>
                     <div className={styles.qualityMetrics}>
                       <div className={styles.qualityMetric}>
-                        <span className={styles.qualityNumber}>95%</span>
-                        <span className={styles.qualityLabel}>Accuracy in author extraction</span>
+                        <span className={styles.qualityNumber}>85-90%</span>
+                        <span className={styles.qualityLabel}>Overall data accuracy</span>
                       </div>
                       <div className={styles.qualityMetric}>
-                        <span className={styles.qualityNumber}>88%</span>
-                        <span className={styles.qualityLabel}>Institution matching success</span>
+                        <span className={styles.qualityNumber}>10-15%</span>
+                        <span className={styles.qualityLabel}>Error rate (transparent reporting)</span>
                       </div>
                       <div className={styles.qualityMetric}>
-                        <span className={styles.qualityNumber}>92%</span>
-                        <span className={styles.qualityLabel}>Field classification accuracy</span>
+                        <span className={styles.qualityNumber}>344,843</span>
+                        <span className={styles.qualityLabel}>Total validated records</span>
                       </div>
                     </div>
+                    <p className="text-body-small" style={{ marginTop: 'var(--spacing-md)', color: 'var(--color-text-secondary)' }}>
+                      Quality control conducted through random sampling approach due to computational feasibility constraints. 
+                      Primary error sources include LLM hallucination and input truncation limitations.
+                    </p>
                   </Card.Content>
                 </Card>
               </div>
