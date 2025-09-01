@@ -4,6 +4,12 @@
 /* Import the theme with all CSS custom properties */
 @import './theme.css';
 
+/* Import author analytics styles */
+@import '../components/authorAnalytics/AuthorAnalyticsCharts.module.css';
+@import '../components/authorAnalytics/AuthorCitationScatterChart.module.css';
+@import '../components/authorAnalytics/AuthorPublicationsTimelineChart.module.css';
+@import '../components/authorAnalytics/AuthorSubjectDistributionChart.module.css';
+
 :root {
   font-synthesis: none;
   text-rendering: optimizeLegibility;

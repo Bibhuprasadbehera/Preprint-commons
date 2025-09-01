@@ -14,6 +14,7 @@ import CitationHeatmap from '../components/citationCharts/CitationHeatmap';
 import PapersList from '../components/ui/PapersList/PapersList';
 import DynamicSectionTitle from '../components/ui/DynamicSectionTitle/DynamicSectionTitle';
 import AnalyticsDashboard from '../components/analytics/AnalyticsDashboard/AnalyticsDashboard';
+import AuthorAnalyticsCharts from '../components/authorAnalytics/AuthorAnalyticsCharts';
 import { useUnifiedCitationData } from '../hooks/useUnifiedCitationData';
 import ApiService from '../services/api';
 import { API_BASE_URL } from '../utils/api';
@@ -888,6 +889,17 @@ const ExplorePage = () => {
                   </div>
                 )}
               </div>
+
+              {/* Author Analytics Charts */}
+              <AuthorAnalyticsCharts 
+                authorQuery={authorQuery}
+                authorResults={authorResults}
+                showAnalytics={hasAuthorSearched && authorResults.length > 0}
+                isLoading={isAuthorLoading}
+                error={null}
+                onRefreshData={() => handleAuthorSearch(1)}
+                maxAuthors={50}
+              />
             </div>
           </div>
         )}
