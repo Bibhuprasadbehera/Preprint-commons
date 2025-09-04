@@ -14,6 +14,7 @@ import CitationHeatmap from '../components/citationCharts/CitationHeatmap';
 import PapersList from '../components/ui/PapersList/PapersList';
 import DynamicSectionTitle from '../components/ui/DynamicSectionTitle/DynamicSectionTitle';
 import AnalyticsDashboard from '../components/analytics/AnalyticsDashboard/AnalyticsDashboard';
+import AdvancedSearch from '../components/ui/AdvancedSearch/AdvancedSearch';
 import { useUnifiedCitationData } from '../hooks/useUnifiedCitationData';
 import ApiService from '../services/api';
 import { API_BASE_URL } from '../utils/api';
@@ -25,6 +26,7 @@ import styles from './ExplorePage.module.css';
 
 const ExplorePage = () => {
   const [activeTab, setActiveTab] = useState('map');
+  const [searchSubTab, setSearchSubTab] = useState('basic');
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -98,6 +100,51 @@ const ExplorePage = () => {
     }
   }, [activeTab]);
 
+<<<<<<< HEAD
+=======
+  // Handle URL parameters for chart navigation
+  useEffect(() => {
+    const year = searchParams.get('year');
+    const subject = searchParams.get('subject');
+    const month = searchParams.get('month');
+    const server = searchParams.get('server');
+
+    if (year) {
+      // Navigate to search tab and use advanced search for papers from that year
+      setActiveTab('search');
+      setSearchSubTab('advanced');
+      const criteria = { year_from: parseInt(year), year_to: parseInt(year) };
+      setTimeout(() => {
+        handleAdvancedSearch(criteria, 1);
+      }, 100);
+    } else if (subject) {
+      // Navigate to search tab and use advanced search for papers in that subject
+      setActiveTab('search');
+      setSearchSubTab('advanced');
+      const criteria = { subject: subject };
+      setTimeout(() => {
+        handleAdvancedSearch(criteria, 1);
+      }, 100);
+    } else if (month) {
+      // Navigate to search tab and use advanced search for papers from that month
+      setActiveTab('search');
+      setSearchSubTab('advanced');
+      const criteria = { month: month };
+      setTimeout(() => {
+        handleAdvancedSearch(criteria, 1);
+      }, 100);
+    } else if (server) {
+      // Navigate to search tab and use advanced search for papers from that server
+      setActiveTab('search');
+      setSearchSubTab('advanced');
+      const criteria = { server: server };
+      setTimeout(() => {
+        handleAdvancedSearch(criteria, 1);
+      }, 100);
+    }
+  }, [searchParams]);
+
+>>>>>>> 2018d38 (now works well the (clickable charts))
   const handleSubjectSearchClickLocal = async () => {
     setIsSearching(true);
     setSubjectErrorLocal(null);
@@ -308,6 +355,46 @@ const ExplorePage = () => {
     setHasAuthorSearched(false);
   };
 
+  // Advanced search handler
+  const handleAdvancedSearch = async (criteria, page = 1) => {
+    setIsLoading(true);
+    setCurrentPage(page);
+
+    try {
+      console.log('Advanced search criteria:', criteria);
+      const response = await fetch(`${API_BASE_URL}/api/papers/advanced-search?page=${page}&page_size=${RESULTS_PER_PAGE}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(criteria),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('Advanced search results:', data);
+
+      const results = data.papers || [];
+      const total = Math.min(data.total || results.length, MAX_RESULTS);
+
+      setSearchResults(results);
+      setTotalResults(total);
+      setTotalPages(Math.ceil(total / RESULTS_PER_PAGE));
+      setHasSearched(true);
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Advanced search error:', error);
+      setSearchResults([]);
+      setTotalResults(0);
+      setTotalPages(0);
+      setHasSearched(true);
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Layout>
       <div className="centered-page">
@@ -391,7 +478,7 @@ const ExplorePage = () => {
         {activeTab === 'search' && (
           <div className="container">
             <div className={layoutStyles.contentSection}>
-              <Header 
+              <Header
                 title="Search Preprints"
                 subtitle={
                   <>
@@ -403,30 +490,61 @@ const ExplorePage = () => {
                 size="medium"
                 className={styles.searchHeader}
               />
-              
-              <div className={styles.searchSection}>
-                <SearchBar
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onSearch={() => handleSearch(1)}
-                  placeholder="Search by title, DOI, author, or keywords..."
-                  isLoading={isLoading}
-                  className={styles.searchBar}
-                />
-                
-                {hasSearched && searchQuery && (
-                  <div className={styles.searchActions}>
-                    <Button
-                      variant="ghost"
-                      size="small"
-                      onClick={resetSearch}
-                      className={styles.clearButton}
-                    >
-                      Clear Search
-                    </Button>
-                  </div>
-                )}
+
+              {/* Search Sub-tabs */}
+              <div className={styles.subTabNavigation}>
+                <Button
+                  variant={searchSubTab === 'basic' ? 'primary' : 'outline'}
+                  onClick={() => setSearchSubTab('basic')}
+                  className={styles.subTabButton}
+                  size="small"
+                >
+                  Basic Search
+                </Button>
+                <Button
+                  variant={searchSubTab === 'advanced' ? 'primary' : 'outline'}
+                  onClick={() => setSearchSubTab('advanced')}
+                  className={styles.subTabButton}
+                  size="small"
+                >
+                  Advanced Search
+                </Button>
               </div>
+
+              {/* Basic Search */}
+              {searchSubTab === 'basic' && (
+                <div className={styles.searchSection}>
+                  <SearchBar
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onSearch={() => handleSearch(1)}
+                    placeholder="Search by title, DOI, author, or keywords..."
+                    isLoading={isLoading}
+                    className={styles.searchBar}
+                  />
+
+                  {hasSearched && searchQuery && (
+                    <div className={styles.searchActions}>
+                      <Button
+                        variant="ghost"
+                        size="small"
+                        onClick={resetSearch}
+                        className={styles.clearButton}
+                      >
+                        Clear Search
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Advanced Search */}
+              {searchSubTab === 'advanced' && (
+                <AdvancedSearch
+                  onSearch={(criteria) => handleAdvancedSearch(criteria)}
+                  loading={isLoading}
+                />
+              )}
               
               <div id="search-results" className={styles.resultsSection}>
                 {isLoading && (
