@@ -431,6 +431,8 @@ const CitationScatterChart = ({ data, loading = false }) => {
         className={styles.chartCanvas}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
+        onClick={handleClick}
+        style={{ cursor: hoveredPoint !== null ? 'pointer' : 'default' }}
       />
       {isZoomedIn && canPan && (
         <div className={styles.panSliderContainer}>
