@@ -9,18 +9,24 @@
 - A new page to display the details of a single paper.
 - A new route `/paper/{ppc_id}` to fetch the details of a single paper.
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 4965e04 (doesnt work but good approach)
 - Clickable scatter plot points that open paper details in a new tab.
 - Clickable citation trends chart that filters papers by year.
 - Clickable subject distribution pie chart that filters papers by subject.
 - Clickable publication timeline chart that filters papers by month.
 - Clickable server distribution bar chart that filters papers by server.
+<<<<<<< HEAD
 - Advanced search functionality with multiple criteria (year range, subject, server, country, authors, institution, license, citation range, month filtering).
 - Advanced search API endpoint supporting complex queries with month-specific filtering.
 - Search sub-tabs for basic and advanced search modes.
 - Chart clicks now use advanced search for better filtering.
 - Fixed publication timeline chart click to properly filter by specific months.
 >>>>>>> 2018d38 (now works well the (clickable charts))
+=======
+>>>>>>> 4965e04 (doesnt work but good approach)
 
 ### Changed
 - The search results are now limited to 10 results.

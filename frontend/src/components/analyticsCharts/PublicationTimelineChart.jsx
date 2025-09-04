@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -27,6 +28,7 @@ ChartJS.register(
 
 const PublicationTimelineChart = ({ data, loading = false }) => {
   const chartRef = useRef();
+  const navigate = useNavigate();
 
   if (loading) {
     return (
@@ -66,9 +68,21 @@ const PublicationTimelineChart = ({ data, loading = false }) => {
     ],
   };
 
+  const handleChartClick = (event, elements) => {
+    if (elements.length > 0) {
+      const dataIndex = elements[0].index;
+      const periodData = data[dataIndex];
+      const month = periodData.month; // Format: YYYY-MM
+
+      // Navigate to explore page with month filter
+      navigate(`/explore?month=${month}`);
+    }
+  };
+
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    onClick: handleChartClick,
     plugins: {
       legend: {
         display: false,

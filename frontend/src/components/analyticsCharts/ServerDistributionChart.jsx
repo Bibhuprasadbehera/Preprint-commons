@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -23,6 +24,7 @@ ChartJS.register(
 
 const ServerDistributionChart = ({ data, loading = false }) => {
   const chartRef = useRef();
+  const navigate = useNavigate();
 
   if (loading) {
     return (
@@ -73,9 +75,21 @@ const ServerDistributionChart = ({ data, loading = false }) => {
     ],
   };
 
+  const handleChartClick = (event, elements) => {
+    if (elements.length > 0) {
+      const dataIndex = elements[0].index;
+      const serverData = data[dataIndex];
+      const server = serverData.server;
+
+      // Navigate to explore page with server filter
+      navigate(`/explore?server=${encodeURIComponent(server)}`);
+    }
+  };
+
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    onClick: handleChartClick,
     plugins: {
       legend: {
         display: false,

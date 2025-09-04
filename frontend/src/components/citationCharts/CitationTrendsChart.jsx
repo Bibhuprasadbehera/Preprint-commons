@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -26,6 +27,7 @@ ChartJS.register(
 
 const CitationTrendsChart = ({ data, loading = false }) => {
   const chartRef = useRef();
+  const navigate = useNavigate();
 
   // Don't show chart if loading or no data
   if (loading) {
@@ -67,9 +69,21 @@ const CitationTrendsChart = ({ data, loading = false }) => {
     ],
   };
 
+  const handleChartClick = (event, elements) => {
+    if (elements.length > 0) {
+      const dataIndex = elements[0].index;
+      const yearData = data[dataIndex];
+      const year = yearData.year;
+
+      // Navigate to explore page with year filter
+      navigate(`/explore?year=${year}`);
+    }
+  };
+
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    onClick: handleChartClick,
     plugins: {
       legend: {
         display: false,

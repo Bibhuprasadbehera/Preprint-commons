@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -13,6 +14,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const SubjectDistributionChart = ({ data, loading = false }) => {
   const chartRef = useRef();
+  const navigate = useNavigate();
 
   if (loading) {
     return (
@@ -66,9 +68,21 @@ const SubjectDistributionChart = ({ data, loading = false }) => {
     ],
   };
 
+  const handleChartClick = (event, elements) => {
+    if (elements.length > 0) {
+      const dataIndex = elements[0].index;
+      const subjectData = data[dataIndex];
+      const subject = subjectData.subject;
+
+      // Navigate to explore page with subject filter
+      navigate(`/explore?subject=${encodeURIComponent(subject)}`);
+    }
+  };
+
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    onClick: handleChartClick,
     plugins: {
       legend: {
         position: 'bottom',
@@ -81,12 +95,12 @@ const SubjectDistributionChart = ({ data, loading = false }) => {
           generateLabels: function(chart) {
             const original = ChartJS.defaults.plugins.legend.labels.generateLabels;
             const labels = original.call(this, chart);
-            
+
             labels.forEach((label, index) => {
               const dataItem = data[index];
               label.text = `${label.text}: ${formatNumber(dataItem.count)} (${dataItem.percentage}%)`;
             });
-            
+
             return labels;
           },
         },

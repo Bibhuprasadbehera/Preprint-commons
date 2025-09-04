@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import Layout from '../components/layout/Layout/Layout';
 import Button from '../components/ui/Button/Button';
 import SearchBar from '../components/ui/SearchBar/SearchBar';
@@ -25,6 +25,7 @@ import layoutStyles from '../components/layout/Layout/Layout.module.css';
 import styles from './ExplorePage.module.css';
 
 const ExplorePage = () => {
+  const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState('map');
   const [searchSubTab, setSearchSubTab] = useState('basic');
   const [searchQuery, setSearchQuery] = useState('');
@@ -101,7 +102,10 @@ const ExplorePage = () => {
   }, [activeTab]);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 4965e04 (doesnt work but good approach)
   // Handle URL parameters for chart navigation
   useEffect(() => {
     const year = searchParams.get('year');
@@ -110,6 +114,7 @@ const ExplorePage = () => {
     const server = searchParams.get('server');
 
     if (year) {
+<<<<<<< HEAD
       // Navigate to search tab and use advanced search for papers from that year
       setActiveTab('search');
       setSearchSubTab('advanced');
@@ -140,11 +145,42 @@ const ExplorePage = () => {
       const criteria = { server: server };
       setTimeout(() => {
         handleAdvancedSearch(criteria, 1);
+=======
+      // Navigate to search tab and search for papers from that year
+      setActiveTab('search');
+      setSearchQuery(`year:${year}`);
+      setTimeout(() => {
+        handleSearch(1);
+      }, 100);
+    } else if (subject) {
+      // Navigate to search tab and search for papers in that subject
+      setActiveTab('search');
+      setSearchQuery(`subject:"${subject}"`);
+      setTimeout(() => {
+        handleSearch(1);
+      }, 100);
+    } else if (month) {
+      // Navigate to search tab and search for papers from that month
+      setActiveTab('search');
+      setSearchQuery(`date:${month}`);
+      setTimeout(() => {
+        handleSearch(1);
+      }, 100);
+    } else if (server) {
+      // Navigate to search tab and search for papers from that server
+      setActiveTab('search');
+      setSearchQuery(`server:"${server}"`);
+      setTimeout(() => {
+        handleSearch(1);
+>>>>>>> 4965e04 (doesnt work but good approach)
       }, 100);
     }
   }, [searchParams]);
 
+<<<<<<< HEAD
 >>>>>>> 2018d38 (now works well the (clickable charts))
+=======
+>>>>>>> 4965e04 (doesnt work but good approach)
   const handleSubjectSearchClickLocal = async () => {
     setIsSearching(true);
     setSubjectErrorLocal(null);
