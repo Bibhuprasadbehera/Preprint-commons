@@ -57,7 +57,7 @@ export const useUnifiedCitationData = () => {
       params.append('sort_by', sortBy);
       params.append('limit', limit.toString());
       
-      const url = `${API_BASE_URL}/citation-data-unified?${params}`;
+      const url = `${API_BASE_URL}/api/analytics/citations?${params}`;
       console.log('🚀 Fetching unified citation data from:', url);
       
       const response = await fetch(url);
@@ -70,7 +70,7 @@ export const useUnifiedCitationData = () => {
       const result = await response.json();
       console.log('✅ Unified citation data received:', result);
       
-      debugLog('/citation-data-unified', params.toString(), result, null);
+      debugLog('/api/analytics/citations', params.toString(), result, null);
       return result;
     };
     
@@ -98,7 +98,7 @@ export const useUnifiedCitationData = () => {
       
     } catch (err) {
       console.error('💥 Unified citation data fetch error after retries:', err);
-      debugLog('/citation-data-unified', '', null, err);
+      debugLog('/api/analytics/citations', '', null, err);
       
       // Set error for all data types
       const errorMessage = err.message;

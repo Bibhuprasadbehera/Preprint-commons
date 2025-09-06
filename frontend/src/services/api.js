@@ -5,11 +5,16 @@ const API_BASE_URL = process.env.NODE_ENV === 'production'
 
 class ApiService {
   static async get(endpoint) {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`);
+    const url = `${API_BASE_URL}${endpoint}`;
+    console.log('Making API request to:', url);
+    const response = await fetch(url);
+    console.log('Response status:', response.status);
     if (!response.ok) {
       throw new Error(`API Error: ${response.status}`);
     }
-    return response.json();
+    const data = await response.json();
+    console.log('Response data:', data);
+    return data;
   }
 
   static async post(endpoint, data) {

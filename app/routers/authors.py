@@ -55,6 +55,9 @@ def search_authors(
             params=(f"%{query}%", page_size, offset)
         )
 
+        # Handle NaN values in total_citation to prevent Pydantic validation errors
+        df['total_citation'] = df['total_citation'].fillna(0).astype(int)
+
         has_next = offset + page_size < total
 
         response = SearchResponse(
@@ -157,6 +160,9 @@ def get_author_papers(
             LIMIT ? OFFSET ?
         """
         df = pd.read_sql_query(query, conn, params=(f"%{author_name}%", page_size, offset))
+
+        # Handle NaN values in total_citation to prevent Pydantic validation errors
+        df['total_citation'] = df['total_citation'].fillna(0).astype(int)
 
         has_next = offset + page_size < total
 

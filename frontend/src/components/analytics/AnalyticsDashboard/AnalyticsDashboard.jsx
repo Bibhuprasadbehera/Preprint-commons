@@ -138,7 +138,7 @@ const AnalyticsDashboard = () => {
         {/* Subject Distribution Chart */}
         <Card className={styles.chartCard}>
           <Card.Header>
-            <h3 className={styles.chartTitle}>Subject Distribution</h3>
+            <h3 className={styles.chartTitle}>Top 10 Subject Distribution</h3>
             <p className={styles.chartSubtitle}>Research Areas</p>
           </Card.Header>
           <Card.Content>

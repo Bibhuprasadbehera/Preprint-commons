@@ -20,26 +20,30 @@ const PaperDetailsPage = () => {
   const fetchPaper = async (attemptNumber = 1) => {
     try {
       console.log(`Fetching paper with ID: ${id} (attempt ${attemptNumber})`);
+      console.log('API Base URL:', process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:8000/api');
       setError(null);
-      
+
       const data = await ApiService.getPaper(id);
       console.log('Paper data received:', data);
-      
+      console.log('Paper data type:', typeof data);
+      console.log('Paper data keys:', data ? Object.keys(data) : 'No data');
+
       if (!data) {
         throw new Error('No paper data received');
       }
-      
+
       setPaper(data);
       setIsLoading(false);
       setRetryCount(0);
     } catch (error) {
       console.error(`Error fetching paper (attempt ${attemptNumber}):`, error);
-      
+      console.error('Error details:', error.message, error.stack);
+
       // Auto-retry up to 2 times with exponential backoff
       if (attemptNumber < 3) {
         const delay = Math.pow(2, attemptNumber - 1) * 1000; // 1s, 2s, 4s
         console.log(`Retrying in ${delay}ms...`);
-        
+
         setTimeout(() => {
           fetchPaper(attemptNumber + 1);
         }, delay);

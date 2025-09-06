@@ -27,20 +27,20 @@ export const useAnalyticsData = () => {
     });
 
     const fetchFunction = async () => {
-      const url = `${API_BASE_URL}/analytics-data`;
+      const url = `${API_BASE_URL}/api/analytics/dashboard`;
       console.log('🚀 Fetching analytics data from:', url);
-      
+
       const response = await fetch(url);
       console.log('📊 Analytics response status:', response.status, response.statusText);
-      
+
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
-      
+
       const result = await response.json();
       console.log('✅ Analytics data received:', result);
-      
-      debugLog('/analytics-data', '', result, null);
+
+      debugLog('/api/analytics/dashboard', '', result, null);
       return result;
     };
     
