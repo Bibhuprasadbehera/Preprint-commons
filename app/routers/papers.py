@@ -58,6 +58,9 @@ def search_papers(
         # Handle NaN values in total_citation to prevent Pydantic validation errors
         df['total_citation'] = df['total_citation'].fillna(0).astype(int)
 
+<<<<<<< HEAD
+>>>>>>> 07001b1 (cleaning backend (i dont understand))
+=======
 >>>>>>> 07001b1 (cleaning backend (i dont understand))
         has_next = offset + page_size < total
         
