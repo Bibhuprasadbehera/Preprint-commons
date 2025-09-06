@@ -251,14 +251,14 @@ def get_unified_citation_data(
                    strftime('%m', preprint_submission_date) as month,
                    strftime('%d', preprint_submission_date) as day,
                    SUM(total_citation) as citations
-            FROM papers 
-            WHERE total_citation IS NOT NULL 
+            FROM papers
+            WHERE total_citation IS NOT NULL
             AND preprint_submission_date IS NOT NULL
             {time_filter}
+            {subject_filter}
             GROUP BY strftime('%Y', preprint_submission_date), strftime('%m', preprint_submission_date)
         """
-        heatmap_params = [p for p in params if not p.startswith('%')]
-        heatmap_df = pd.read_sql_query(heatmap_query, conn, params=heatmap_params)
+        heatmap_df = pd.read_sql_query(heatmap_query, conn, params=params)
         
         # Convert heatmap columns to integers
         if not heatmap_df.empty:
