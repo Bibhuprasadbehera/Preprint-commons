@@ -8,6 +8,8 @@ from fastapi.middleware.trustedhost import TrustedHostMiddleware
 import logging
 import sys
 from contextlib import asynccontextmanager
+import time
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.config import settings
 from app.routers import papers, analytics, health, authors, subjects
@@ -23,6 +25,21 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
+
+class PerformanceMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        start_time = time.time()
+        response = await call_next(request)
+        process_time = time.time() - start_time
+        response.headers["X-Process-Time"] = str(process_time)
+        
+        # Log slow requests
+        if process_time > 1.0:  # Log requests taking more than 1 second
+            logger.warning(f"Slow request: {request.method} {request.url.path} took {process_time:.3f}s")
+        elif process_time > 0.5:  # Log requests taking more than 0.5 seconds
+            logger.info(f"Moderate request: {request.method} {request.url.path} took {process_time:.3f}s")
+        
+        return response
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -49,6 +66,9 @@ if settings.environment == "production":
         TrustedHostMiddleware,
         allowed_hosts=["*"]  # Configure this properly for production
     )
+
+# Add performance monitoring middleware
+app.add_middleware(PerformanceMiddleware)
 
 # Add CORS middleware
 app.add_middleware(

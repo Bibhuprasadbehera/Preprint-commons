@@ -30,6 +30,7 @@ class Settings(BaseSettings):
     
     # Cache
     cache_ttl: int = 300
+    analytics_cache_ttl: int = 3600  # 1 hour for analytics data
     
     class Config:
         env_file = ".env"

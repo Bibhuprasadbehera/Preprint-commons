@@ -6,14 +6,21 @@ from typing import Optional
 from app.database import get_db_connection
 from app.models import AnalyticsResponse, CitationDataResponse
 from app.config import settings
+from app.cache import get_analytics_cache
+from cachetools import Cache
 import logging
+import json
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/analytics", tags=["analytics"])
 
 @router.get("/country-data")
-def country_data(conn: sqlite3.Connection = Depends(get_db_connection)):
+def country_data(conn: sqlite3.Connection = Depends(get_db_connection), cache: Cache = Depends(get_analytics_cache)):
     """Get country-wise paper distribution by year"""
+    cache_key = "country_data"
+    if cache_key in cache:
+        return cache[cache_key]
+    
     try:
         query = """
             SELECT country_name, strftime('%Y', preprint_submission_date) as year, COUNT(*) as count 
@@ -23,15 +30,21 @@ def country_data(conn: sqlite3.Connection = Depends(get_db_connection)):
             ORDER BY year, country_name
         """
         df = pd.read_sql_query(query, conn)
-        return JSONResponse(content={"data": df.to_dict("records")})
+        response = JSONResponse(content={"data": df.to_dict("records")})
+        cache[cache_key] = response
+        return response
         
     except Exception as e:
         logger.error(f"Country data error: {e}")
         raise HTTPException(status_code=500, detail="Failed to fetch country data")
 
 @router.get("/subjects")
-def get_subjects(conn: sqlite3.Connection = Depends(get_db_connection)):
+def get_subjects(conn: sqlite3.Connection = Depends(get_db_connection), cache: Cache = Depends(get_analytics_cache)):
     """Get all unique subject areas"""
+    cache_key = "analytics_subjects"
+    if cache_key in cache:
+        return cache[cache_key]
+    
     try:
         query = """
             SELECT DISTINCT preprint_subject
@@ -42,16 +55,21 @@ def get_subjects(conn: sqlite3.Connection = Depends(get_db_connection)):
         """
         df = pd.read_sql_query(query, conn)
         subjects = df['preprint_subject'].tolist()
-        
-        return JSONResponse(content={"data": subjects})
+        response = JSONResponse(content={"data": subjects})
+        cache[cache_key] = response
+        return response
         
     except Exception as e:
         logger.error(f"Subjects error: {e}")
         raise HTTPException(status_code=500, detail="Failed to fetch subjects")
 
 @router.get("/dashboard")
-def get_analytics_data(conn: sqlite3.Connection = Depends(get_db_connection)):
+def get_analytics_data(conn: sqlite3.Connection = Depends(get_db_connection), cache: Cache = Depends(get_analytics_cache)):
     """Get comprehensive analytics dashboard data"""
+    cache_key = "analytics_dashboard"
+    if cache_key in cache:
+        return cache[cache_key]
+    
     try:
         # Publication Timeline Data
         timeline_query = """
@@ -156,6 +174,7 @@ def get_analytics_data(conn: sqlite3.Connection = Depends(get_db_connection)):
             }
         )
         
+        cache[cache_key] = response_data
         return response_data
         
     except Exception as e:
@@ -168,9 +187,14 @@ def get_unified_citation_data(
     subject: Optional[str] = Query(None, description="Subject filter"),
     limit: int = Query(10, ge=1, le=100, description="Limit for top papers"),
     sort_by: str = Query("citations_desc", description="Sort order"),
-    conn: sqlite3.Connection = Depends(get_db_connection)
+    conn: sqlite3.Connection = Depends(get_db_connection),
+    cache: Cache = Depends(get_analytics_cache)
 ):
     """Get unified citation data for all citation-related charts"""
+    cache_key = f"citations_{time_range}_{subject}_{limit}_{sort_by}"
+    if cache_key in cache:
+        return cache[cache_key]
+    
     try:
         # Build common filter conditions
         params = []
@@ -195,15 +219,15 @@ def get_unified_citation_data(
             subject_filter = " AND preprint_subject LIKE ?"
             params.append(f"%{subject}%")
         
-        # Citation Impact Data
+        # Citation Impact Data - Optimized to only fetch necessary fields
         impact_query = f"""
             SELECT PPC_Id, preprint_title, preprint_submission_date as publication_date, 
-                   total_citation, all_authors, preprint_subject
+                   total_citation, preprint_subject
             FROM papers 
             WHERE total_citation IS NOT NULL
             {time_filter}
             {subject_filter}
-            ORDER BY total_citation DESC LIMIT 1000
+            ORDER BY total_citation DESC LIMIT 500
         """
         impact_df = pd.read_sql_query(impact_query, conn, params=params)
         
@@ -260,7 +284,7 @@ def get_unified_citation_data(
         
         top_papers_query = f"""
             SELECT PPC_Id, preprint_title, preprint_submission_date as publication_date,
-                   total_citation, all_authors, preprint_subject
+                   total_citation, preprint_subject
             FROM papers 
             WHERE total_citation IS NOT NULL
             {time_filter}
@@ -288,6 +312,7 @@ def get_unified_citation_data(
             }
         )
         
+        cache[cache_key] = response_data
         return response_data
         
     except Exception as e:
