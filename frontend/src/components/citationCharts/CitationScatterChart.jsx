@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ZoomControls from './chartsFeatures/ZoomControls/ZoomControls';
 import PanSlider from './chartsFeatures/PanSlider/PanSlider';
 import styles from './CitationScatterChart.module.css';
 
 const CitationScatterChart = ({ data, loading = false }) => {
+  const navigate = useNavigate();
   const canvasRef = useRef();
   const containerRef = useRef();
   const [dimensions, setDimensions] = useState({ width: 800, height: 400 });
@@ -260,6 +262,50 @@ const CitationScatterChart = ({ data, loading = false }) => {
     setHoveredPoint(null);
     setTooltip({ show: false, x: 0, y: 0, data: null });
   }, []);
+
+  // Handle click events
+  const handleClick = useCallback((event) => {
+    if (!canvasRef.current || !data) return;
+
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    const margin = { top: 20, right: 20, bottom: 60, left: 80 };
+    const chartWidth = dimensions.width - margin.left - margin.right;
+    const chartHeight = dimensions.height - margin.top - margin.bottom;
+
+    // Find closest point
+    let closestIndex = -1;
+    let closestDistance = Infinity;
+
+    data.forEach((paper, index) => {
+      const date = new Date(paper.publication_date).getTime();
+      const citations = paper.total_citation;
+
+      if (date < zoomState.minDate || date > zoomState.maxDate) return;
+
+      const dateRange = zoomState.maxDate - zoomState.minDate;
+      const citationRange = zoomState.maxCitations - zoomState.minCitations;
+
+      const pointX = margin.left + ((date - zoomState.minDate) / dateRange) * chartWidth;
+      const pointY = margin.top + chartHeight - ((citations - zoomState.minCitations) / citationRange) * chartHeight;
+
+      const distance = Math.sqrt((x - pointX) ** 2 + (y - pointY) ** 2);
+
+      if (distance < 15 && distance < closestDistance) {
+        closestDistance = distance;
+        closestIndex = index;
+      }
+    });
+
+    if (closestIndex !== -1) {
+      const paper = data[closestIndex];
+      // Open paper details in new tab
+      window.open(`/paper/${paper.PPC_Id}`, '_blank');
+    }
+  }, [data, dimensions, zoomState]);
 
   // Calculate pan range based on zoom level
   const calculatePanRange = useCallback(() => {
