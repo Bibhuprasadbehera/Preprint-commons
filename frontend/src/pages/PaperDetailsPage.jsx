@@ -68,11 +68,15 @@ const PaperDetailsPage = () => {
   useEffect(() => {
     if (paper && paper.citation && chartRef.current) {
       try {
-        const citations = JSON.parse(paper.citation);
+        // Handle malformed JSON with single quotes by replacing them with double quotes
+        const fixedCitation = paper.citation.replace(/'/g, '"');
+        const citations = JSON.parse(fixedCitation);
+        console.log('Citations parsed successfully:', citations);
+
         const ctx = document.createElement('canvas');
         chartRef.current.innerHTML = '';
         chartRef.current.appendChild(ctx);
-        
+
         new Chart(ctx, {
           type: 'bar',
           data: {
@@ -87,23 +91,24 @@ const PaperDetailsPage = () => {
           },
           options: {
             responsive: true,
-            plugins: { 
+            plugins: {
               legend: { display: false },
               title: {
                 display: true,
                 text: 'Citation History'
               }
             },
-            scales: { 
-              y: { 
-                beginAtZero: true, 
-                ticks: { precision: 0 } 
-              } 
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: { precision: 0 }
+              }
             }
           }
         });
       } catch (error) {
         console.error('Error creating chart:', error);
+        console.error('Raw citation data:', paper.citation);
       }
     }
   }, [paper]);
@@ -169,7 +174,19 @@ const PaperDetailsPage = () => {
     );
   }
 
-  const authors = paper.all_authors ? JSON.parse(paper.all_authors) : [];
+  let authors = [];
+  try {
+    if (paper.all_authors) {
+      // Handle malformed JSON with single quotes by replacing them with double quotes
+      const fixedAuthors = paper.all_authors.replace(/'/g, '"');
+      authors = JSON.parse(fixedAuthors);
+      console.log('Authors parsed successfully:', authors);
+    }
+  } catch (error) {
+    console.error('Error parsing authors JSON:', error);
+    console.error('Raw authors data:', paper.all_authors);
+    authors = [];
+  }
   
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {

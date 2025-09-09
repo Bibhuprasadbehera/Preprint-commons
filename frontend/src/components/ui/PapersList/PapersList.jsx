@@ -63,9 +63,14 @@ const formatAuthors = (authorsArray, submissionContact, navigate) => {
   if (!authorsArray || authorsArray.length === 0) return 'Unknown authors';
 
   try {
-    const authors = typeof authorsArray === 'string'
-      ? JSON.parse(authorsArray)
-      : authorsArray;
+    let authors;
+    if (typeof authorsArray === 'string') {
+      // Handle malformed JSON with single quotes by replacing them with double quotes
+      const fixedAuthors = authorsArray.replace(/'/g, '"');
+      authors = JSON.parse(fixedAuthors);
+    } else {
+      authors = authorsArray;
+    }
 
     const validAuthors = authors
       .filter(author => author.author_name && author.author_name.trim());

@@ -42,7 +42,9 @@ const PaperMetadata = ({ paper }) => {
     { k: 'country_name', l: 'Country' },
     { k: 'versions', l: 'Versions', v: d => {
       try {
-        return JSON.parse(d).map(v => `${v.version} (${new Date(v.created).toLocaleDateString()})`).join(', ');
+        // Handle malformed JSON with single quotes by replacing them with double quotes
+        const fixedVersions = d.replace(/'/g, '"');
+        return JSON.parse(fixedVersions).map(v => `${v.version} (${new Date(v.created).toLocaleDateString()})`).join(', ');
       } catch {
         return d;
       }
@@ -55,7 +57,18 @@ const PaperMetadata = ({ paper }) => {
     { k: 'total_citation', l: 'Total Citations' }
   ];
 
-  const authors = paper.all_authors ? JSON.parse(paper.all_authors) : [];
+  let authors = [];
+  try {
+    if (paper.all_authors) {
+      // Handle malformed JSON with single quotes by replacing them with double quotes
+      const fixedAuthors = paper.all_authors.replace(/'/g, '"');
+      authors = JSON.parse(fixedAuthors);
+    }
+  } catch (error) {
+    console.error('Error parsing authors JSON in PaperMetadata:', error);
+    console.error('Raw authors data:', paper.all_authors);
+    authors = [];
+  }
 
   return (
     <div className={styles.metadataContainer} ref={metadataRef}>
