@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './MapContainer.module.css';
 
-const MapContainer = ({ 
+const MapContainer = ({
   title = "Global Preprint Distribution Map",
   className = '',
   showStats = true,
@@ -14,12 +14,17 @@ const MapContainer = ({
   return (
     <div className={`${styles.mapSection} ${className}`}>
       <div className={styles.mapContainer}>
-        <iframe 
-          id="map-iframe" 
+        <iframe
+          id="map-iframe"
           src="/map.html"
           className={styles.mapIframe}
           title={title}
         />
+      </div>
+
+      {/* Data Availability Note */}
+      <div className={styles.dataNote}>
+        <p><strong>Note:</strong> Country-level data is only available for some papers. Some Papers are not included in this visualization due to missing geographic information.</p>
       </div>
       
       {showStats && (
