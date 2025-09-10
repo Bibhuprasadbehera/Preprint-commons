@@ -51,6 +51,19 @@
   position: relative;
 }
 
+.clickable {
+  cursor: pointer !important;
+}
+
+.clickable:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-accent);
+}
+
+.clickable:active {
+  transform: scale(1.05);
+}
+
 .cellValue {
   color: inherit;
   font-size: 9px;

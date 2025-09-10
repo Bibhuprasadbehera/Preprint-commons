@@ -1,22 +1,8 @@
 import React from 'react';
 import CitationScatterChart from './components/citationCharts/CitationScatterChart';
+import CitationHeatmap from './components/citationCharts/CitationHeatmap';
 import MapContainer from './components/ui/MapContainer/MapContainer';
 import './styles/index.css';
-
-// Mock data with different date ranges to test the citation chart fix
-const mockDataSubject1 = [
-  { PPC_Id: '1', preprint_title: 'Early Research Paper', publication_date: '2018-03-15', total_citation: 45 },
-  { PPC_Id: '2', preprint_title: 'Mid Period Study', publication_date: '2019-07-22', total_citation: 78 },
-  { PPC_Id: '3', preprint_title: 'Recent Analysis', publication_date: '2020-11-08', total_citation: 123 },
-  { PPC_Id: '4', preprint_title: 'Latest Findings', publication_date: '2021-02-14', total_citation: 89 }
-];
-
-const mockDataSubject2 = [
-  { PPC_Id: '5', preprint_title: 'Very Recent Study', publication_date: '2022-05-10', total_citation: 234 },
-  { PPC_Id: '6', preprint_title: 'Current Research', publication_date: '2023-01-20', total_citation: 156 },
-  { PPC_Id: '7', preprint_title: 'Latest Publication', publication_date: '2023-08-15', total_citation: 67 },
-  { PPC_Id: '8', preprint_title: 'Most Recent Work', publication_date: '2024-01-05', total_citation: 23 }
-];
 
 const App = () => {
   const [currentData, setCurrentData] = React.useState(mockDataSubject1);
@@ -100,6 +86,34 @@ const App = () => {
         </div>
       </section>
 
+      {/* Citation Heatmap Demo */}
+      <section style={{ marginBottom: '40px' }}>
+        <h2>Citation Heatmap - Click Navigation Fix</h2>
+        <p>The heatmap now supports clicking on cells to search papers from that month:</p>
+        
+        <div style={{ 
+          border: '1px solid #E5E7EB', 
+          borderRadius: '8px', 
+          padding: '20px',
+          backgroundColor: 'white'
+        }}>
+          <h3>Citation Heatmap</h3>
+          <p>Click on cells with data to search papers from that specific month.</p>
+          <CitationHeatmap data={mockHeatmapData} loading={false} />
+        </div>
+
+        <div style={{ marginTop: '20px', fontSize: '14px', color: '#6B7280' }}>
+          <h4>Heatmap Fix Details:</h4>
+          <ul>
+            <li>✅ Added click navigation similar to PublicationTimelineChart</li>
+            <li>✅ Clicking cells navigates to advanced search with month filter</li>
+            <li>✅ Only cells with data are clickable (cursor changes to pointer)</li>
+            <li>✅ Tooltip shows click hint for interactive cells</li>
+            <li>✅ Month format matches other chart navigation (YYYY-MM)</li>
+          </ul>
+        </div>
+      </section>
+
       {/* Map Fix Demo */}
       <section style={{ marginBottom: '40px' }}>
         <h2>World Map - Country Names Removal Fix</h2>
@@ -141,6 +155,7 @@ const App = () => {
         <h3>How to Test:</h3>
         <ol>
           <li><strong>Citation Chart:</strong> Switch between Subject 1 and Subject 2 buttons to see automatic axis adjustment</li>
+          <li><strong>Citation Heatmap:</strong> Click on colored cells to search papers from that specific month</li>
           <li><strong>World Map:</strong> Hover over countries to see names and data (no visible labels)</li>
           <li><strong>Map Toggle:</strong> Use the left/right toggle switch to switch between "Year-wise" and "Cumulative" modes</li>
           <li><strong>Map Slider:</strong> Use the year slider to filter data by specific years</li>

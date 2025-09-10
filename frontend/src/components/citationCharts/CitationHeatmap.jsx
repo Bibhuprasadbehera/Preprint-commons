@@ -1,7 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './CitationHeatmap.module.css';
 
 const CitationHeatmap = ({ data, loading = false }) => {
+  const navigate = useNavigate();
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
@@ -56,6 +58,15 @@ const CitationHeatmap = ({ data, loading = false }) => {
   // Get unique years and sort them
   const years = [...new Set(heatmapData.map(d => d.year))].sort();
 
+  // Handle cell click navigation
+  const handleCellClick = (year, month) => {
+    if (year && month) {
+      // Format month as YYYY-MM for consistency with PublicationTimelineChart
+      const formattedMonth = `${year}-${month.toString().padStart(2, '0')}`;
+      navigate(`/explore?month=${formattedMonth}`);
+    }
+  };
+
   return (
     <div className={styles.heatmapContainer}>
       <div className={styles.heatmapGrid}>
@@ -73,8 +84,10 @@ const CitationHeatmap = ({ data, loading = false }) => {
                 return (
                   <div
                     key={`${year}-${monthIndex + 1}`}
-                    className={`${styles.heatmapCell} ${getColorClass(intensity)}`}
-                    title={`${month} ${year}: ${citations} citations`}
+                    className={`${styles.heatmapCell} ${getColorClass(intensity)} ${citations > 0 ? styles.clickable : ''}`}
+                    title={`${month} ${year}: ${citations} citations${citations > 0 ? ' (Click to search papers)' : ''}`}
+                    onClick={() => citations > 0 && handleCellClick(year, monthIndex + 1)}
+                    style={{ cursor: citations > 0 ? 'pointer' : 'default' }}
                   >
                     <span className={styles.cellValue}>
                       {citations > 0 ? citations : ''}
