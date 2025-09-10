@@ -17,32 +17,103 @@ const CitationScatterChart = ({ data, loading = false }) => {
     minCitations: null,
     maxCitations: null
   });
-  const [panPosition, setPanPosition] = useState(50); // 0-100 percentage for pan position
+  const [panPosition, setPanPosition] = useState(50);
   const [hoveredPoint, setHoveredPoint] = useState(null);
   const [tooltip, setTooltip] = useState({ show: false, x: 0, y: 0, data: null });
+  const [dataSignature, setDataSignature] = useState('');
 
-  // Calculate date and citation ranges from data
+  // Helper functions for axis calculations
+  const calculateDataSignature = useCallback((data) => {
+    if (!data || data.length === 0) return '';
+    const dates = data.map(paper => new Date(paper.publication_date).getTime()).sort();
+    const citations = data.map(paper => paper.total_citation).sort((a, b) => b - a);
+    return `${data.length}-${dates[0]}-${dates[dates.length - 1]}-${citations[0]}-${citations[citations.length - 1]}`;
+  }, []);
+
+  const areRangesDifferent = useCallback((range1, range2, threshold = 0.3) => {
+    if (!range1 || !range2) return true;
+    const range1Span = range1.maxDate - range1.minDate;
+    const range2Span = range2.maxDate - range2.minDate;
+    const overlapStart = Math.max(range1.minDate, range2.minDate);
+    const overlapEnd = Math.min(range1.maxDate, range2.maxDate);
+    const overlapSpan = Math.max(0, overlapEnd - overlapStart);
+    const minSpan = Math.min(range1Span, range2Span);
+    const overlapRatio = overlapSpan / minSpan;
+    return overlapRatio < (1 - threshold);
+  }, []);
+
+  // Calculate date and citation ranges from data with proper reset logic
   useEffect(() => {
-    if (data && data.length > 0) {
-      const dates = data.map(paper => new Date(paper.publication_date).getTime());
-      const citations = data.map(paper => paper.total_citation);
+    if (!data || data.length === 0) {
+      setZoomState({
+        minDate: null,
+        maxDate: null,
+        originalMinDate: null,
+        originalMaxDate: null,
+        minCitations: null,
+        maxCitations: null
+      });
+      setDataSignature('');
+      return;
+    }
+
+    const newSignature = calculateDataSignature(data);
+    const isNewData = newSignature !== dataSignature;
+    
+    if (isNewData) {
+      console.log('📊 New data detected, recalculating chart ranges');
       
+      // Calculate date range with padding
+      const dates = data.map(paper => new Date(paper.publication_date).getTime());
       const minDate = Math.min(...dates);
       const maxDate = Math.max(...dates);
-      const minCitations = 0; // Start y-axis at 0
-      const maxCitations = Math.max(...citations);
+      const dateRange = maxDate - minDate;
+      const datePadding = Math.max(dateRange * 0.05, 365.25 * 24 * 60 * 60 * 1000);
       
-      setZoomState(prev => ({
-        ...prev,
-        minDate: prev.originalMinDate || minDate,
-        maxDate: prev.originalMaxDate || maxDate,
-        originalMinDate: prev.originalMinDate || minDate,
-        originalMaxDate: prev.originalMaxDate || maxDate,
-        minCitations: minCitations,
-        maxCitations: maxCitations
-      }));
+      // Calculate citation range
+      const citations = data.map(paper => paper.total_citation || 0);
+      const maxCitations = Math.max(...citations);
+      const paddedMaxCitations = Math.max(maxCitations * 1.1, 10);
+      
+      const newDateRange = {
+        minDate: minDate - datePadding,
+        maxDate: maxDate + datePadding,
+        originalMinDate: minDate,
+        originalMaxDate: maxDate
+      };
+      
+      // Check if we should reset zoom
+      const currentDateRange = {
+        minDate: zoomState.originalMinDate,
+        maxDate: zoomState.originalMaxDate
+      };
+      
+      const shouldResetZoom = !zoomState.originalMinDate || 
+                             areRangesDifferent(newDateRange, currentDateRange, 0.3);
+      
+      if (shouldResetZoom) {
+        console.log('🔄 Resetting zoom due to significantly different data ranges');
+        setZoomState({
+          minDate: newDateRange.minDate,
+          maxDate: newDateRange.maxDate,
+          originalMinDate: newDateRange.minDate,
+          originalMaxDate: newDateRange.maxDate,
+          minCitations: 0,
+          maxCitations: paddedMaxCitations
+        });
+        setPanPosition(50);
+      } else {
+        // Update citation range but preserve date zoom if similar
+        setZoomState(prev => ({
+          ...prev,
+          minCitations: 0,
+          maxCitations: paddedMaxCitations
+        }));
+      }
+      
+      setDataSignature(newSignature);
     }
-  }, [data]);
+  }, [data, dataSignature, calculateDataSignature, areRangesDifferent, zoomState.originalMinDate, zoomState.originalMaxDate]);
 
   // Handle canvas resize
   useEffect(() => {
@@ -63,7 +134,7 @@ const CitationScatterChart = ({ data, loading = false }) => {
 
   // Draw the chart
   useEffect(() => {
-    if (!canvasRef.current || !data || data.length === 0) return;
+    if (!canvasRef.current || !data || data.length === 0 || !zoomState.minDate) return;
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
