@@ -1,5 +1,4 @@
 /* Modern Theme Variables for Preprint Commons */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap');
 
 :root {
   /* Color Palette - Modern Blue & Orange with better contrast */
@@ -46,8 +45,8 @@
   
   /* Typography */
   --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-family-display: 'Playfair Display', 'Space Grotesk', serif;
-  --font-family-heading: 'Playfair Display', 'Space Grotesk', serif;
+  --font-family-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-family-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   
   --font-size-xs: 0.75rem;    /* 12px */
   --font-size-sm: 0.875rem;   /* 14px */
@@ -153,7 +152,7 @@
 
 /* Typography Classes */
 .text-display-1 {
-  font-family: var(--font-family-display);
+  font-family: var(--font-family-primary);
   font-size: var(--font-size-6xl);
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
@@ -161,7 +160,7 @@
 }
 
 .text-display-2 {
-  font-family: var(--font-family-display);
+  font-family: var(--font-family-primary);
   font-size: var(--font-size-5xl);
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
@@ -169,28 +168,28 @@
 }
 
 .text-heading-1 {
-  font-family: var(--font-family-display);
+  font-family: var(--font-family-primary);
   font-size: var(--font-size-4xl);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
 }
 
 .text-heading-2 {
-  font-family: var(--font-family-display);
+  font-family: var(--font-family-primary);
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
 }
 
 .text-heading-3 {
-  font-family: var(--font-family-display);
+  font-family: var(--font-family-primary);
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-normal);
 }
 
 .text-heading-4 {
-  font-family: var(--font-family-display);
+  font-family: var(--font-family-primary);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-normal);
