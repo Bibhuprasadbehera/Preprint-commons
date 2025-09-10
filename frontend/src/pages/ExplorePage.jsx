@@ -35,6 +35,8 @@ const ExplorePage = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [totalResults, setTotalResults] = useState(0);
   const [hasSearched, setHasSearched] = useState(false);
+  const [lastSearchCriteria, setLastSearchCriteria] = useState(null);
+  const [isAdvancedSearch, setIsAdvancedSearch] = useState(false);
 
   // Author search state
   const [authorQuery, setAuthorQuery] = useState('');
@@ -184,6 +186,8 @@ const ExplorePage = () => {
 
     setIsLoading(true);
     setCurrentPage(page);
+    setIsAdvancedSearch(false);
+    setLastSearchCriteria(null);
 
     try {
       console.log(`Searching papers: "${searchQuery}" page ${page} (attempt ${attemptNumber})`);
@@ -220,7 +224,13 @@ const ExplorePage = () => {
   };
 
   const handlePageChange = (page) => {
-    handleSearch(page);
+    if (isAdvancedSearch && lastSearchCriteria) {
+      // Use advanced search for pagination
+      handleAdvancedSearch(lastSearchCriteria, page);
+    } else {
+      // Use basic search for pagination
+      handleSearch(page);
+    }
     // Scroll to top of results
     document.getElementById('search-results')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -232,6 +242,8 @@ const ExplorePage = () => {
     setTotalPages(0);
     setTotalResults(0);
     setHasSearched(false);
+    setIsAdvancedSearch(false);
+    setLastSearchCriteria(null);
   };
 
   const handleSearchClick = async (forceRefresh = false) => {
@@ -357,6 +369,8 @@ const ExplorePage = () => {
   const handleAdvancedSearch = async (criteria, page = 1) => {
     setIsLoading(true);
     setCurrentPage(page);
+    setIsAdvancedSearch(true);
+    setLastSearchCriteria(criteria);
 
     try {
       console.log('Advanced search criteria:', criteria);
@@ -571,6 +585,8 @@ const ExplorePage = () => {
                       papers={searchResults}
                       loading={false}
                       onPaperClick={(paper) => console.log('Paper clicked:', paper)}
+                      currentPage={currentPage}
+                      resultsPerPage={RESULTS_PER_PAGE}
                     />
                     
                     {totalPages > 1 && (
@@ -790,6 +806,8 @@ const ExplorePage = () => {
                       papers={authorResults}
                       loading={false}
                       onPaperClick={(paper) => console.log('Paper clicked:', paper)}
+                      currentPage={authorCurrentPage}
+                      resultsPerPage={RESULTS_PER_PAGE}
                     />
                     
                     {authorTotalPages > 1 && (

@@ -140,7 +140,7 @@ const formatSubmissionContact = (contact, navigate) => {
   );
 };
 
-const PapersList = ({ papers, loading = false, onPaperClick }) => {
+const PapersList = ({ papers, loading = false, onPaperClick, currentPage = 1, resultsPerPage = 20 }) => {
   const navigate = useNavigate();
   if (loading) {
     return (
@@ -180,7 +180,7 @@ const PapersList = ({ papers, loading = false, onPaperClick }) => {
         >
           <Card.Content>
             <div className={styles.paperHeader}>
-              <div className={styles.rankBadge}>#{index + 1}</div>
+              <div className={styles.rankBadge}>#{(currentPage - 1) * resultsPerPage + index + 1}</div>
               <div className={styles.citationCount}>
                 {formatCitationCount(paper.total_citation)}
               </div>
