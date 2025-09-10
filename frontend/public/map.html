@@ -12,7 +12,13 @@
   <div class="container">
     <h1>Global Preprint Distribution Map</h1>
     <div class="controls">
-      <button id="toggle-mode" class="button">Year-wise</button>
+      <div class="toggle-switch-container">
+        <span class="toggle-label">Year-wise</span>
+        <div class="toggle-switch" id="toggle-mode">
+          <div class="toggle-slider"></div>
+        </div>
+        <span class="toggle-label">Cumulative</span>
+      </div>
       <div class="slider-container">
         <input type="range" id="year-filter" min="0" max="30" value="0" step="1">
         <span id="year-value">All Year Cumulative</span>
@@ -200,39 +206,60 @@
                 <div class="tooltip-header">${d.properties.name}</div>
                 <div class="tooltip-value">${count.toLocaleString()} preprints</div>
                 ${selectedYear !== "all" ? `<div class="tooltip-year">${isCumulative ? 'Cumulative up to' : 'Year'}: ${selectedYear}</div>` : ''}
+                <div class="tooltip-click-hint">Click to search papers from this country</div>
               `).style("left", `${event.pageX + 10}px`).style("top", `${event.pageY + 10}px`);
             })
             .on("mousemove", function(event) {
               tooltip.style("left", `${event.pageX + 10}px`).style("top", `${event.pageY + 10}px`);
             })
-            .on("mouseout", () => tooltip.style("opacity", 0));
+            .on("mouseout", () => tooltip.style("opacity", 0))
+            .on("click", function(event, d) {
+              const count = countryTotals.get(normalizeCountryName(d.properties.name)) || 0;
+              if (count > 0) {
+                // Navigate to explore page with country filter using advanced search
+                const countryName = d.properties.name;
+                const encodedCountry = encodeURIComponent(countryName);
+                
+                console.log('Country clicked:', countryName, 'Count:', count);
+                
+                // Check if we're in an iframe and need to communicate with parent
+                if (window.parent && window.parent !== window) {
+                  console.log('Sending message to parent:', `/explore?country=${encodedCountry}`);
+                  // Send message to parent window to navigate
+                  window.parent.postMessage({
+                    type: 'navigate',
+                    url: `/explore?country=${encodedCountry}`
+                  }, '*');
+                } else {
+                  // Direct navigation if not in iframe
+                  console.log('Direct navigation to:', `/explore?country=${encodedCountry}`);
+                  window.location.href = `/explore?country=${encodedCountry}`;
+                }
+              } else {
+                console.log('Country has no data:', d.properties.name);
+              }
+            })
+            .style("cursor", d => {
+              const count = countryTotals.get(normalizeCountryName(d.properties.name)) || 0;
+              return count > 0 ? "pointer" : "default";
+            });
 
+          // Remove all country labels - keep only hover functionality
           svg.selectAll(".country-label").remove();
-          if (selectedYear !== "all") {
-            svg.selectAll(".country-label").data(countries.features.filter(d =>
-              countryTotals.get(normalizeCountryName(d.properties.name)) > maxCount * 0.1
-            )).enter().append("text")
-              .attr("class", "country-label")
-              .attr("transform", d => `translate(${path.centroid(d)})`)
-              .attr("text-anchor", "middle")
-              .text(d => d.properties.name)
-              .style("font-size", "8px")
-              .style("fill", "#333")
-              .style("pointer-events", "none");
-          }
           updateTitle(isCumulative ? "cumulative" : "year-wise", selectedYear);
         }
 
         yearFilter.addEventListener("input", (event) => {
           const selectedYearIndex = parseInt(event.target.value);
           yearValue.textContent = selectedYearIndex === 0 ? "All Year Cumulative" : years[selectedYearIndex - 1];
-          updateMap(toggleMode.textContent === "Cumulative", selectedYearIndex);
+          updateMap(isCumulative, selectedYearIndex);
         });
 
+        let isCumulative = false;
         toggleMode.addEventListener("click", () => {
-          const isCumulative = toggleMode.textContent === "Year-wise";
-          toggleMode.textContent = isCumulative ? "Cumulative" : "Year-wise";
-          yearFilter.style.setProperty("--thumb-color", isCumulative ? "red" : "#3498db");
+          isCumulative = !isCumulative;
+          toggleMode.classList.toggle("active", isCumulative);
+          yearFilter.style.setProperty("--thumb-color", isCumulative ? "hsl(0, 84%, 60%)" : "hsl(210, 85%, 45%)");
           updateMap(isCumulative, yearFilter.value);
         });
 
@@ -246,7 +273,7 @@
              .attr('width', containerWidth)
              .attr('height', containerHeight);
           
-          updateMap(toggleMode.textContent === "Cumulative", yearFilter.value);
+          updateMap(isCumulative, yearFilter.value);
         }
 
         window.addEventListener('resize', handleResize);

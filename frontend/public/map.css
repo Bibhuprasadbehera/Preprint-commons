@@ -60,19 +60,69 @@ h1 {
     flex-wrap: wrap;
 }
 
-.button {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    background: #fff;
-    cursor: pointer;
-    transition: background-color 0.2s, border-color 0.2s;
+.toggle-switch-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
-.button:hover {
-    background-color: #f0f0f0;
-    border-color: #aaa;
+.toggle-label {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: hsl(210, 15%, 30%);
+    user-select: none;
+    transition: color 250ms ease-in-out;
+}
+
+.toggle-switch {
+    position: relative;
+    width: 64px;
+    height: 32px;
+    background: hsl(210, 16%, 88%);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 250ms ease-in-out;
+    border: 1px solid hsl(210, 14%, 78%);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.toggle-switch.active {
+    background: hsl(210, 85%, 45%);
+    border-color: hsl(210, 85%, 35%);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.toggle-slider {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 26px;
+    height: 26px;
+    background: hsl(0, 0%, 100%);
+    border-radius: 50%;
+    transition: all 250ms ease-in-out;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.toggle-switch.active .toggle-slider {
+    transform: translateX(32px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.toggle-switch:hover {
+    background: hsl(210, 14%, 78%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.toggle-switch.active:hover {
+    background: hsl(210, 85%, 35%);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.toggle-switch:hover .toggle-slider {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .slider-container {
@@ -83,32 +133,49 @@ h1 {
 
 input[type="range"] {
     width: 300px;
-    --thumb-color: #3498db;
+    --thumb-color: hsl(210, 85%, 45%);
+    height: 6px;
+    border-radius: 3px;
+    background: hsl(210, 16%, 88%);
+    outline: none;
+    -webkit-appearance: none;
 }
 
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 15px;
-    height: 15px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     background: var(--thumb-color);
     cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: all 250ms ease-in-out;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 input[type="range"]::-moz-range-thumb {
-    width: 15px;
-    height: 15px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     background: var(--thumb-color);
     cursor: pointer;
+    border: none;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: all 250ms ease-in-out;
 }
 
 #year-value {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 500;
-    color: #555;
+    color: hsl(210, 15%, 30%);
     min-width: 150px;
     text-align: center;
+    font-size: 0.875rem;
 }
 
 #map-container {
@@ -205,6 +272,15 @@ svg {
     font-size: 12px;
     color: #7f8c8d;
     margin-top: 4px;
+}
+
+.tooltip-click-hint {
+    font-size: 11px;
+    color: #95a5a6;
+    margin-top: 6px;
+    font-style: italic;
+    border-top: 1px solid rgba(149, 165, 166, 0.3);
+    padding-top: 4px;
 }
 
 .legend-group text {

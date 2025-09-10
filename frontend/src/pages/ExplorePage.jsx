@@ -107,6 +107,7 @@ const ExplorePage = () => {
     const subject = searchParams.get('subject');
     const month = searchParams.get('month');
     const server = searchParams.get('server');
+    const country = searchParams.get('country');
 
     if (year) {
       // Navigate to search tab and use advanced search for papers from that year
@@ -137,6 +138,14 @@ const ExplorePage = () => {
       setActiveTab('search');
       setSearchSubTab('advanced');
       const criteria = { server: server };
+      setTimeout(() => {
+        handleAdvancedSearch(criteria, 1);
+      }, 100);
+    } else if (country) {
+      // Navigate to search tab and use advanced search for papers from that country
+      setActiveTab('search');
+      setSearchSubTab('advanced');
+      const criteria = { country: country };
       setTimeout(() => {
         handleAdvancedSearch(criteria, 1);
       }, 100);

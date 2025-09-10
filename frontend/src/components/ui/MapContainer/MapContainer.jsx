@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './MapContainer.module.css';
 
 const MapContainer = ({
@@ -11,6 +12,20 @@ const MapContainer = ({
     { number: "1,000+", label: "Institutions Tracked" }
   ]
 }) => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Listen for navigation messages from the iframe
+    const handleMessage = (event) => {
+      if (event.data && event.data.type === 'navigate') {
+        navigate(event.data.url);
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [navigate]);
+
   return (
     <div className={`${styles.mapSection} ${className}`}>
       <div className={styles.mapContainer}>
