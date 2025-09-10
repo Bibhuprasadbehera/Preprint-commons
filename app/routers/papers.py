@@ -51,21 +51,10 @@ def search_papers(
             conn,
             params=(f"%{query}%", f"%{query}%", f"%{query}%", page_size, offset)
         )
-<<<<<<< HEAD
-<<<<<<< HEAD
-        
-=======
 
         # Handle NaN values in total_citation to prevent Pydantic validation errors
         df['total_citation'] = df['total_citation'].fillna(0).astype(int)
 
-<<<<<<< HEAD
->>>>>>> 07001b1 (cleaning backend (i dont understand))
-=======
->>>>>>> 07001b1 (cleaning backend (i dont understand))
-=======
-
->>>>>>> 2018d38 (now works well the (clickable charts))
         has_next = offset + page_size < total
 
         response = SearchResponse(
@@ -82,11 +71,6 @@ def search_papers(
         logger.error(f"Search error: {e}")
         raise HTTPException(status_code=500, detail="Search failed")
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 2018d38 (now works well the (clickable charts))
 @router.post("/advanced-search")
 def advanced_search_papers(
     search_criteria: Dict[str, Any],
@@ -187,12 +171,9 @@ def advanced_search_papers(
         """
         df = pd.read_sql_query(query, conn, params=params + [page_size, offset])
 
-<<<<<<< HEAD
         # Handle NaN values in total_citation to prevent Pydantic validation errors
         df['total_citation'] = df['total_citation'].fillna(0).astype(int)
 
-=======
->>>>>>> 2018d38 (now works well the (clickable charts))
         has_next = offset + page_size < total
 
         response = SearchResponse(
@@ -277,10 +258,6 @@ def get_licenses(conn: sqlite3.Connection = Depends(get_db_connection), cache: C
         logger.error(f"Get licenses error: {e}")
         raise HTTPException(status_code=500, detail="Failed to get licenses")
 
-<<<<<<< HEAD
->>>>>>> 07001b1 (cleaning backend (i dont understand))
-=======
->>>>>>> 2018d38 (now works well the (clickable charts))
 @router.get("/{ppc_id}")
 def get_paper(ppc_id: str, conn: sqlite3.Connection = Depends(get_db_connection), cache: Cache = Depends(get_cache)):
     """Get a specific paper by PPC_Id"""

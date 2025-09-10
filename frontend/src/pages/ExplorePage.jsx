@@ -101,11 +101,6 @@ const ExplorePage = () => {
     }
   }, [activeTab]);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 4965e04 (doesnt work but good approach)
   // Handle URL parameters for chart navigation
   useEffect(() => {
     const year = searchParams.get('year');
@@ -114,7 +109,6 @@ const ExplorePage = () => {
     const server = searchParams.get('server');
 
     if (year) {
-<<<<<<< HEAD
       // Navigate to search tab and use advanced search for papers from that year
       setActiveTab('search');
       setSearchSubTab('advanced');
@@ -145,42 +139,10 @@ const ExplorePage = () => {
       const criteria = { server: server };
       setTimeout(() => {
         handleAdvancedSearch(criteria, 1);
-=======
-      // Navigate to search tab and search for papers from that year
-      setActiveTab('search');
-      setSearchQuery(`year:${year}`);
-      setTimeout(() => {
-        handleSearch(1);
-      }, 100);
-    } else if (subject) {
-      // Navigate to search tab and search for papers in that subject
-      setActiveTab('search');
-      setSearchQuery(`subject:"${subject}"`);
-      setTimeout(() => {
-        handleSearch(1);
-      }, 100);
-    } else if (month) {
-      // Navigate to search tab and search for papers from that month
-      setActiveTab('search');
-      setSearchQuery(`date:${month}`);
-      setTimeout(() => {
-        handleSearch(1);
-      }, 100);
-    } else if (server) {
-      // Navigate to search tab and search for papers from that server
-      setActiveTab('search');
-      setSearchQuery(`server:"${server}"`);
-      setTimeout(() => {
-        handleSearch(1);
->>>>>>> 4965e04 (doesnt work but good approach)
       }, 100);
     }
   }, [searchParams]);
 
-<<<<<<< HEAD
->>>>>>> 2018d38 (now works well the (clickable charts))
-=======
->>>>>>> 4965e04 (doesnt work but good approach)
   const handleSubjectSearchClickLocal = async () => {
     setIsSearching(true);
     setSubjectErrorLocal(null);
@@ -271,12 +233,6 @@ const ExplorePage = () => {
       sortOption: sortOption
     };
 
-    // Check if we need to fetch new data
-    if (!forceRefresh && !filtersChanged(currentFilters, lastAnalyticsFilters) && analyticsDataCached) {
-      console.log('📋 Using cached analytics data');
-      return;
-    }
-
     setIsSearching(true);
     
     // Clear all existing data immediately to avoid showing stale results
@@ -288,12 +244,9 @@ const ExplorePage = () => {
     
     try {
       await fetchAllData(selectedTimeRange, selectedSubject, sortOption, 10);
-      setLastAnalyticsFilters(currentFilters);
-      setAnalyticsDataCached(true);
       console.log('✅ Analytics data cached');
     } catch (err) {
       console.error('Analytics data fetch failed:', err);
-      setAnalyticsDataCached(false);
     } finally {
       setIsSearching(false);
     }
@@ -722,7 +675,7 @@ const ExplorePage = () => {
                 <Card className={styles.chartCard}>
                   <Card.Header>
                     <h3 className={styles.chartTitle}>Citation Heatmap</h3>
-                    <p className={styles.chartSubtitle}>Citation Patterns by Year</p>
+                    <p className={styles.chartSubtitle}>Research Activity Patterns</p>
                   </Card.Header>
                   <Card.Content>
                     <CitationHeatmap data={heatmapData} loading={heatmapLoading} />
@@ -737,13 +690,15 @@ const ExplorePage = () => {
 
                 <Card className={styles.chartCard}>
                   <Card.Header>
-                    <DynamicSectionTitle sortOption={sortOption} />
+                    <h3 className={styles.chartTitle}>Top Papers</h3>
+                    <p className={styles.chartSubtitle}>Most Cited Research</p>
                   </Card.Header>
                   <Card.Content>
                     <PapersList 
                       papers={topPapersData} 
                       loading={papersLoading}
                       onPaperClick={handlePaperClick}
+                      variant="compact"
                     />
                     {papersError && (
                       <div className={styles.error}>
@@ -758,186 +713,7 @@ const ExplorePage = () => {
           </div>
         )}
 
-        {/* Subject Analysis Tab */}
-        {activeTab === 'subjects' && (
-          <div className="container">
-            <div className={layoutStyles.contentSection}>
-              <Header 
-                title="Subject Analysis"
-                subtitle="Explore subject evolution, citation ranking by subject, and version distributions. Compare up to two subjects."
-                variant="section"
-                size="medium"
-              />
-
-              <FilterControls
-                selectedTimeRange={selectedTimeRange}
-                selectedSubject={selectedSubject}
-                selectedCountry={null}
-                sortOption={'citations_desc'}
-                onTimeRangeChange={setSelectedTimeRange}
-                onSubjectChange={setSelectedSubject}
-                onCountryChange={() => {}}
-                onSortChange={() => {}}
-                onSearchClick={handleSubjectSearchClickLocal}
-                onExportData={() => {
-                  const exportData = {
-                    filters: { timeRange: selectedTimeRange, subjects: [selectedSubject, selectedSubject2].filter(Boolean) },
-                    subjectAnalysis
-                  };
-                  const dataStr = JSON.stringify(exportData, null, 2);
-                  const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-                  const exportFileDefaultName = `subject-analysis-${new Date().toISOString().split('T')[0]}.json`;
-                  const linkElement = document.createElement('a');
-                  linkElement.setAttribute('href', dataUri);
-                  linkElement.setAttribute('download', exportFileDefaultName);
-                  linkElement.click();
-                }}
-                onRefreshData={handleSubjectSearchClickLocal}
-                isSearching={isSearching}
-              />
-
-              {/* Secondary subject selector for comparison */}
-              <div className={styles.searchSection}>
-                <div style={{ maxWidth: 400, margin: '0 auto', textAlign: 'left' }}>
-                  <label style={{ display: 'block', marginBottom: 6, color: '#334155' }}>Compare With (optional)</label>
-                  <Select
-                    options={subjectOptions}
-                    value={selectedSubject2 || ''}
-                    onChange={(value) => setSelectedSubject2(value || null)}
-                    className={styles.filterSelect}
-                    disabled={subjectsLoading}
-                    placeholder={subjectsLoading ? 'Loading subjects...' : 'Select subject'}
-                  />
-                  {subjectsError && (
-                    <div className={styles.error}>Failed to load subjects: {subjectsError}</div>
-                  )}
-                </div>
-              </div>
-
-              <div className={styles.chartsGrid}>
-                {/* Subject Evolution */}
-                <Card className={styles.chartCard}>
-                  <Card.Header>
-                    <h3 className={styles.chartTitle}>Subject Evolution</h3>
-                    <p className={styles.chartSubtitle}>Yearly submission counts per subject</p>
-                  </Card.Header>
-                  <Card.Content>
-                    {subjectLoadingLocal ? (
-                      <div className={styles.loadingState}><div className={styles.loadingSpinner}></div><p>Loading subject evolution...</p></div>
-                    ) : subjectErrorLocal ? (
-                      <div className={styles.error}>Error: {subjectErrorLocal}</div>
-                    ) : !subjectAnalysis.evolutionData || subjectAnalysis.evolutionData.length === 0 ? (
-                      <div className={styles.emptyState}><div className={styles.emptyIcon}>📈</div><p>No evolution data available.</p></div>
-                    ) : (() => {
-                      const records = subjectAnalysis.evolutionData;
-                      const years = Array.from(new Set(records.map(r => r.year))).sort();
-                      const subjectsSet = Array.from(new Set(records.map(r => r.subject)));
-                      const palette = ['#2563eb','#f59e0b','#10b981','#ef4444','#8b5cf6','#06b6d4'];
-                      const datasets = subjectsSet.map((subj, i) => {
-                        const byYear = new Map(records.filter(r => r.subject === subj).map(r => [r.year, r.count]));
-                        return {
-                          label: subj,
-                          data: years.map(y => byYear.get(y) || 0),
-                          borderColor: palette[i % palette.length],
-                          backgroundColor: palette[i % palette.length] + '33',
-                          borderWidth: 2,
-                          fill: true,
-                          tension: 0.3
-                        };
-                      });
-                      const data = { labels: years, datasets };
-                      const options = { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: true } } };
-                      return <div style={{ height: 360 }}><Line data={data} options={options} /></div>;
-                    })()}
-                  </Card.Content>
-                </Card>
-
-                {/* Subject Citation Ranking */}
-                <Card className={styles.chartCard}>
-                  <Card.Header>
-                    <h3 className={styles.chartTitle}>Subject Citation Ranking</h3>
-                    <p className={styles.chartSubtitle}>Total and average citations per subject</p>
-                  </Card.Header>
-                  <Card.Content>
-                    {subjectLoadingLocal ? (
-                      <div className={styles.loadingState}><div className={styles.loadingSpinner}></div><p>Loading subject citation ranking...</p></div>
-                    ) : subjectErrorLocal ? (
-                      <div className={styles.error}>Error: {subjectErrorLocal}</div>
-                    ) : !subjectAnalysis.citationRanking || subjectAnalysis.citationRanking.length === 0 ? (
-                      <div className={styles.emptyState}><div className={styles.emptyIcon}>🏆</div><p>No citation ranking data available.</p></div>
-                    ) : (() => {
-                      const recs = subjectAnalysis.citationRanking;
-                      const labels = recs.map(r => r.subject);
-                      const totals = recs.map(r => r.total_citation);
-                      const data = { labels, datasets: [{ label: 'Total Citations', data: totals, backgroundColor: '#2563eb' }] };
-                      const options = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { afterBody: (items) => {
-                        const idx = items[0].dataIndex; const r = recs[idx]; return `Avg per paper: ${r.avg_citation} (n=${r.paper_count})`;
-                      } } } }, indexAxis: 'y', scales: { x: { beginAtZero: true } } };
-                      return <div style={{ height: 360 }}><Bar data={data} options={options} /></div>;
-                    })()}
-                  </Card.Content>
-                </Card>
-
-                {/* Version Analysis */}
-                <Card className={styles.chartCard}>
-                  <Card.Header>
-                    <h3 className={styles.chartTitle}>Version Analysis</h3>
-                    <p className={styles.chartSubtitle}>Version distribution and summary</p>
-                  </Card.Header>
-                  <Card.Content>
-                    {subjectLoadingLocal ? (
-                      <div className={styles.loadingState}><div className={styles.loadingSpinner}></div><p>Loading version analysis...</p></div>
-                    ) : subjectErrorLocal ? (
-                      <div className={styles.error}>Error: {subjectErrorLocal}</div>
-                    ) : !subjectAnalysis.versionDistribution || subjectAnalysis.versionDistribution.length === 0 ? (
-                      <div className={styles.emptyState}><div className={styles.emptyIcon}>📊</div><p>No version data available.</p></div>
-                    ) : (
-                      <>
-                        <div style={{ marginBottom: '1rem' }}>
-                          <strong>Summary:</strong>
-                          <div>Total Papers: {subjectAnalysis?.versionSummary?.totalPapers || 0}</div>
-                          <div>Multi-version Papers: {subjectAnalysis?.versionSummary?.multiVersionPapers || 0}</div>
-                          <div>% Multi-version: {subjectAnalysis?.versionSummary?.percentMultiVersion || 0}%</div>
-                        </div>
-                        {(() => {
-                          const selected = subjectAnalysis?.metadata?.selectedSubjects || [];
-                          const palette = ['#2563eb','#f59e0b','#10b981','#ef4444'];
-                          if (selected.length > 1 && subjectAnalysis.versionDistributionBySubject && subjectAnalysis.versionDistributionBySubject.length > 0) {
-                            // Grouped bar per subject
-                            const recs = subjectAnalysis.versionDistributionBySubject;
-                            const versions = Array.from(new Set(recs.map(r => r.versions))).sort((a,b)=>a-b);
-                            const subjectsSet = Array.from(new Set(recs.map(r => r.subject)));
-                            const datasets = subjectsSet.map((subj, i) => {
-                              const byVer = new Map(recs.filter(r => r.subject === subj).map(r => [r.versions, r.count]));
-                              return {
-                                label: subj,
-                                data: versions.map(v => byVer.get(v) || 0),
-                                backgroundColor: palette[i % palette.length]
-                              };
-                            });
-                            const data = { labels: versions, datasets };
-                            const options = { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { x: { title: { display: true, text: 'Versions' } }, y: { beginAtZero: true } } };
-                            return <div style={{ height: 360 }}><Bar data={data} options={options} /></div>;
-                          } else {
-                            // Single series histogram
-                            const recs = subjectAnalysis.versionDistribution;
-                            const labels = recs.map(r => r.versions);
-                            const counts = recs.map(r => r.count);
-                            const data = { labels, datasets: [{ label: 'Papers', data: counts, backgroundColor: '#10b981' }] };
-                            const options = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { title: { display: true, text: 'Versions' } }, y: { beginAtZero: true } } };
-                            return <div style={{ height: 360 }}><Bar data={data} options={options} /></div>;
-                          }
-                        })()}
-                      </>
-                    )}
-                  </Card.Content>
-                </Card>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Authors Search Tab */}
+        {/* Authors Tab */}
         {activeTab === 'authors' && (
           <div className="container">
             <div className={layoutStyles.contentSection}>
@@ -945,7 +721,7 @@ const ExplorePage = () => {
                 title="Search Authors"
                 subtitle={
                   <>
-                    Search through our database of authors using the submission contact information.
+                    Find papers by specific authors or research groups.
                     <span className={styles.searchLimit}> Limited to {MAX_RESULTS} results for optimal performance.</span>
                   </>
                 }
@@ -977,36 +753,36 @@ const ExplorePage = () => {
                   </div>
                 )}
               </div>
-
+              
               <div id="author-search-results" className={styles.resultsSection}>
                 {isAuthorLoading && (
                   <div className={styles.loadingState}>
                     <div className={styles.loadingSpinner}></div>
-                    <p className="text-body">Searching through authors...</p>
+                    <p className="text-body">Searching for authors...</p>
                   </div>
                 )}
-
+                
                 {!isAuthorLoading && hasAuthorSearched && authorResults.length === 0 && (
                   <div className={styles.emptyState}>
                     <div className={styles.emptyIcon}>👤</div>
-                    <h3 className="text-heading-4 mb-2">No Results Found</h3>
+                    <h3 className="text-heading-4 mb-2">No Authors Found</h3>
                     <p className="text-body mb-4">
-                      No authors match your search query "{authorQuery}".
+                      No papers found for author "{authorQuery}".
                     </p>
                     <p className="text-body-small text-neutral-600">
                       Try different author names or check your spelling.
                     </p>
                   </div>
                 )}
-
+                
                 {!isAuthorLoading && authorResults.length > 0 && (
                   <>
-                    <PapersList
+                    <PapersList 
                       papers={authorResults}
                       loading={false}
-                      onPaperClick={(paper) => console.log('Author paper clicked:', paper)}
+                      onPaperClick={(paper) => console.log('Paper clicked:', paper)}
                     />
-
+                    
                     {authorTotalPages > 1 && (
                       <Pagination
                         currentPage={authorCurrentPage}
@@ -1022,26 +798,153 @@ const ExplorePage = () => {
                     )}
                   </>
                 )}
-
+                
                 {!hasAuthorSearched && (
                   <div className={styles.welcomeState}>
                     <div className={styles.welcomeIcon}>👥</div>
-                    <h3 className="text-heading-4 mb-2">Search Authors</h3>
+                    <h3 className="text-heading-4 mb-2">Search for Authors</h3>
                     <p className="text-body mb-4">
-                      Enter an author name to find all papers associated with that author in our preprint database.
+                      Enter author names to find their published preprints and research contributions.
                     </p>
                     <div className={styles.searchTips}>
                       <h4 className="text-body-small font-medium mb-2">Search Tips:</h4>
                       <ul className={styles.tipsList}>
-                        <li>Search by full name or surname</li>
-                        <li>Try common variations of names</li>
-                        <li>Use exact matches for better results</li>
-                        <li>Results are based on submission contact information</li>
+                        <li>Use full names or surnames</li>
+                        <li>Try variations of author names</li>
+                        <li>Search for research group leaders</li>
+                        <li>Include middle initials if known</li>
                       </ul>
                     </div>
                   </div>
                 )}
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Subject Analysis Tab */}
+        {activeTab === 'subjects' && (
+          <div className="container">
+            <div className={layoutStyles.contentSection}>
+              <Header 
+                title="Subject Analysis"
+                subtitle="Analyze research trends and patterns across different subject areas."
+                variant="section"
+                size="medium"
+              />
+
+              <div className={styles.subjectControls}>
+                <div className={styles.subjectFilters}>
+                  <Select
+                    value={selectedTimeRange}
+                    onChange={setSelectedTimeRange}
+                    options={[
+                      { value: 'all', label: 'All Time' },
+                      { value: '1y', label: 'Last Year' },
+                      { value: '2y', label: 'Last 2 Years' },
+                      { value: '5y', label: 'Last 5 Years' }
+                    ]}
+                    placeholder="Select time range"
+                    className={styles.filterSelect}
+                  />
+                  
+                  <Select
+                    value={selectedSubject || ''}
+                    onChange={setSelectedSubject}
+                    options={subjectOptions}
+                    placeholder="Select primary subject"
+                    loading={subjectsLoading}
+                    className={styles.filterSelect}
+                  />
+                  
+                  <Select
+                    value={selectedSubject2 || ''}
+                    onChange={setSelectedSubject2}
+                    options={subjectOptions}
+                    placeholder="Compare with subject (optional)"
+                    loading={subjectsLoading}
+                    className={styles.filterSelect}
+                  />
+                </div>
+
+                <Button
+                  variant="primary"
+                  onClick={handleSubjectSearchClickLocal}
+                  disabled={isSearching}
+                  className={styles.analyzeButton}
+                >
+                  {isSearching ? 'Analyzing...' : 'Analyze Subjects'}
+                </Button>
+              </div>
+
+              {subjectErrorLocal && (
+                <div className={styles.error}>
+                  Error: {subjectErrorLocal}
+                </div>
+              )}
+
+              {subjectLoadingLocal && (
+                <div className={styles.loadingState}>
+                  <div className={styles.loadingSpinner}></div>
+                  <p className="text-body">Analyzing subject data...</p>
+                </div>
+              )}
+
+              {!subjectLoadingLocal && subjectAnalysis.evolutionData.length > 0 && (
+                <div className={styles.subjectResults}>
+                  <DynamicSectionTitle 
+                    title="Subject Analysis Results"
+                    subtitle="Research trends and patterns in the selected subject areas"
+                  />
+                  
+                  <div className={styles.chartsGrid}>
+                    <Card className={styles.chartCard}>
+                      <Card.Header>
+                        <h3 className={styles.chartTitle}>Subject Evolution</h3>
+                        <p className={styles.chartSubtitle}>Publication trends over time</p>
+                      </Card.Header>
+                      <Card.Content>
+                        <Line 
+                          data={{
+                            labels: subjectAnalysis.evolutionData.map(d => d.year),
+                            datasets: [{
+                              label: 'Publications',
+                              data: subjectAnalysis.evolutionData.map(d => d.count),
+                              borderColor: 'rgb(59, 130, 246)',
+                              backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                              tension: 0.4
+                            }]
+                          }}
+                          options={{
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                              y: {
+                                beginAtZero: true
+                              }
+                            }
+                          }}
+                        />
+                      </Card.Content>
+                    </Card>
+
+                    <Card className={styles.chartCard}>
+                      <Card.Header>
+                        <h3 className={styles.chartTitle}>Citation Rankings</h3>
+                        <p className={styles.chartSubtitle}>Top cited papers in subject</p>
+                      </Card.Header>
+                      <Card.Content>
+                        <PapersList 
+                          papers={subjectAnalysis.citationRanking}
+                          loading={false}
+                          onPaperClick={handlePaperClick}
+                          variant="compact"
+                        />
+                      </Card.Content>
+                    </Card>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
