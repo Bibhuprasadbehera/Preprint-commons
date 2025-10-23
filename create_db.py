@@ -3,7 +3,7 @@ import sqlite3
 import sys
 import logging
 
-CSV_INPUT = 'combined_db_with_ppc_id.csv'
+CSV_INPUT = 'combined_db_with_updated_country.csv'
 DB_NAME = 'ppc.db'
 TABLE_NAME = 'papers'
 
