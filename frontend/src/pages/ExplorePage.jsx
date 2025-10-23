@@ -14,13 +14,11 @@ import CitationHeatmap from '../components/citationCharts/CitationHeatmap';
 import PapersList from '../components/ui/PapersList/PapersList';
 import DynamicSectionTitle from '../components/ui/DynamicSectionTitle/DynamicSectionTitle';
 import AnalyticsDashboard from '../components/analytics/AnalyticsDashboard/AnalyticsDashboard';
+import SubjectAnalysis from '../components/analytics/SubjectAnalysis/SubjectAnalysis';
 import AdvancedSearch from '../components/ui/AdvancedSearch/AdvancedSearch';
 import { useUnifiedCitationData } from '../hooks/useUnifiedCitationData';
 import ApiService from '../services/api';
-import { API_BASE_URL } from '../utils/api';
 import Chart from 'chart.js/auto';
-import { Line, Bar } from 'react-chartjs-2';
-import Select from '../components/ui/Select/Select';
 import layoutStyles from '../components/layout/Layout/Layout.module.css';
 import styles from './ExplorePage.module.css';
 
@@ -54,24 +52,6 @@ const ExplorePage = () => {
   const [sortOption, setSortOption] = useState('citations_desc');
   const [isSearching, setIsSearching] = useState(false);
   
-  // Subject Analysis compare selector
-  const [selectedSubject2, setSelectedSubject2] = useState(null);
-  const [subjectOptions, setSubjectOptions] = useState([{ value: '', label: 'All Subjects' }]);
-  const [subjectsLoading, setSubjectsLoading] = useState(false);
-  const [subjectsError, setSubjectsError] = useState(null);
-
-  // Local Subject Analysis data (fetched directly for flexibility)
-  const [subjectAnalysis, setSubjectAnalysis] = useState({
-    evolutionData: [],
-    citationRanking: [],
-    versionDistribution: [],
-    versionDistributionBySubject: [],
-    versionSummary: null,
-    metadata: {}
-  });
-  const [subjectLoadingLocal, setSubjectLoadingLocal] = useState(false);
-  const [subjectErrorLocal, setSubjectErrorLocal] = useState(null);
-  
   const RESULTS_PER_PAGE = 20;
   const MAX_RESULTS = 200;
 
@@ -86,22 +66,6 @@ const ExplorePage = () => {
     setActiveTab(tabName);
   };
 
-  useEffect(() => {
-    // Load subjects when opening Subject Analysis tab
-    if (activeTab === 'subjects' && subjectOptions.length <= 1 && !subjectsLoading) {
-      setSubjectsLoading(true);
-      ApiService.getSubjects()
-        .then((res) => {
-          const opts = [
-            { value: '', label: 'All Subjects' },
-            ...((res?.data || []).map((s) => ({ value: s, label: s.split(' ').map(w => w.charAt(0).toUpperCase()+w.slice(1)).join(' ') })))
-          ];
-          setSubjectOptions(opts);
-        })
-        .catch((e) => setSubjectsError(String(e)))
-        .finally(() => setSubjectsLoading(false));
-    }
-  }, [activeTab]);
 
   // Handle URL parameters for chart navigation
   useEffect(() => {
@@ -154,32 +118,6 @@ const ExplorePage = () => {
     }
   }, [searchParams]);
 
-  const handleSubjectSearchClickLocal = async () => {
-    setIsSearching(true);
-    setSubjectErrorLocal(null);
-    setSubjectLoadingLocal(true);
-    try {
-      const params = new URLSearchParams();
-      if (selectedTimeRange) params.append('time_range', selectedTimeRange);
-      const subjectsList = [selectedSubject, selectedSubject2].filter(Boolean);
-      if (subjectsList.length > 0) {
-        params.append('subjects', subjectsList.join(','));
-      } else if (selectedSubject) {
-        params.append('subject', selectedSubject);
-      }
-      params.append('top', '10');
-      const res = await fetch(`${API_BASE_URL}/api/subjects/analysis?${params.toString()}`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const json = await res.json();
-      setSubjectAnalysis(json);
-    } catch (e) {
-      setSubjectErrorLocal(String(e));
-      setSubjectAnalysis({ evolutionData: [], citationRanking: [], versionDistribution: [], versionDistributionBySubject: [], versionSummary: null, metadata: {} });
-    } finally {
-      setSubjectLoadingLocal(false);
-      setIsSearching(false);
-    }
-  };
 
   const handleSearch = async (page = 1, attemptNumber = 1) => {
     if (!searchQuery.trim()) return;
@@ -851,129 +789,7 @@ const ExplorePage = () => {
 
         {/* Subject Analysis Tab */}
         {activeTab === 'subjects' && (
-          <div className="container">
-            <div className={layoutStyles.contentSection}>
-              <Header 
-                title="Subject Analysis"
-                subtitle="Analyze research trends and patterns across different subject areas."
-                variant="section"
-                size="medium"
-              />
-
-              <div className={styles.subjectControls}>
-                <div className={styles.subjectFilters}>
-                  <Select
-                    value={selectedTimeRange}
-                    onChange={setSelectedTimeRange}
-                    options={[
-                      { value: 'all', label: 'All Time' },
-                      { value: '1y', label: 'Last Year' },
-                      { value: '2y', label: 'Last 2 Years' },
-                      { value: '5y', label: 'Last 5 Years' }
-                    ]}
-                    placeholder="Select time range"
-                    className={styles.filterSelect}
-                  />
-                  
-                  <Select
-                    value={selectedSubject || ''}
-                    onChange={setSelectedSubject}
-                    options={subjectOptions}
-                    placeholder="Select primary subject"
-                    loading={subjectsLoading}
-                    className={styles.filterSelect}
-                  />
-                  
-                  <Select
-                    value={selectedSubject2 || ''}
-                    onChange={setSelectedSubject2}
-                    options={subjectOptions}
-                    placeholder="Compare with subject (optional)"
-                    loading={subjectsLoading}
-                    className={styles.filterSelect}
-                  />
-                </div>
-
-                <Button
-                  variant="primary"
-                  onClick={handleSubjectSearchClickLocal}
-                  disabled={isSearching}
-                  className={styles.analyzeButton}
-                >
-                  {isSearching ? 'Analyzing...' : 'Analyze Subjects'}
-                </Button>
-              </div>
-
-              {subjectErrorLocal && (
-                <div className={styles.error}>
-                  Error: {subjectErrorLocal}
-                </div>
-              )}
-
-              {subjectLoadingLocal && (
-                <div className={styles.loadingState}>
-                  <div className={styles.loadingSpinner}></div>
-                  <p className="text-body">Analyzing subject data...</p>
-                </div>
-              )}
-
-              {!subjectLoadingLocal && subjectAnalysis.evolutionData.length > 0 && (
-                <div className={styles.subjectResults}>
-                  <DynamicSectionTitle 
-                    title="Subject Analysis Results"
-                    subtitle="Research trends and patterns in the selected subject areas"
-                  />
-                  
-                  <div className={styles.chartsGrid}>
-                    <Card className={styles.chartCard}>
-                      <Card.Header>
-                        <h3 className={styles.chartTitle}>Subject Evolution</h3>
-                        <p className={styles.chartSubtitle}>Publication trends over time</p>
-                      </Card.Header>
-                      <Card.Content>
-                        <Line 
-                          data={{
-                            labels: subjectAnalysis.evolutionData.map(d => d.year),
-                            datasets: [{
-                              label: 'Publications',
-                              data: subjectAnalysis.evolutionData.map(d => d.count),
-                              borderColor: 'rgb(59, 130, 246)',
-                              backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                              tension: 0.4
-                            }]
-                          }}
-                          options={{
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            scales: {
-                              y: {
-                                beginAtZero: true
-                              }
-                            }
-                          }}
-                        />
-                      </Card.Content>
-                    </Card>
-
-                    <Card className={styles.chartCard}>
-                      <Card.Header>
-                        <h3 className={styles.chartTitle}>Citation Rankings</h3>
-                        <p className={styles.chartSubtitle}>Top cited papers in subject</p>
-                      </Card.Header>
-                      <Card.Content>
-                        <PapersList 
-                          papers={subjectAnalysis.citationRanking}
-                          loading={false}
-                          onPaperClick={handlePaperClick}
-                          variant="compact"
-                        />
-                      </Card.Content>
-                    </Card>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
+          <SubjectAnalysis />
         )}
       </div>
     </Layout>
