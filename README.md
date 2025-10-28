@@ -320,7 +320,6 @@ If you encounter any issues or have questions:
 
 - [ ] Author network
 - [ ] Integration with more preprint repositories
-- [ ] Real-time data updates
 - [ ] Authentication and user management
 - [ ] Advanced analytics and machine learning insights
 

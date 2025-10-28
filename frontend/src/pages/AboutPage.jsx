@@ -384,45 +384,6 @@ const AboutPage = () => {
             gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', 
             gap: 'var(--spacing-xl)'
           }}>
-            <div className="card" style={{
-              background: 'var(--color-bg-primary)',
-              borderRadius: 'var(--radius-xl)',
-              padding: 'var(--spacing-2xl)',
-              border: '1px solid var(--color-neutral-200)',
-              boxShadow: 'var(--shadow-md)'
-            }}>
-              <div style={{
-                width: '60px',
-                height: '60px',
-                background: 'linear-gradient(135deg, var(--color-success), #10b981)',
-                borderRadius: 'var(--radius-full)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: 'var(--spacing-lg)',
-                fontSize: 'var(--font-size-2xl)'
-              }}>
-                ✓
-              </div>
-              <h3 className="text-heading-3" style={{ marginBottom: 'var(--spacing-md)' }}>Quality Metrics</h3>
-              <div style={{ marginBottom: 'var(--spacing-lg)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--spacing-sm)' }}>
-                  <span>Data Accuracy</span>
-                  <span style={{ fontWeight: 'var(--font-weight-semibold)' }}>85-90%</span>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--spacing-sm)' }}>
-                  <span>Metadata Completeness</span>
-                  <span style={{ fontWeight: 'var(--font-weight-semibold)' }}>~90%</span>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between)' }}>
-                  <span>Geographic Coverage</span>
-                  <span style={{ fontWeight: 'var(--font-weight-semibold)' }}>150+ Countries</span>
-                </div>
-              </div>
-              <p className="text-body-small" style={{ color: 'var(--color-text-secondary)' }}>
-                Random sampling validation reveals 10-15% error rate, primarily due to LLM processing constraints.
-              </p>
-            </div>
 
             <div className="card" style={{
               background: 'var(--color-bg-primary)',
@@ -457,7 +418,7 @@ const AboutPage = () => {
                 </li>
                 <li style={{ marginBottom: 'var(--spacing-sm)', display: 'flex', alignItems: 'flex-start' }}>
                   <span style={{ color: 'var(--color-warning)', marginRight: 'var(--spacing-sm)' }}>•</span>
-                  <span>Potential hallucination in missing affiliations</span>
+                  <span>Potential hallucination and missing affiliations</span>
                 </li>
                 <li style={{ display: 'flex', alignItems: 'flex-start' }}>
                   <span style={{ color: 'var(--color-warning)', marginRight: 'var(--spacing-sm)' }}>•</span>

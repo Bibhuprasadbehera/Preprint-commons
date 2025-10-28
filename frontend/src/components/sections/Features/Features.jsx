@@ -29,17 +29,17 @@ const Features = () => {
     {
       icon: '🔍',
       title: 'Advanced Search',
-      description: 'Find specific papers, authors, or institutions quickly'
+      description: 'Find specific preprints, authors, or institutions quickly'
     },
     {
       icon: '📈',
       title: 'Trend Analysis',
-      description: 'Identify emerging research areas and hot topics'
+      description: 'Visualize trend, research areas and hot topics'
     },
     {
       icon: '🤖',
       title: 'AI-Enhanced Metadata',
-      description: 'Automated extraction of affiliations and funding information'
+      description: 'Automated extraction of affiliations and country information'
     },
     {
       icon: '📑',
@@ -54,7 +54,7 @@ const Features = () => {
     {
       icon: '🔒',
       title: 'Open Data',
-      description: 'All code is freely available under CC-BY license'
+      description: 'All code is freely available under CC-BY-NC-ND license'
     }
   ];
 

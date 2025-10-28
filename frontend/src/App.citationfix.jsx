@@ -89,7 +89,7 @@ const App = () => {
       {/* Citation Heatmap Demo */}
       <section style={{ marginBottom: '40px' }}>
         <h2>Citation Heatmap - Click Navigation Fix</h2>
-        <p>The heatmap now supports clicking on cells to search papers from that month:</p>
+        <p>The heatmap now supports clicking on cells to search preprint from that month:</p>
         
         <div style={{ 
           border: '1px solid #E5E7EB', 
@@ -98,7 +98,7 @@ const App = () => {
           backgroundColor: 'white'
         }}>
           <h3>Citation Heatmap</h3>
-          <p>Click on cells with data to search papers from that specific month.</p>
+          <p>Click on cells with data to search preprints from that specific month.</p>
           <CitationHeatmap data={mockHeatmapData} loading={false} />
         </div>
 
@@ -142,7 +142,7 @@ const App = () => {
             <li>✅ Toggle button now uses left/right visual switch instead of text</li>
             <li>✅ Year slider works with both modes</li>
             <li>✅ Tooltip shows country name and preprint count on hover</li>
-            <li>✅ Click on countries to search papers from that country</li>
+            <li>✅ Click on countries to search preprints from that country</li>
             <li>✅ Added country parameter handling in ExplorePage</li>
           </ul>
         </div>
@@ -152,11 +152,11 @@ const App = () => {
         <h3>How to Test:</h3>
         <ol>
           <li><strong>Citation Chart:</strong> Switch between Subject 1 and Subject 2 buttons to see automatic axis adjustment</li>
-          <li><strong>Citation Heatmap:</strong> Click on colored cells to search papers from that specific month</li>
+          <li><strong>Citation Heatmap:</strong> Click on colored cells to search preprints from that specific month</li>
           <li><strong>World Map:</strong> Hover over countries to see names and data (no visible labels)</li>
           <li><strong>Map Toggle:</strong> Use the left/right toggle switch to switch between "Year-wise" and "Cumulative" modes</li>
           <li><strong>Map Slider:</strong> Use the year slider to filter data by specific years</li>
-          <li><strong>Map Click:</strong> Click on countries with data to search papers from that country (opens console for debugging)</li>
+          <li><strong>Map Click:</strong> Click on countries with data to search preprints from that country (opens console for debugging)</li>
         </ol>
       </div>
     </div>

@@ -11,9 +11,7 @@ const Footer = () => {
           <div className={styles.section}>
             <div className={styles.brand}>
               <div className={styles.logo}>Preprint Commons</div>
-              <p className={styles.tagline}>
-                Tracking the global impact of preprints in open science. 
-                Explore trends, collaborations, and citations across major preprint servers.
+              <p className={styles.tagline}>Explore trends, landscape, and citations across arXiv, bioRxiv & medRxiv preprint servers through comprehensive data visualization.
               </p>
             </div>
             <div className={styles.socialLinks}>
@@ -81,16 +79,16 @@ const Footer = () => {
           <div className={styles.section}>
             <h3>Legal</h3>
             <div className={styles.links}>
-              <a href="#" className={styles.link}>CC-BY License</a>
+              <a href="https://github.com/Bibhuprasadbehera/Preprint-commons?tab=License-2-ov-file" className={styles.link}>CC-BY-NC-ND License</a>
             </div>
           </div>
         </div>
 
         <div className={styles.bottom}>
-          <div className={styles.copyright}>
-            © 2025 Preprint Commons. All rights reserved. Licensed under CC-BY.
-          </div>
-          <div className={styles.bottomLinks}>
+            <div className={styles.copyright}>
+                <a href='https://www.binaypandalab.org/' style={{ color: 'inherit', textDecoration: 'none' }}>© 2025 Preprint Commons. All rights reserved. Genome Science and Technology Lab, JNU - New Delhi, India</a>
+            </div>
+            <div className={styles.bottomLinks}>
           </div>
         </div>
       </div>

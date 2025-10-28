@@ -19,7 +19,7 @@ const HomePage = () => {
             <div className={styles.sectionHeader}>
               <h2 className={styles.sectionTitle}>Preprint Landscape Overview</h2>
               <p className={styles.sectionSubtitle}>
-                Explore the global distribution of preprints and discover preprint landscape worldwide
+                Explore global distribution of preprints and preprint landscape
               </p>
             </div>
             
@@ -47,8 +47,8 @@ const HomePage = () => {
                 <div className={styles.stepNumber}>01</div>
                 <h3 className={styles.stepTitle}>Data Collection</h3>
                 <p className={styles.stepDescription}>
-                  We aggregate preprints from major repositories including medRxiv, bioRxiv, 
-                  and q-bio sections of arXiv, ensuring comprehensive coverage.
+                  We aggregate preprints from medRxiv, bioRxiv, 
+                  and q-bio section of arXiv ensuring comprehensive coverage.
                 </p>
               </div>
               
@@ -56,8 +56,8 @@ const HomePage = () => {
                 <div className={styles.stepNumber}>02</div>
                 <h3 className={styles.stepTitle}>AI-Powered Enrichment</h3>
                 <p className={styles.stepDescription}>
-                  Advanced Large Language models is used to fill missing metadata such as author affiliations, 
-                   and country.
+                   Large Language Model was used to fill missing metadata such as author affiliations, 
+                   and country information.
                 </p>
               </div>
               
@@ -66,7 +66,7 @@ const HomePage = () => {
                 <h3 className={styles.stepTitle}>Interactive Visualization</h3>
                 <p className={styles.stepDescription}>
                   Explore insights through dynamic dashboards, interactive maps, 
-                  and comprehensive visualization designed for researchers.
+                  and comprehensive visualization.
                 </p>
               </div>
             </div>

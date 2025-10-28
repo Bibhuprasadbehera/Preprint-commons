@@ -97,7 +97,7 @@ const AnalyticsDashboard = () => {
       {/* Key Statistics Cards */}
       <div className={styles.statisticsGrid}>
         <StatisticsCard
-          title="Total Papers"
+          title="Total Preprints"
           value={statisticsData?.totalPapers || 0}
           subtitle="All time submissions"
           variant="primary"
@@ -115,7 +115,7 @@ const AnalyticsDashboard = () => {
           variant="success"
         />
         <StatisticsCard
-          title="Avg Papers/Month"
+          title="Avg Preprints/Month"
           value={statisticsData?.averagePapersPerMonth || 0}
           subtitle="Monthly average"
           variant="warning"

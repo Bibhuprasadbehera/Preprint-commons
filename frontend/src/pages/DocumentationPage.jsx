@@ -578,12 +578,6 @@ const DocumentationPage = () => {
                         10% overlap between chunks<br />
                         Structured JSON output format
                       </div>
-                      <div>
-                        <strong>Quality Metrics:</strong><br />
-                        85-90% accuracy rate<br />
-                        10-15% error rate (known)<br />
-                        Random sampling validation
-                      </div>
                     </div>
                   </div>
                 </Card.Content>

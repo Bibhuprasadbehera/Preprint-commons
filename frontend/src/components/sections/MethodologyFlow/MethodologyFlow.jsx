@@ -53,7 +53,7 @@ const MethodologyFlow = () => {
       title: 'Visualization',
       description: 'Interactive dashboards and analytics tools',
       details: [
-        'Real-time chart generation',
+        'Dynamic chart',
         'Geographic mapping',
         'Trend analysis and forecasting'
       ],

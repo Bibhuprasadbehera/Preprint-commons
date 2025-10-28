@@ -36,7 +36,7 @@ const MapContainer = ({
 
       {/* Data Availability Note */}
       <div className={styles.dataNote}>
-        <p><strong>Note:</strong> Country-level data is only available for some papers. Some Papers are not included in this visualization due to missing geographic information.</p>
+        <p><strong>Note:</strong> Country-level data is only available for some preprints. </p>
       </div>
       
       {showStats && (
