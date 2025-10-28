@@ -9,7 +9,7 @@ const MethodologyFlow = () => {
       title: 'Data Collection',
       description: 'Scraping and API integration with preprint repositories',
       details: [
-        'Daily synchronization with medRxiv, bioRxiv, and arXiv',
+        'Synchronization with medRxiv, bioRxiv, and arXiv',
         'Metadata extraction and standardization',
         'Duplicate detection and removal'
       ],

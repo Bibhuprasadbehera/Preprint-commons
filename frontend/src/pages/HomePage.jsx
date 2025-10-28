@@ -19,7 +19,7 @@ const HomePage = () => {
             <div className={styles.sectionHeader}>
               <h2 className={styles.sectionTitle}>Preprint Landscape Overview</h2>
               <p className={styles.sectionSubtitle}>
-                Explore the global distribution of preprints and discover research hotspots worldwide
+                Explore the global distribution of preprints and discover preprint landscape worldwide
               </p>
             </div>
             
@@ -27,9 +27,6 @@ const HomePage = () => {
               title="Global Preprint Distribution Map"
               showStats={true}
               statsData={[
-                { number: "300,000+", label: "Preprints Indexed" },
-                { number: "50+", label: "Countries Contributing" },
-                { number: "1,000+", label: "Institutions Tracked" }
               ]}
             />
           </div>
@@ -59,8 +56,8 @@ const HomePage = () => {
                 <div className={styles.stepNumber}>02</div>
                 <h3 className={styles.stepTitle}>AI-Powered Enrichment</h3>
                 <p className={styles.stepDescription}>
-                  Advanced language models extract missing metadata such as author affiliations, 
-                  funding information, and research classifications.
+                  Advanced Large Language models is used to fill missing metadata such as author affiliations, 
+                   and country.
                 </p>
               </div>
               
@@ -69,7 +66,7 @@ const HomePage = () => {
                 <h3 className={styles.stepTitle}>Interactive Visualization</h3>
                 <p className={styles.stepDescription}>
                   Explore insights through dynamic dashboards, interactive maps, 
-                  and comprehensive analytics tools designed for researchers.
+                  and comprehensive visualization designed for researchers.
                 </p>
               </div>
             </div>

@@ -17,7 +17,7 @@ const FaqPage = () => {
     },
     {
       question: "Which preprint repositories are included in your database?",
-      answer: "Our database includes 344,843 preprints from three major repositories: bioRxiv (239,847 entries), medRxiv (55,695 entries), and arXiv q-bio section (49,301 entries). We focused on these sources due to their consistent, high-quality metadata available via robust APIs and thematic focus on life sciences.",
+      answer: "Our database includes 344,843 preprints from three repositories: bioRxiv (239,847 entries), medRxiv (55,695 entries), and arXiv q-bio section (49,301 entries). We focused on these sources due to their consistent, high-quality metadata available via robust APIs and thematic focus on life sciences.",
       category: "Data Sources"
     },
     {

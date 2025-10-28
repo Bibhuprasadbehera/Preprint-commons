@@ -38,7 +38,7 @@ const AboutPage = () => {
               lineHeight: 'var(--line-height-relaxed)',
               fontSize: 'var(--font-size-xl)'
             }}>
-              The first dedicated database and analytical platform for large-scale preprint meta-analysis, 
+              A dedicated database and visualization platform for large-scale preprint meta-analysis, 
               featuring over 344,000 curated preprints with AI-enhanced metadata extraction.
             </p>
             <div style={{
@@ -57,7 +57,7 @@ const AboutPage = () => {
                 <div style={{ fontSize: 'var(--font-size-lg)', opacity: 0.9 }}>Current Repositories</div>
               </div>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 'var(--font-size-4xl)', fontWeight: 'var(--font-weight-bold)' }}>50+</div>
+                <div style={{ fontSize: 'var(--font-size-4xl)', fontWeight: 'var(--font-weight-bold)' }}>150+</div>
                 <div style={{ fontSize: 'var(--font-size-lg)', opacity: 0.9 }}>Countries Covered</div>
               </div>
             </div>
@@ -416,7 +416,7 @@ const AboutPage = () => {
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between)' }}>
                   <span>Geographic Coverage</span>
-                  <span style={{ fontWeight: 'var(--font-weight-semibold)' }}>50+ Countries</span>
+                  <span style={{ fontWeight: 'var(--font-weight-semibold)' }}>150+ Countries</span>
                 </div>
               </div>
               <p className="text-body-small" style={{ color: 'var(--color-text-secondary)' }}>

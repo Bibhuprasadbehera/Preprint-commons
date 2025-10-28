@@ -74,7 +74,7 @@ const PaperMetadata = ({ paper }) => {
     <div className={styles.metadataContainer} ref={metadataRef}>
       <Card className={styles.metadataCard}>
         <Card.Header>
-          <h3 className={styles.sectionTitle}>Paper Details</h3>
+          <h3 className={styles.sectionTitle}>Preprint Details</h3>
         </Card.Header>
         <Card.Content>
           <div className={styles.metadataGrid}>

@@ -16,11 +16,11 @@ const Hero = () => {
       <div className={styles.container}>
         <div className={styles.content}>
           <h1 className={styles.title}>
-            Tracking the Global Impact of Preprints in Open Science
+            Preprint Commons -<br /> Tracking Global Impact of Preprints 
           </h1>
           <p className={styles.subtitle}>
-            Explore trends, collaborations, and citations across arXiv, bioRxiv, medRxiv, and more. 
-            Discover the future of scientific publishing through comprehensive data visualization.
+            Explore trends, landscape, and citations across arXiv, bioRxiv & medRxiv preprint servers 
+             through comprehensive data visualization.
           </p>
           
           <div className={styles.actions}>
@@ -42,16 +42,16 @@ const Hero = () => {
               <span className={styles.statLabel}>Preprints Indexed</span>
             </div>
             <div className={styles.stat}>
-              <span className={styles.statNumber}>150+</span>
-              <span className={styles.statLabel}>Countries Contributing</span>
+              <span className={styles.statNumber}>150,000+</span>
+              <span className={styles.statLabel}>Corresponding Authors</span>
             </div>
             <div className={styles.stat}>
               <span className={styles.statNumber}>10,000+</span>
               <span className={styles.statLabel}>Institutions Tracked</span>
             </div>
             <div className={styles.stat}>
-              <span className={styles.statNumber}>Daily</span>
-              <span className={styles.statLabel}>Data Updates</span>
+              <span className={styles.statNumber}>150+</span>
+              <span className={styles.statLabel}>Countries Contributing</span>
             </div>
           </div>
         </div>

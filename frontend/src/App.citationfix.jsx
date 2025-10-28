@@ -130,9 +130,6 @@ const App = () => {
             title="Global Preprint Distribution Map - Fixed"
             showStats={true}
             statsData={[
-              { number: "300,000+", label: "Preprints Indexed" },
-              { number: "50+", label: "Countries Contributing" },
-              { number: "1,000+", label: "Institutions Tracked" }
             ]}
           />
         </div>

@@ -415,9 +415,6 @@ const ExplorePage = () => {
               title="Global Preprint Distribution Map"
               showStats={true}
               statsData={[
-                { number: "300,000+", label: "Preprints Indexed" },
-                { number: "50+", label: "Countries Contributing" },
-                { number: "1,000+", label: "Institutions Tracked" }
               ]}
               className={styles.exploreMapContainer}
             />

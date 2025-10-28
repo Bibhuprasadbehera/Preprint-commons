@@ -372,10 +372,10 @@ const DocumentationPage = () => {
                       </div>
                       <div className={styles.metric}>
                         <span className={styles.metricNumber}>3</span>
-                        <span className={styles.metricLabel}>Major Repositories</span>
+                        <span className={styles.metricLabel}>Repositories</span>
                       </div>
                       <div className={styles.metric}>
-                        <span className={styles.metricNumber}>50+</span>
+                        <span className={styles.metricNumber}>150+</span>
                         <span className={styles.metricLabel}>Countries</span>
                       </div>
                     </div>
@@ -648,15 +648,15 @@ const DocumentationPage = () => {
                     <div className={styles.qualityMetrics}>
                       <div className={styles.qualityMetric}>
                         <span className={styles.qualityNumber}>85-90%</span>
-                        <span className={styles.qualityLabel}>Overall data accuracy</span>
+                        <span className={styles.qualityLabel}>Overall LLM data extraction accuracy (only country and institution)</span>
                       </div>
                       <div className={styles.qualityMetric}>
                         <span className={styles.qualityNumber}>10-15%</span>
-                        <span className={styles.qualityLabel}>Error rate (transparent reporting)</span>
+                        <span className={styles.qualityLabel}>Error rate in LLM data (only country and institution)</span>
                       </div>
                       <div className={styles.qualityMetric}>
                         <span className={styles.qualityNumber}>344,843</span>
-                        <span className={styles.qualityLabel}>Total validated records</span>
+                        <span className={styles.qualityLabel}>Total records</span>
                       </div>
                     </div>
                     <p className="text-body-small" style={{ marginTop: 'var(--spacing-md)', color: 'var(--color-text-secondary)' }}>

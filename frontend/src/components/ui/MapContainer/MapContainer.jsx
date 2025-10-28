@@ -7,9 +7,6 @@ const MapContainer = ({
   className = '',
   showStats = true,
   statsData = [
-    { number: "300,000+", label: "Preprints Indexed" },
-    { number: "50+", label: "Countries Contributing" },
-    { number: "1,000+", label: "Institutions Tracked" }
   ]
 }) => {
   const navigate = useNavigate();

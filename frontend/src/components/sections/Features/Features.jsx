@@ -6,12 +6,12 @@ const Features = () => {
     {
       icon: '🌍',
       title: 'Global Trends',
-      description: 'Analyze preprint growth by country, institution, and field. Track the evolution of scientific publishing across different regions and disciplines.'
+      description: 'Analyze preprint growth by country, institution, and field. Track the evolution of preprints across different regions and disciplines.'
     },
     {
       icon: '📊',
       title: 'Interactive Visualizations',
-      description: 'Explore dynamic charts, maps, and collaboration networks. Dive deep into data with intuitive and responsive visualization tools.'
+      description: 'Explore dynamic charts and maps. Dive deep into data with intuitive and responsive visualization tools.'
     },
     {
       icon: '🔬',
@@ -22,9 +22,9 @@ const Features = () => {
 
   const additionalFeatures = [
     {
-      icon: '⚡',
-      title: 'Real-time Updates',
-      description: 'Get the latest preprint data as it becomes available'
+      icon: '📍',
+      title: 'Geographic Insights',
+      description: 'Discover research hotspots and regional trends'
     },
     {
       icon: '🔍',
@@ -37,9 +37,14 @@ const Features = () => {
       description: 'Identify emerging research areas and hot topics'
     },
     {
-      icon: '🤝',
-      title: 'Collaboration Networks',
-      description: 'Visualize research collaboration patterns'
+      icon: '🤖',
+      title: 'AI-Enhanced Metadata',
+      description: 'Automated extraction of affiliations and funding information'
+    },
+    {
+      icon: '📑',
+      title: 'Citation Tracking',
+      description: 'Monitor citation patterns'
     },
     {
       icon: '📱',
@@ -49,7 +54,7 @@ const Features = () => {
     {
       icon: '🔒',
       title: 'Open Data',
-      description: 'All data is freely available under CC-BY license'
+      description: 'All code is freely available under CC-BY license'
     }
   ];
 
@@ -57,10 +62,10 @@ const Features = () => {
     <section className={styles.features}>
       <div className={styles.container}>
         <div className={styles.header}>
-          <h2 className={styles.title}>Powerful Features for Research Insights</h2>
+          <h2 className={styles.title}>Powerful Features with Deeper Insights</h2>
           <p className={styles.subtitle}>
-            Discover comprehensive tools and visualizations designed to help researchers, 
-            institutions, and policymakers understand the preprint landscape.
+            Comprehensive visualizations designed to help researchers and 
+            institutions to understand the preprint landscape.
           </p>
         </div>
 
