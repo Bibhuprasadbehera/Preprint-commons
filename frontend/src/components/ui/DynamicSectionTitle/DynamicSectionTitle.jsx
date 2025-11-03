@@ -15,7 +15,7 @@ const DynamicSectionTitle = ({ sortOption, subtitle = "Based on current filters"
       case 'title_asc':
         return 'Papers (A-Z)';
       default:
-        return 'Research Papers';
+        return 'Research Preprints';
     }
   };
 

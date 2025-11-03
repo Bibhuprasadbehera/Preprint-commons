@@ -274,7 +274,7 @@ const PaperDetailsPage = () => {
                   rel="noopener noreferrer"
                 >
                   <Button variant="primary" size="large">
-                    View Original Paper
+                    View Original Preprint
                   </Button>
                 </a>
               )}

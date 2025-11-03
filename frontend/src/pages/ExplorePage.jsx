@@ -369,7 +369,7 @@ const ExplorePage = () => {
             onClick={() => openTab('search')}
             className={styles.tabButton}
           >
-            Search Papers
+            Search Preprints
           </Button>
           <Button
             variant={activeTab === 'analytics' ? 'primary' : 'outline'}
@@ -465,7 +465,7 @@ const ExplorePage = () => {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onSearch={() => handleSearch(1)}
-                    placeholder="Search by title, DOI, author, or keywords..."
+                    placeholder="Search by title, DOI or keyword"
                     isLoading={isLoading}
                     className={styles.searchBar}
                   />
@@ -681,7 +681,7 @@ const ExplorePage = () => {
                 title="Search Authors"
                 subtitle={
                   <>
-                    Find papers by specific authors or research groups.
+                    Find Preprints by specific authors or research consortia.
                     <span className={styles.searchLimit}> Limited to {MAX_RESULTS} results for optimal performance.</span>
                   </>
                 }

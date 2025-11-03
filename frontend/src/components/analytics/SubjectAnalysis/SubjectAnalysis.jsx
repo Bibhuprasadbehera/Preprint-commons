@@ -229,7 +229,7 @@ const SubjectAnalysis = () => {
           <div className={styles.results}>
             <DynamicSectionTitle 
               title="Subject Analysis Results"
-              subtitle="Research trends and patterns in the selected subject areas"
+              subtitle="Research trend and patterns in the selected subject areas"
             />
             
             <div className={styles.chartsGrid}>

@@ -12,62 +12,57 @@ const FaqPage = () => {
   const faqs = [
     {
       question: "What is Preprint Commons and what makes it unique?",
-      answer: "Preprint Commons is the first dedicated database and analytical platform for large-scale preprint meta-analysis, featuring over 344,000 curated preprints. Built on rigorous academic research by Bibhu Prasad Behera and Binay Panda with institutional support from JNU and C-DAC, it addresses the critical gap in preprint ecosystem analysis through AI-enhanced metadata extraction and comprehensive visualization tools.",
+      answer: "Preprint Commons is the first dedicated database and analytical platform for large-scale preprint meta-analysis, featuring over 344,000 curated preprints. Built on rigorous academic research, it addresses the critical gap in preprint ecosystem through analysis, AI-enhanced metadata extraction and comprehensive visualization tools.",
       category: "General"
     },
     {
-      question: "Which preprint repositories are included in your database?",
-      answer: "Our database includes 344,843 preprints from three repositories: bioRxiv (239,847 entries), medRxiv (55,695 entries), and arXiv q-bio section (49,301 entries). We focused on these sources due to their consistent, high-quality metadata available via robust APIs and thematic focus on life sciences.",
-      category: "Data Sources"
+      question: "Which preprint repositories are included in the database?",
+      answer: "Preprint Commons includes 344,843 preprints from three repositories: bioRxiv (239,847 entries), medRxiv (55,695 entries), and arXiv q-bio section (49,301 entries). We focused on these sources due to their consistent, high-quality metadata availablibility via robust APIs and thematic focus on life sciences.",
+      category: "General"
     },
     {
-      question: "How do you use AI to enhance the preprint metadata?",
-      answer: "We employ the NVIDIA/Llama-3.1-Nemotron-70B-Instruct-HF model deployed across 8 A100-SXM4 GPUs to extract missing author affiliations and geographic information. The LLM processes the first two pages of each preprint using structured prompts to return JSON-formatted data including corresponding author details, affiliations, countries, and email addresses.",
+      question: "How does Preprint Commons use AI to enhance meta-analysis?",
+      answer: "The database employs the NVIDIA/Llama-3.1-Nemotron-70B-Instruct-HF model deployed across 8 A100-SXM4 GPUs to extract missing author affiliations and geographic information for arXiv (Q-bio) repository. The LLM processes the first two pages of each preprint using structured prompts to return JSON-formatted data including corresponding author details, affiliations, countries, and email addresses.",
+      category: "Technical"
+    },
+    {
+      question: "Does Preprint Commons use LLM for all the preprints?",
+      answer: "No, LLM processing is specifically applied to arXiv (Q-bio) preprints to extract missing author affiliation and geographic data. For bioRxiv and medRxiv preprints, JATS-XML was used to extract the relevant information.",
       category: "Technical"
     },
     {
       question: "What are the known limitations of your data processing?",
-      answer: "We maintain transparency about our limitations: LLM processing is restricted to the first two pages due to computational constraints, which can result in 10-15% error rates when affiliations are located beyond this range. The model may also hallucinate plausible but incorrect information when relevant context is missing. We're working on securing resources for full-text processing in future iterations.",
+      answer: "LLM processing is restricted to the first two pages due to computational constraints. The model may hallucinate resulting in incorrect information on Author affiliation and geographic information for some preprints. Missing fields and undocumented errors may result in incomplete or partially complete data in some cases.",
       category: "Quality Control"
     },
     {
-      question: "How accurate is your data and how do you validate it?",
-      answer: "Random sampling validation reveals 85-90% overall accuracy with a 10-15% error rate. We conduct comprehensive quality control through random sampling approaches due to the computational infeasibility of manual validation for all 344,000+ records. Primary error sources include LLM processing constraints and input truncation limitations.",
+      question: "How accurate is the underlying data?",
+      answer: "As manual validation for 344,843 preprints was not possible, we performed random sampling that yielded 85-90% overall accuracy. ",
       category: "Quality Control"
     },
     {
       question: "What technical infrastructure powers Preprint Commons?",
-      answer: "Our platform uses a modern full-stack architecture: FastAPI backend with PostgreSQL database, React 19 frontend with Chart.js and D3.js visualizations, and high-performance computing infrastructure including 8 A100-SXM4 GPUs for AI processing. We provide 20+ RESTful API endpoints with automatic OpenAPI documentation generation.",
+      answer: "Preprint Commons platform uses a modern full-stack architecture: FastAPI backend with PostgreSQL database, React 19 frontend with Chart.js and D3.js visualizations, and high-performance computing infrastructure including 8 A100-SXM4 GPUs for AI processing. We provide 20+ RESTful API endpoints with automatic OpenAPI documentation.",
       category: "Technical"
-    },
-    {
-      question: "How often is your database updated?",
-      answer: "Currently, our dataset includes preprints up to June 2024, with plans for quarterly updates. The research paper mentions a biennial refresh cycle to ensure the latest insights are incorporated while balancing computational resources and data quality maintenance.",
-      category: "Data Sources"
     },
     {
       question: "Can I access the complete dataset programmatically?",
       answer: "Yes! In strict alignment with open science principles, we provide comprehensive public REST API access built using FastAPI. The API supports complex filtering, sorting, field selection, and pagination, returning structured JSON data. For large-scale analysis, the complete dataset is available for bulk download in JSON and CSV formats.",
-      category: "Access"
+      category: "Technical"
     },
     {
       question: "What research applications does Preprint Commons support?",
-      answer: "Our platform enables various research applications including disciplinary adoption rate analysis, collaboration network mapping, geographic distribution studies, temporal trend modeling, comparative citation analysis, institutional impact assessment, and policy development for research funding and evaluation.",
-      category: "Research Applications"
-    },
-    {
-      question: "Who are the researchers behind Preprint Commons?",
-      answer: "Preprint Commons was developed by Bibhu Prasad Behera and Binay Panda, with institutional support from Jawaharlal Nehru University (JNU) and Centre for Development of Advanced Computing (C-DAC). The work includes acknowledgments to Ms. Neeraja K M for LLM script assistance and Sibabrata for backend prototyping.",
-      category: "Research Team"
+      answer: "Preprint Commons enables various research applications including subject-specific analysis, preprint distribution in different geographies, trend and citation analysis.",
+      category: "Open science"
     },
     {
       question: "How does your platform contribute to open science?",
-      answer: "Preprint Commons promotes transparency and collaboration by providing free access to comprehensive preprint analytics, enabling researchers to quantify the impact and evolution of preprints, and delivering actionable evidence for the scientific community's commitment to equity, transparency, and collaborative progress in scholarly communication.",
-      category: "Open Science"
+      answer: "Preprint Commons promotes transparency and collaboration by providing free access to comprehensive preprint analytics. The database enables researchers to quantify the impact and evolution of preprints.",
+      category: "Open science"
     },
     {
       question: "What future developments are planned for the platform?",
-      answer: "Future development priorities include implementing author network analysis for collaboration mapping, developing content-based recommendation systems, enhancing metadata integration for less structured servers, employing topic modeling for research theme evolution tracking, and securing resources for full-text LLM processing to improve data accuracy.",
+      answer: "Future development will include implementing author network analysis for collaboration, enhancing metadata integration for additional preprint servers, employing subject based modeling and full-text processing using future generation LLMs to improve data accuracy.",
       category: "Future Development"
     }
   ];
@@ -95,7 +90,7 @@ const FaqPage = () => {
             margin: '0 auto',
             lineHeight: 'var(--line-height-relaxed)'
           }}>
-            Find answers to common questions about Preprint Commons, our data, and how to use our platform effectively.
+            Find answers to common questions about Preprint Commons, the underlying data and how to use the platform effectively.
           </p>
         </div>
 
@@ -234,7 +229,7 @@ const FaqPage = () => {
               color: 'white', 
               marginBottom: 'var(--spacing-lg)' 
             }}>
-              Still Have Questions?
+              Still have questions?
             </h2>
             <p className="text-body" style={{ 
               color: 'rgba(255, 255, 255, 0.9)',
@@ -242,7 +237,7 @@ const FaqPage = () => {
               maxWidth: '500px',
               margin: '0 auto var(--spacing-xl)'
             }}>
-              Can't find what you're looking for? Our team is here to help you get the most out of Preprint Commons.
+              Can't find what you're looking for? 
             </p>
             <button className="btn btn-secondary" style={{
               background: 'white',
@@ -254,7 +249,7 @@ const FaqPage = () => {
               fontSize: 'var(--font-size-lg)',
               transition: 'all var(--transition-normal)'
             }}>
-              Contact Support
+              Contact us
             </button>
           </div>
         </div>

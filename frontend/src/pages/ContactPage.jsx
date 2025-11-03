@@ -16,7 +16,7 @@ const ContactPage = () => {
           textAlign: 'center'
         }}>
           <h1 className="text-display-2" style={{ color: 'white', marginBottom: 'var(--spacing-lg)' }}>
-            Connect with Our Research Team
+            Connect with our research team
           </h1>
           <p className="text-body-large" style={{ 
             color: 'rgba(255, 255, 255, 0.9)', 
@@ -24,9 +24,7 @@ const ContactPage = () => {
             margin: '0 auto',
             lineHeight: 'var(--line-height-relaxed)'
           }}>
-            Get in touch with the academic research team behind Preprint Commons. Whether you have questions about our methodology, 
-            data access, research collaboration opportunities, or technical implementation, we're here to support your work.
-          </p>
+            </p>
         </div>
         
         <div style={{ 
@@ -41,7 +39,7 @@ const ContactPage = () => {
               marginBottom: 'var(--spacing-xl)',
               color: 'var(--color-text-primary)'
             }}>
-              Get in Touch
+              Get in Touch with the relevant topic in the subject line
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)' }}>
               {[
@@ -49,21 +47,18 @@ const ContactPage = () => {
                   icon: '🔬',
                   title: 'Research Inquiries',
                   desc: 'Questions about methodology, data quality, and research applications',
-                  email: 'research@preprintcommons.org',
                   delay: '0.2s'
                 },
                 {
                   icon: '🤖',
                   title: 'Technical & API Support',
                   desc: 'API access, technical implementation, and data integration support',
-                  email: 'api@preprintcommons.org',
                   delay: '0.3s'
                 },
                 {
                   icon: '🤝',
                   title: 'Academic Collaborations',
                   desc: 'Research partnerships, institutional collaborations, and joint projects',
-                  email: 'collaborate@preprintcommons.org',
                   delay: '0.4s'
                 }
               ].map((contact, index) => (
@@ -216,7 +211,7 @@ const ContactPage = () => {
                   cursor: 'pointer',
                   transition: 'all var(--transition-normal)'
                 }}>
-                  Subscribe to Updates
+                  Subscribe to get updates
                 </button>
               </div>
 
@@ -243,14 +238,14 @@ const ContactPage = () => {
                     👥
                   </div>
                   <h3 className="text-heading-4" style={{ color: 'var(--color-text-primary)' }}>
-                    Community
+                    Community for developers
                   </h3>
                 </div>
                 <p className="text-body" style={{ 
                   color: 'var(--color-text-secondary)',
                   marginBottom: 'var(--spacing-lg)'
                 }}>
-                  Join our community of researchers and data enthusiasts
+                  Join our community of researchers and developers
                 </p>
                 <button style={{
                   background: 'transparent',
@@ -292,7 +287,7 @@ const ContactPage = () => {
               👥
             </div>
             <h2 className="text-heading-2" style={{ marginBottom: 'var(--spacing-lg)' }}>
-              Meet the Research Team
+              Citations
             </h2>
             <p className="text-body" style={{ 
               maxWidth: '700px',
@@ -300,47 +295,16 @@ const ContactPage = () => {
               lineHeight: 'var(--line-height-relaxed)',
               color: 'var(--color-text-secondary)'
             }}>
-              Preprint Commons is developed by academic researchers with institutional support from leading research organizations.
-            </p>
+                </p>
             
             <div style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-              gap: 'var(--spacing-xl)',
-              marginTop: 'var(--spacing-2xl)'
             }}>
-              <div style={{
-                background: 'var(--color-bg-primary)',
-                borderRadius: 'var(--radius-xl)',
-                padding: 'var(--spacing-xl)',
-                border: '1px solid var(--color-neutral-200)'
-              }}>
-                <h3 className="text-heading-4" style={{ marginBottom: 'var(--spacing-md)' }}>
-                  Bibhu Prasad Behera
-                </h3>
-                <p className="text-body-small" style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--spacing-sm)' }}>
-                  Lead Researcher & Co-Author
-                </p>
-                <p className="text-body-small" style={{ color: 'var(--color-text-secondary)' }}>
-                  Jawaharlal Nehru University (JNU)
-                </p>
+              <div>
+                
               </div>
               
               <div style={{
-                background: 'var(--color-bg-primary)',
-                borderRadius: 'var(--radius-xl)',
-                padding: 'var(--spacing-xl)',
-                border: '1px solid var(--color-neutral-200)'
               }}>
-                <h3 className="text-heading-4" style={{ marginBottom: 'var(--spacing-md)' }}>
-                  Binay Panda
-                </h3>
-                <p className="text-body-small" style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--spacing-sm)' }}>
-                  Co-Author & Research Supervisor
-                </p>
-                <p className="text-body-small" style={{ color: 'var(--color-text-secondary)' }}>
-                  Jawaharlal Nehru University (JNU)
-                </p>
               </div>
             </div>
             
@@ -352,8 +316,7 @@ const ContactPage = () => {
               border: '1px solid var(--color-neutral-200)'
             }}>
               <h3 className="text-heading-4" style={{ marginBottom: 'var(--spacing-md)' }}>
-                Institutional Support
-              </h3>
+                </h3>
               <div style={{ 
                 display: 'flex', 
                 justifyContent: 'center', 
@@ -363,18 +326,14 @@ const ContactPage = () => {
               }}>
                 <div style={{ textAlign: 'center' }}>
                   <div style={{ fontWeight: 'var(--font-weight-semibold)', marginBottom: 'var(--spacing-xs)' }}>
-                    Jawaharlal Nehru University
                   </div>
                   <div style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)' }}>
-                    (JNU)
                   </div>
                 </div>
                 <div style={{ textAlign: 'center' }}>
                   <div style={{ fontWeight: 'var(--font-weight-semibold)', marginBottom: 'var(--spacing-xs)' }}>
-                    Centre for Development of Advanced Computing
                   </div>
                   <div style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)' }}>
-                    (C-DAC)
                   </div>
                 </div>
               </div>
@@ -383,10 +342,7 @@ const ContactPage = () => {
             <p className="text-body-small" style={{ 
               marginTop: 'var(--spacing-xl)',
               color: 'var(--color-text-secondary)'
-            }}>
-              We typically respond to research inquiries within 48 hours. For urgent technical issues, 
-              please include "URGENT" in your subject line.
-            </p>
+            }}></p>
           </div>
         </div>
       </div>
