@@ -347,21 +347,6 @@ const DocumentationPage = () => {
 
                 <Card className={styles.overviewCard}>
                   <Card.Header>
-                    <h3 className="text-heading-3">Technical Architecture</h3>
-                  </Card.Header>
-                  <Card.Content>
-                    <ul className={styles.techList}>
-                      <li>FastAPI backend with PostgreSQL database</li>
-                      <li>React 19 frontend with Chart.js & D3.js</li>
-                      <li>NVIDIA/Llama-3.1-Nemotron-70B-Instruct-HF for AI enhancement</li>
-                      <li>High-performance computing with 8 A100-SXM4 GPUs</li>
-                      <li>20+ RESTful API endpoints with automatic documentation</li>
-                    </ul>
-                  </Card.Content>
-                </Card>
-
-                <Card className={styles.overviewCard}>
-                  <Card.Header>
                     <h3 className="text-heading-3">Database Statistics</h3>
                   </Card.Header>
                   <Card.Content>
@@ -385,6 +370,94 @@ const DocumentationPage = () => {
                   </Card.Content>
                 </Card>
               </div>
+
+              {/* Technical Architecture Section */}
+              <Card style={{ marginTop: 'var(--spacing-2xl)' }}>
+                <Card.Header>
+                  <h3 className="text-heading-3">Advanced Technical Architecture</h3>
+                </Card.Header>
+                <Card.Content>
+                  <p className="text-body" style={{ marginBottom: 'var(--spacing-xl)' }}>
+                    Built with modern full-stack architecture designed for scalability, maintainability, and high performance.
+                  </p>
+                  <div style={{ 
+                    display: 'grid', 
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+                    gap: 'var(--spacing-lg)'
+                  }}>
+                    {[
+                      { 
+                        icon: '🚀', 
+                        title: 'FastAPI Backend', 
+                        desc: 'Python-based backend with 20+ RESTful endpoints, asynchronous capabilities, and automatic OpenAPI documentation',
+                        color: 'var(--color-primary)'
+                      },
+                      { 
+                        icon: '🗄️', 
+                        title: 'PostgreSQL Database', 
+                        desc: 'Normalized relational schema optimized for preprint data with efficient indexing and caching strategies',
+                        color: 'var(--color-secondary)'
+                      },
+                      { 
+                        icon: '⚛️', 
+                        title: 'React 19 Frontend', 
+                        desc: 'Modern responsive application with Chart.js visualizations, D3.js components, and interactive dashboards',
+                        color: 'var(--color-accent)'
+                      },
+                      { 
+                        icon: '🤖', 
+                        title: 'AI Enhancement', 
+                        desc: 'NVIDIA/Llama-3.1-Nemotron-70B-Instruct-HF model for metadata extraction and geographic classification',
+                        color: 'var(--color-success)'
+                      }
+                    ].map((tech, index) => (
+                      <div key={index} style={{
+                        padding: 'var(--spacing-lg)',
+                        background: 'var(--color-bg-secondary)',
+                        borderRadius: 'var(--radius-lg)',
+                        borderLeft: `4px solid ${tech.color}`
+                      }}>
+                        <div style={{
+                          fontSize: 'var(--font-size-2xl)',
+                          marginBottom: 'var(--spacing-md)'
+                        }}>
+                          {tech.icon}
+                        </div>
+                        <h4 className="text-heading-4" style={{ 
+                          marginBottom: 'var(--spacing-sm)',
+                          color: tech.color
+                        }}>
+                          {tech.title}
+                        </h4>
+                        <p className="text-body-small" style={{ 
+                          color: 'var(--color-text-secondary)',
+                          lineHeight: 'var(--line-height-relaxed)'
+                        }}>
+                          {tech.desc}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div style={{ 
+                    marginTop: 'var(--spacing-xl)', 
+                    padding: 'var(--spacing-lg)', 
+                    background: 'var(--color-bg-secondary)', 
+                    borderRadius: 'var(--radius-lg)' 
+                  }}>
+                    <h4 className="text-heading-4" style={{ marginBottom: 'var(--spacing-md)' }}>
+                      Infrastructure Specifications
+                    </h4>
+                    <ul className={styles.techList}>
+                      <li><strong>Computing Power:</strong> 8 A100-SXM4 GPUs for AI processing</li>
+                      <li><strong>API Endpoints:</strong> 20+ RESTful endpoints with automatic documentation</li>
+                      <li><strong>Data Processing:</strong> Asynchronous pipeline with efficient caching</li>
+                      <li><strong>Visualization:</strong> Chart.js and D3.js for interactive analytics</li>
+                      <li><strong>Performance:</strong> Optimized database queries with connection pooling</li>
+                    </ul>
+                  </div>
+                </Card.Content>
+              </Card>
 
               {/* Research Methodology Overview */}
               <Card style={{ marginTop: 'var(--spacing-2xl)' }}>
