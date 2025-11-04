@@ -1,38 +1,57 @@
 # Preprint Commons
 
-A comprehensive platform for tracking, analyzing, and visualizing preprint research data from major repositories worldwide. Preprint Commons provides researchers, policy makers, and institutions with powerful tools to understand trends, collaborations, and the impact of open science.
+<div align="center">
+  <img src="frontend/images/preprint_commons_logo2.svg" alt="Preprint Commons Logo" width="400"/>
+  
+  <p><strong>A dedicated database and visualization platform for large-scale preprint meta-analysis</strong></p>
+  
+  ![Status](https://img.shields.io/badge/Status-Active-green)
+  ![React](https://img.shields.io/badge/React-19.1.0-blue)
+  ![FastAPI](https://img.shields.io/badge/FastAPI-Latest-green)
+  ![Python](https://img.shields.io/badge/Python-3.10+-blue)
+</div>
 
-![Preprint Commons](https://img.shields.io/badge/Status-Active-green)
-![React](https://img.shields.io/badge/React-19.1.0-blue)
-![FastAPI](https://img.shields.io/badge/FastAPI-Latest-green)
-![Python](https://img.shields.io/badge/Python-3.10+-blue)
+---
 
-## 🌟 Features
+## 📖 About
 
-- **Global Coverage**: Comprehensive data from major preprint repositories (medRxiv, bioRxiv, arXiv)
-- **AI-Enhanced Metadata**: Advanced language models extract and enrich missing information
-- **Interactive Visualizations**: Dynamic charts, maps, and dashboards for data exploration
-- **Real-time Updates**: Continuously updated data ensuring the latest insights
-- **Search & Discovery**: Advanced search capabilities to find specific papers and research
-- **Country-wise Analytics**: Detailed breakdown of preprint submissions by country and year
+Preprint Commons is the first dedicated database and analytical platform for large-scale preprint meta-analysis, featuring over **344,000 preprints** from three major life sciences repositories. Built on rigorous academic research, the platform provides researchers, data scientists, and institutions with powerful tools to understand trends, collaborations, and the impact of open science.
+
+### 🎯 Mission
+
+To address the critical gap in preprint ecosystem analysis by providing a centralized platform for large-scale meta-analysis, enabling cross-disciplinary trend analysis and comparative impact assessment.
+
+## 🌟 Key Features
+
+- **📊 Comprehensive Database**: 344,843 preprints from bioRxiv (239,847), medRxiv (55,695), and arXiv q-bio (49,301)
+- **🤖 AI-Enhanced Metadata**: LLM-based extraction of missing author affiliations and geographic data
+- **🗺️ Interactive Visualizations**: Dynamic charts, maps, and dashboards powered by Chart.js and D3.js
+- **🔍 Advanced Search**: Full-text search, filters by country/year/subject, and complex query support
+- **📈 Citation Analysis**: Track citation patterns, identify high-impact papers, and analyze networks
+- **🌐 Geographic Analytics**: Country-wise distribution and institutional affiliation mapping
+- **👥 Author Profiles**: Comprehensive author search with publication counts and metrics
+- **🔬 Subject Analysis**: Disciplinary adoption rates and cross-field trend analysis
+- **🌍 Open Access**: Complete dataset available via public REST API with bulk download options
 
 ## 🏗️ Architecture
 
-### Backend (FastAPI + SQLite)
+### Backend (FastAPI + PostgreSQL/SQLite)
 - **FastAPI** web framework with modular router structure
-- **SQLite** database with connection pooling and error handling
+- **PostgreSQL/SQLite** database with optimized queries and indexing
 - **Pandas** for efficient data processing and analysis
 - **Pydantic** models for request/response validation
-- **Environment-based configuration** for different deployment stages
-- **Comprehensive logging** and health monitoring
-- **Docker support** for containerized deployment
+- **20+ RESTful API endpoints** with comprehensive filtering and pagination
+- **Asynchronous capabilities** for high performance
+- **Automatic OpenAPI documentation** at `/docs`
 
-### Frontend (React + Vite)
-- **React 19** with modern hooks and components
-- **React Router v7** for navigation
-- **CSS Modules** for component styling
+### Frontend (React 19 + Vite)
+- **React 19** with modern hooks and functional components
+- **React Router v7** for client-side navigation
+- **CSS Modules** for scoped component styling
 - **Chart.js** for data visualization
-- **Vite** for fast development and building
+- **Custom D3.js components** for advanced visualizations
+- **Responsive design** optimized for all devices
+- **Vite** for fast development and optimized builds
 
 ## 🚀 Quick Start
 
@@ -41,7 +60,7 @@ A comprehensive platform for tracking, analyzing, and visualizing preprint resea
 - **Python 3.10+**
 - **Node.js 18+**
 - **npm** or **yarn**
-- **Docker** (optional, for containerized deployment)
+- **PostgreSQL** (optional, SQLite works for development)
 
 ### Installation
 
@@ -68,7 +87,7 @@ A comprehensive platform for tracking, analyzing, and visualizing preprint resea
 
 ### Running the Application
 
-#### Option 1: Simple Development Setup (Recommended)
+#### Development Setup (Recommended)
 ```bash
 # Backend (from project root)
 python run_simple.py
@@ -78,29 +97,10 @@ cd frontend
 npm run dev
 ```
 
-#### Option 2: Using the Improved Backend Structure
-```bash
-# Backend with new modular structure
-python run.py
-
-# Frontend (in new terminal)
-cd frontend
-npm run dev
-```
-
-#### Option 3: Docker Deployment (Production)
-```bash
-# Build and run with Docker
-docker-compose up -d
-
-# View logs
-docker-compose logs -f
-```
-
 This will start:
 - Frontend development server at `http://localhost:5173`
 - Backend API server at `http://localhost:8000`
-- API Documentation at `http://localhost:8000/docs`
+- Interactive API Documentation at `http://localhost:8000/docs`
 
 ## 📊 Database Setup
 
@@ -110,50 +110,53 @@ The application requires a CSV file named `combined_db_with_ppc_id.csv` containi
 python create_db.py
 ```
 
-This will create a SQLite database (`ppc.db`) with the papers table.
+This will create a database (`ppc.db`) with the papers table and all necessary indexes.
 
 ## 🛠️ Development
 
 ### Project Structure
 ```
 PPC-Backend-main/
-├── main.py                 # Legacy FastAPI backend (still works)
-├── run_simple.py          # Simple runner for main.py
-├── create_db.py           # Database setup script
-├── requirements.txt       # Python dependencies
-├── .env                   # Environment configuration
-├── ppc.db                 # SQLite database (created after setup)
-├── app/                   # Improved modular backend structure
-│   ├── __init__.py
-│   ├── main.py           # New FastAPI app with better structure
+├── app/                   # Modular backend structure
+│   ├── routers/          # API route modules
+│   │   ├── papers.py     # Paper endpoints
+│   │   ├── analytics.py  # Analytics endpoints
+│   │   ├── authors.py    # Author endpoints
+│   │   ├── subjects.py   # Subject analysis endpoints
+│   │   └── health.py     # Health check endpoints
+│   ├── main.py           # FastAPI application
 │   ├── config.py         # Configuration management
-│   ├── database.py       # Database connection handling
-│   ├── models.py         # Pydantic models
-│   └── routers/          # API route modules
-│       ├── papers.py     # Paper-related endpoints
-│       ├── analytics.py  # Analytics endpoints
-│       └── health.py     # Health check endpoints
-├── Dockerfile            # Docker configuration
-├── docker-compose.yml    # Docker Compose setup
-├── nginx.conf           # Nginx reverse proxy config
-├── frontend/            # React frontend application
+│   ├── database.py       # Database connection
+│   └── models.py         # Pydantic models
+├── frontend/             # React frontend application
 │   ├── src/
-│   │   ├── components/  # Reusable UI components
-│   │   ├── pages/       # Page components
-│   │   ├── styles/      # Global styles and themes
-│   │   └── App.jsx      # Main application component
-│   ├── public/          # Static assets
-│   └── package.json     # Frontend dependencies
-└── README.md            # This file
+│   │   ├── components/   # Reusable UI components
+│   │   │   ├── layout/   # Layout components
+│   │   │   ├── sections/ # Page sections
+│   │   │   └── ui/       # UI elements
+│   │   ├── pages/        # Page components
+│   │   │   ├── HomePage.jsx
+│   │   │   ├── AboutPage.jsx
+│   │   │   ├── DocumentationPage.jsx
+│   │   │   └── FaqPage.jsx
+│   │   ├── styles/       # Global styles and themes
+│   │   │   ├── index.css
+│   │   │   └── theme.css
+│   │   └── main.jsx      # Application entry point
+│   ├── public/           # Static assets
+│   └── package.json      # Frontend dependencies
+├── create_db.py          # Database setup script
+├── requirements.txt      # Python dependencies
+├── .env                  # Environment configuration
+└── README.md             # This file
 ```
 
 ### Available Scripts
 
 **Backend:**
-- `python run_simple.py` - Start simple backend (main.py)
-- `python run.py` - Start improved modular backend
+- `python run_simple.py` - Start development server
 - `python create_db.py` - Initialize database
-- `docker-compose up -d` - Run with Docker
+- `uvicorn app.main:app --reload` - Start with uvicorn directly
 
 **Frontend:**
 - `npm run dev` - Start development server
@@ -163,41 +166,39 @@ PPC-Backend-main/
 
 ## 🌐 API Endpoints
 
-### Legacy Endpoints (main.py)
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/country-data` | GET | Get preprint counts by country and year |
-| `/papers` | GET | Fetch papers by country and year |
-| `/search` | GET | Search papers by title or DOI |
-| `/paper/{ppc_id}` | GET | Get specific paper details |
-| `/analytics-data` | GET | Get comprehensive analytics data |
-| `/subjects` | GET | Get all unique subject areas |
-| `/citation-data-unified` | GET | Get unified citation data |
+### Core Endpoints
 
-### New API Endpoints (app/main.py)
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/health/` | GET | Health check endpoint |
-| `/api/papers/search` | GET | Search papers with pagination |
-| `/api/papers/{ppc_id}` | GET | Get specific paper details |
-| `/api/papers/` | GET | Fetch papers with filters and pagination |
-| `/api/analytics/country-data` | GET | Country-wise paper distribution |
-| `/api/analytics/subjects` | GET | All unique subject areas |
-| `/api/analytics/dashboard` | GET | Comprehensive analytics data |
-| `/api/analytics/citations` | GET | Unified citation data |
+#### Papers
+- `GET /api/papers/` - Fetch papers with comprehensive filtering and pagination
+- `GET /api/papers/search` - Search papers by title, DOI, or author
+- `POST /api/papers/advanced-search` - Advanced search with multiple criteria
+- `GET /api/papers/{ppc_id}` - Get complete paper details
+
+#### Analytics
+- `GET /api/analytics/country-data` - Country-wise paper distribution by year
+- `GET /api/analytics/dashboard` - Comprehensive analytics dashboard data
+- `GET /api/analytics/citations` - Unified citation data for visualizations
+
+#### Authors
+- `GET /api/authors/search` - Search papers by author name
+
+#### Subjects
+- `GET /api/subjects/analysis` - Subject evolution, citations, and version analysis
 
 ### Example API Usage
 
 ```bash
-# Legacy endpoints
-curl http://localhost:8000/country-data
-curl "http://localhost:8000/search?query=covid"
-curl "http://localhost:8000/papers?country=United States&year=2023"
-
-# New endpoints with better features
-curl http://localhost:8000/api/health
+# Search for papers
 curl "http://localhost:8000/api/papers/search?query=covid&page=1&page_size=10"
+
+# Get analytics dashboard
 curl http://localhost:8000/api/analytics/dashboard
+
+# Get country-wise data
+curl http://localhost:8000/api/analytics/country-data
+
+# Get specific paper
+curl http://localhost:8000/api/papers/PPC_001
 
 # Interactive API documentation
 open http://localhost:8000/docs
@@ -205,12 +206,11 @@ open http://localhost:8000/docs
 
 ## 🎨 Frontend Pages
 
-- **Home** (`/`) - Landing page with overview and interactive map
-- **Explore** (`/explore`) - Data exploration and visualization tools
-- **About** (`/about`) - Information about the platform
+- **Home** (`/`) - Landing page with hero section, features, and interactive map
+- **About** (`/about`) - Platform mission, logo story, and open science commitment
+- **Documentation** (`/documentation`) - Complete API reference, data sources, and methodology
 - **FAQ** (`/faq`) - Frequently asked questions
-- **Contact** (`/contact`) - Contact information
-- **Paper Details** (`/paper/:id`) - Individual paper view
+- **Explore** - Data exploration and visualization tools (coming soon)
 
 ## 🔧 Configuration
 
@@ -230,32 +230,54 @@ API_PORT=8000
 API_RELOAD=True
 
 # CORS
-ALLOWED_ORIGINS=["http://127.0.0.1:8000", "http://localhost:8000", "http://localhost:5173"]
+ALLOWED_ORIGINS=["http://localhost:5173", "http://localhost:8000"]
 
 # Pagination
 DEFAULT_PAGE_SIZE=10
 MAX_PAGE_SIZE=100
 ```
 
-### Database Configuration
-- Database file: `ppc.db`
-- Table: `papers`
-- Required CSV: `combined_db_with_ppc_id.csv`
-- Connection pooling and error handling included
-
-### Deployment Options
-1. **Development**: `python run_simple.py`
-2. **Production**: `docker-compose up -d`
-3. **Manual**: `gunicorn app.main:app -w 4 -k uvicorn.workers.UnicornWorker`
-
 ## 📈 Data Sources
 
-Preprint Commons aggregates data from:
-- **medRxiv** - Medical preprints
-- **bioRxiv** - Biological sciences preprints
-- **arXiv(Q-bio)** - Physics, mathematics, and other sciences
+Preprint Commons aggregates data from three major life sciences repositories:
+
+| Repository | Coverage | Fields |
+|------------|----------|--------|
+| **bioRxiv** | 239,847 preprints | Biology, Neuroscience, Bioinformatics, Cell Biology, Genomics |
+| **medRxiv** | 55,695 preprints | Medicine, Health Sciences, Public Health, Epidemiology |
+| **arXiv (q-bio)** | 49,301 preprints | Quantitative Biology, Biophysics, Computational Biology |
+
+### Data Quality
+- **85-90%** accuracy for LLM-extracted metadata
+- **Quarterly updates** to maintain current coverage
+- **Comprehensive validation** through random sampling
+- **Complete version history** preserved for all preprints
+
+## 🔬 Research Methodology
+
+### Data Acquisition
+- Programmatic retrieval via dedicated APIs
+- Comprehensive metadata including DOI, authors, affiliations, citations
+- JATS XML parsing for structured data
+
+### AI Enhancement
+- **NVIDIA/Llama-3.1-Nemotron-70B-Instruct-HF** model
+- Deployed across 8 A100-SXM4 GPUs
+- Extracts missing geographic and institutional metadata
+- Structured JSON output with error handling
+
+### Processing Pipeline
+1. Data collection from repositories
+2. JSON to CSV conversion
+3. Duplicate detection and removal
+4. Geographic data enhancement via LLM
+5. Citation data integration
+6. Database consolidation
+7. API deployment
 
 ## 🤝 Contributing
+
+We welcome contributions from the community! Here's how you can help:
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -271,58 +293,61 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 If you encounter any issues or have questions:
 
-1. Check the [FAQ page](frontend/src/pages/Faq.jsx) for common questions
-2. Open an issue on GitHub
-3. Contact the development team
+1. Check the [Documentation page](http://localhost:5173/documentation) for detailed information
+2. Review the [FAQ page](http://localhost:5173/faq) for common questions
+3. Open an issue on GitHub
+4. Contact the development team
 
-## 🚀 Recent Improvements
+## 👥 Team
 
-### Backend Enhancements
-- ✅ **Modular Architecture**: Organized code into logical modules
-- ✅ **Better Error Handling**: Comprehensive exception handling
-- ✅ **Environment Configuration**: Flexible settings management
-- ✅ **API Documentation**: Auto-generated interactive docs
-- ✅ **Health Monitoring**: Database and application health checks
-- ✅ **Docker Support**: Containerized deployment ready
-- ✅ **Pagination**: Efficient handling of large datasets
-- ✅ **Logging**: Structured logging for debugging and monitoring
+Built by researchers, for researchers:
+- **Bibhu Prasad Behera** - Research & Development
+- **Binay Panda** - Academic Supervision
 
-### Production Ready Features
-- ✅ **Nginx Reverse Proxy**: Load balancing and security
-- ✅ **Docker Compose**: Multi-container orchestration
-- ✅ **Security Headers**: XSS protection and security hardening
-- ✅ **Rate Limiting**: API abuse prevention
-- ✅ **Backward Compatibility**: Legacy endpoints still work
+**Institutional Support:**
+- Jawaharlal Nehru University (JNU)
+- Centre for Development of Advanced Computing (C-DAC)
 
-## 🔮 Future Roadmap
-- [ ] GeographicAnalyticsCard`
-- [ ] AuthorAnalyticsCard`
-- [ ] SubjectAnalyticsCard`
-- [ ] CitationTrendsCard`
-- [ ] AuthorNetworkCard`
-- [ ] QualityMetricsCard`
-- [ ] AdvancedCorrelationsCard
+## 🎯 Target Audience
 
-- [ ] retraction watch
-- [X] API rate limiting and caching
-- [ ] Pickel search
-- [ ] similar papers
-- [ ] similar authors
-- [ ] Update the rest of the pages with static text
+- **Researchers & Scientists** - Analyze trends and discover collaborations
+- **Graduate Students** - Explore research landscapes and identify opportunities
+- **Data Scientists** - Access comprehensive APIs for custom analytics
+- **Publishers & Editors** - Monitor research trends and publication patterns
+- **Research Organizations** - Track global trends and assess scientific output
+- **Open Science Advocates** - Support preprint adoption and transparency
 
-- [ ] make clickable papers everywhere
-- [X] fix the country dropdown in explore page citation analystics
-- [ ] update the citation heatmap based on the subject
-- [ ] make the analytics daashboard to have stacked publication timeline
-- [ ] fix subject distribution with others as well 
-- [x] Make the existing slider better in citation impact visualiser  
-- [X] Author page
+## 🔮 Roadmap
 
-- [ ] Author network
-- [ ] Integration with more preprint repositories
-- [ ] Authentication and user management
-- [ ] Advanced analytics and machine learning insights
+### Completed ✅
+- Core database with 344,000+ preprints
+- RESTful API with 20+ endpoints
+- Interactive frontend with React 19
+- Geographic analytics and mapping
+- Citation analysis and tracking
+- Author search and profiles
+- Subject analysis and trends
+- Comprehensive documentation
+
+### In Progress 🚧
+- Advanced search filters
+- Enhanced analytics dashboards
+- Performance optimizations
+- Mobile responsiveness improvements
+
+### Planned 📋
+- Integration with additional repositories
+- Real-time data updates
+- Advanced machine learning insights
+- Author network visualization
+- Retraction watch integration
+- Similar papers recommendations
+- User authentication and personalization
 
 ---
 
-**Made with ❤️ for the open science community**
+<div align="center">
+  <strong>Made with ❤️ for the open science community</strong>
+  
+  <p>Empowering the next generation to drive the democratization of science</p>
+</div>
