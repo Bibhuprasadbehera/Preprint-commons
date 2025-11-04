@@ -1,8 +1,8 @@
 # Preprint Commons
 
-<div align="center">
-  <img src="frontend/images/preprint_commons_logo2.svg" alt="Preprint Commons Logo" width="400"/>
+  <img src="frontend/images/preprint_commons_logo2.jpg" alt="Preprint Commons Logo" width="400"/>
   
+<div align="center">
   <p><strong>A dedicated database and visualization platform for large-scale preprint meta-analysis</strong></p>
   
   ![Status](https://img.shields.io/badge/Status-Active-green)
