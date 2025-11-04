@@ -1,0 +1,46 @@
+/* AboutPage specific styles */
+
+.principleCard {
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  text-align: center;
+  border: 1px solid var(--color-neutral-200);
+  border-left: 4px solid var(--color-neutral-200);
+  transition: all var(--transition-normal);
+}
+
+.principleCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-left-color: var(--color-primary);
+}
+
+.audienceCard {
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  text-align: center;
+  border: 1px solid var(--color-neutral-200);
+  border-left: 4px solid var(--color-neutral-200);
+  transition: all var(--transition-normal);
+}
+
+.audienceCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-left-color: var(--color-secondary);
+}
+
+.logoCard {
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-neutral-200);
+  transition: all var(--transition-normal);
+}
+
+.logoCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
