@@ -684,8 +684,7 @@ const DocumentationPage = () => {
                       Jawaharlal Nehru University (JNU) and Centre for Development of Advanced Computing (C-DAC).
                     </p>
                     <div style={{ marginTop: 'var(--spacing-lg)' }}>
-                      <strong>Published Research:</strong> "Preprint Commons: A Database for Tracking Trends, Impact, and Collaboration in Open Science"
-                    </div>
+                         </div>
                   </Card.Content>
                 </Card>
 
@@ -826,22 +825,6 @@ const DocumentationPage = () => {
                         <li>Track publication lifecycles from preprint to peer review</li>
                         <li>Identify emerging research trends</li>
                         <li>Discover collaboration opportunities</li>
-                      </ul>
-                    </div>
-                    <div style={{
-                      padding: 'var(--spacing-lg)',
-                      background: 'var(--color-bg-secondary)',
-                      borderRadius: 'var(--radius-lg)',
-                      border: '1px solid var(--color-neutral-200)'
-                    }}>
-                      <h4 className="text-heading-4" style={{ marginBottom: 'var(--spacing-md)', color: 'var(--color-secondary)' }}>
-                        📖 Policymakers
-                      </h4>
-                      <ul className={styles.techList} style={{ fontSize: 'var(--font-size-sm)' }}>
-                        <li>Assess global impact of preprints on scholarly communication</li>
-                        <li>Monitor research output by country and institution</li>
-                        <li>Track open science adoption trends</li>
-                        <li>Inform research policy development</li>
                       </ul>
                     </div>
                     <div style={{

@@ -4,6 +4,7 @@ import styles from '../components/layout/Layout/Layout.module.css';
 
 const FaqPage = () => {
   const [openFaq, setOpenFaq] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('All');
 
   const toggleFaq = (index) => {
     setOpenFaq(openFaq === index ? null : index);
@@ -77,7 +78,11 @@ const FaqPage = () => {
     }
   ];
 
-  const categories = [...new Set(faqs.map(faq => faq.category))];
+  const categories = ['All', ...new Set(faqs.map(faq => faq.category))];
+  
+  const filteredFaqs = selectedCategory === 'All' 
+    ? faqs 
+    : faqs.filter(faq => faq.category === selectedCategory);
 
   return (
     <Layout>
@@ -114,18 +119,46 @@ const FaqPage = () => {
             marginBottom: 'var(--spacing-xl)'
           }}>
             {categories.map((category, index) => (
-              <div key={category} className="animate-fadeInUp" style={{
-                animationDelay: `${index * 0.1}s`,
-                background: 'var(--color-bg-secondary)',
-                padding: 'var(--spacing-sm) var(--spacing-lg)',
-                borderRadius: 'var(--radius-full)',
-                border: '1px solid var(--color-neutral-200)',
-                color: 'var(--color-text-secondary)',
-                fontSize: 'var(--font-size-sm)',
-                fontWeight: 'var(--font-weight-medium)'
-              }}>
+              <button
+                key={category}
+                className="animate-fadeInUp"
+                onClick={() => {
+                  setSelectedCategory(category);
+                  setOpenFaq(null);
+                }}
+                style={{
+                  animationDelay: `${index * 0.1}s`,
+                  background: selectedCategory === category 
+                    ? 'var(--color-primary)' 
+                    : 'var(--color-bg-secondary)',
+                  padding: 'var(--spacing-sm) var(--spacing-lg)',
+                  borderRadius: 'var(--radius-full)',
+                  border: selectedCategory === category 
+                    ? '2px solid var(--color-primary)' 
+                    : '1px solid var(--color-neutral-200)',
+                  color: selectedCategory === category 
+                    ? 'white' 
+                    : 'var(--color-text-secondary)',
+                  fontSize: 'var(--font-size-sm)',
+                  fontWeight: 'var(--font-weight-medium)',
+                  cursor: 'pointer',
+                  transition: 'all var(--transition-normal)'
+                }}
+                onMouseEnter={(e) => {
+                  if (selectedCategory !== category) {
+                    e.currentTarget.style.background = 'var(--color-primary-light)';
+                    e.currentTarget.style.borderColor = 'var(--color-primary)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (selectedCategory !== category) {
+                    e.currentTarget.style.background = 'var(--color-bg-secondary)';
+                    e.currentTarget.style.borderColor = 'var(--color-neutral-200)';
+                  }
+                }}
+              >
                 {category}
-              </div>
+              </button>
             ))}
           </div>
         </div>
@@ -133,96 +166,106 @@ const FaqPage = () => {
         {/* FAQ Items */}
         <div className={`${styles.contentSection} animate-fadeInUp animate-delay-1`}>
           <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-            {faqs.map((faq, index) => (
-              <div key={index} className="animate-fadeInUp" style={{
-                animationDelay: `${0.2 + index * 0.05}s`,
-                marginBottom: 'var(--spacing-lg)'
+            {filteredFaqs.length === 0 ? (
+              <div style={{ 
+                textAlign: 'center', 
+                padding: 'var(--spacing-3xl)',
+                color: 'var(--color-text-secondary)'
               }}>
-                <div style={{
-                  background: 'var(--color-bg-primary)',
-                  borderRadius: 'var(--radius-xl)',
-                  border: '1px solid var(--color-neutral-200)',
-                  boxShadow: 'var(--shadow-sm)',
-                  transition: 'all var(--transition-normal)',
-                  overflow: 'hidden'
-                }}>
-                  <button
-                    style={{
-                      width: '100%',
-                      textAlign: 'left',
-                      padding: 'var(--spacing-xl)',
-                      background: 'none',
-                      border: 'none',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      transition: 'all var(--transition-normal)'
-                    }}
-                    onClick={() => toggleFaq(index)}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = 'var(--color-bg-secondary)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'none';
-                    }}
-                  >
-                    <div>
-                      <div style={{
-                        fontSize: 'var(--font-size-xs)',
-                        color: 'var(--color-primary)',
-                        fontWeight: 'var(--font-weight-medium)',
-                        marginBottom: 'var(--spacing-xs)',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em'
-                      }}>
-                        {faq.category}
-                      </div>
-                      <h3 className="text-heading-4" style={{ 
-                        color: 'var(--color-text-primary)',
-                        margin: 0
-                      }}>
-                        {faq.question}
-                      </h3>
-                    </div>
-                    <div style={{
-                      width: '40px',
-                      height: '40px',
-                      borderRadius: 'var(--radius-full)',
-                      background: openFaq === index ? 'var(--color-primary)' : 'var(--color-neutral-200)',
-                      color: openFaq === index ? 'white' : 'var(--color-text-secondary)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: 'var(--font-size-lg)',
-                      fontWeight: 'var(--font-weight-bold)',
-                      transition: 'all var(--transition-normal)',
-                      flexShrink: 0,
-                      marginLeft: 'var(--spacing-lg)'
-                    }}>
-                      {openFaq === index ? '−' : '+'}
-                    </div>
-                  </button>
-                  
-                  {openFaq === index && (
-                    <div style={{
-                      padding: '0 var(--spacing-xl) var(--spacing-xl)',
-                      borderTop: '1px solid var(--color-neutral-200)',
-                      background: 'var(--color-bg-secondary)',
-                      animation: 'fadeInUp 0.3s ease-out'
-                    }}>
-                      <p className="text-body" style={{ 
-                        margin: 0,
-                        lineHeight: 'var(--line-height-relaxed)',
-                        color: 'var(--color-text-secondary)'
-                      }}>
-                        {faq.answer}
-                      </p>
-                    </div>
-                  )}
-                </div>
+                <p className="text-body">No questions found in this category.</p>
               </div>
-            ))}
+            ) : (
+              filteredFaqs.map((faq, index) => (
+                <div key={index} className="animate-fadeInUp" style={{
+                  animationDelay: `${0.2 + index * 0.05}s`,
+                  marginBottom: 'var(--spacing-lg)'
+                }}>
+                  <div style={{
+                    background: 'var(--color-bg-primary)',
+                    borderRadius: 'var(--radius-xl)',
+                    border: '1px solid var(--color-neutral-200)',
+                    boxShadow: 'var(--shadow-sm)',
+                    transition: 'all var(--transition-normal)',
+                    overflow: 'hidden'
+                  }}>
+                    <button
+                      style={{
+                        width: '100%',
+                        textAlign: 'left',
+                        padding: 'var(--spacing-xl)',
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        transition: 'all var(--transition-normal)'
+                      }}
+                      onClick={() => toggleFaq(index)}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = 'var(--color-bg-secondary)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = 'none';
+                      }}
+                    >
+                      <div>
+                        <div style={{
+                          fontSize: 'var(--font-size-xs)',
+                          color: 'var(--color-primary)',
+                          fontWeight: 'var(--font-weight-medium)',
+                          marginBottom: 'var(--spacing-xs)',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em'
+                        }}>
+                          {faq.category}
+                        </div>
+                        <h3 className="text-heading-4" style={{ 
+                          color: 'var(--color-text-primary)',
+                          margin: 0
+                        }}>
+                          {faq.question}
+                        </h3>
+                      </div>
+                      <div style={{
+                        width: '40px',
+                        height: '40px',
+                        borderRadius: 'var(--radius-full)',
+                        background: openFaq === index ? 'var(--color-primary)' : 'var(--color-neutral-200)',
+                        color: openFaq === index ? 'white' : 'var(--color-text-secondary)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: 'var(--font-size-lg)',
+                        fontWeight: 'var(--font-weight-bold)',
+                        transition: 'all var(--transition-normal)',
+                        flexShrink: 0,
+                        marginLeft: 'var(--spacing-lg)'
+                      }}>
+                        {openFaq === index ? '−' : '+'}
+                      </div>
+                    </button>
+                    
+                    {openFaq === index && (
+                      <div style={{
+                        padding: '0 var(--spacing-xl) var(--spacing-xl)',
+                        borderTop: '1px solid var(--color-neutral-200)',
+                        background: 'var(--color-bg-secondary)',
+                        animation: 'fadeInUp 0.3s ease-out'
+                      }}>
+                        <p className="text-body" style={{ 
+                          margin: 0,
+                          lineHeight: 'var(--line-height-relaxed)',
+                          color: 'var(--color-text-secondary)'
+                        }}>
+                          {faq.answer}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
         
