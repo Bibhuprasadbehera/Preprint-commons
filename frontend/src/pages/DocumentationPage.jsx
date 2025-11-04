@@ -28,21 +28,34 @@ const DocumentationPage = () => {
   }, [activeTab]);
 
   const apiEndpoints = [
+    // Root Endpoint
     {
       method: 'GET',
-      endpoint: '/api/analytics/country-data',
-      description: 'Get country-wise paper distribution by year for geographic analysis',
+      endpoint: '/',
+      description: 'Root endpoint providing API information and version',
       parameters: [],
       response: {
-        data: [
-          {
-            country_name: "United States",
-            year: "2023",
-            count: 45678
-          }
-        ]
+        message: "PPC Research Papers API",
+        version: "2.0.0",
+        docs: "/docs",
+        health: "/api/health"
       }
     },
+
+    // Health Endpoints
+    {
+      method: 'GET',
+      endpoint: '/api/health/',
+      description: 'Health check endpoint to verify API and database status',
+      parameters: [],
+      response: {
+        status: "healthy",
+        database: true,
+        timestamp: "2024-01-15T10:30:00"
+      }
+    },
+
+    // Papers Endpoints
     {
       method: 'GET',
       endpoint: '/api/papers/',
@@ -100,11 +113,41 @@ const DocumentationPage = () => {
       }
     },
     {
+      method: 'POST',
+      endpoint: '/api/papers/advanced-search',
+      description: 'Advanced search with multiple criteria and operators',
+      parameters: [
+        { name: 'search_criteria', type: 'object', required: true, description: 'Search criteria object (see below)' },
+        { name: 'page', type: 'integer', required: false, description: 'Page number (default: 1)' },
+        { name: 'page_size', type: 'integer', required: false, description: 'Items per page (max: 100)' }
+      ],
+      response: {
+        papers: [],
+        total: 0,
+        page: 1,
+        page_size: 10,
+        has_next: false
+      },
+      requestBody: {
+        year_from: "2020",
+        year_to: "2023",
+        month: "2023-06",
+        subject: "neuroscience",
+        server: "bioRxiv",
+        country: "United States",
+        authors: "John Doe",
+        institution: "MIT",
+        license: "CC BY",
+        citation_min: 10,
+        citation_max: 1000
+      }
+    },
+    {
       method: 'GET',
       endpoint: '/api/papers/{ppc_id}',
       description: 'Get complete paper details by PPC_Id',
       parameters: [
-        { name: 'ppc_id', type: 'string', required: true, description: 'Unique paper identifier' }
+        { name: 'ppc_id', type: 'string', required: true, description: 'Unique paper identifier (path parameter)' }
       ],
       response: {
         PPC_Id: "PPC_001",
@@ -125,47 +168,84 @@ const DocumentationPage = () => {
     },
     {
       method: 'GET',
-      endpoint: '/api/analytics/citations',
-      description: 'Get unified citation data for all citation-related visualizations',
-      parameters: [
-        { name: 'time_range', type: 'string', required: false, description: 'Time filter: all, last_year, last_5_years, last_10_years' },
-        { name: 'subject', type: 'string', required: false, description: 'Subject area filter' },
-        { name: 'limit', type: 'integer', required: false, description: 'Limit for top papers (max: 100)' },
-        { name: 'sort_by', type: 'string', required: false, description: 'Sort: citations_desc, citations_asc, date_desc, date_asc, title_asc' }
-      ],
+      endpoint: '/api/papers/subjects',
+      description: 'Get unique subjects for filter dropdown',
+      parameters: [],
+      response: [
+        "neuroscience",
+        "microbiology",
+        "bioinformatics",
+        "cell biology",
+        "genomics"
+      ]
+    },
+    {
+      method: 'GET',
+      endpoint: '/api/papers/servers',
+      description: 'Get unique preprint servers for filter dropdown',
+      parameters: [],
+      response: [
+        "bioRxiv",
+        "medRxiv",
+        "arXiv"
+      ]
+    },
+    {
+      method: 'GET',
+      endpoint: '/api/papers/countries',
+      description: 'Get unique countries for filter dropdown',
+      parameters: [],
+      response: [
+        "United States",
+        "United Kingdom",
+        "Germany",
+        "China",
+        "India"
+      ]
+    },
+    {
+      method: 'GET',
+      endpoint: '/api/papers/licenses',
+      description: 'Get unique licenses for filter dropdown',
+      parameters: [],
+      response: [
+        "CC BY",
+        "CC BY-NC",
+        "CC BY-NC-ND",
+        "CC0"
+      ]
+    },
+
+    // Analytics Endpoints
+    {
+      method: 'GET',
+      endpoint: '/api/analytics/country-data',
+      description: 'Get country-wise paper distribution by year for geographic analysis',
+      parameters: [],
       response: {
-        impactData: [
+        data: [
           {
-            PPC_Id: "PPC_001",
-            preprint_title: "High Impact Paper",
-            publication_date: "2023-01-01",
-            total_citation: 892,
-            all_authors: "Jane Smith, Bob Johnson",
-            preprint_subject: "molecular biology"
-          }
-        ],
-        trendsData: [
-          {
+            country_name: "United States",
             year: "2023",
-            citations: 15678,
-            papers: 234
+            count: 45678
           }
-        ],
-        heatmapData: [
-          {
-            year: 2023,
-            month: 6,
-            day: 15,
-            citations: 45
-          }
-        ],
-        topPapersData: [],
-        metadata: {
-          time_range: "all",
-          subject: null,
-          limit: 10,
-          sort_by: "citations_desc"
-        }
+        ]
+      }
+    },
+    {
+      method: 'GET',
+      endpoint: '/api/analytics/subjects',
+      description: 'Get all unique subject areas from the database',
+      parameters: [],
+      response: {
+        data: [
+          "neuroscience",
+          "microbiology",
+          "bioinformatics",
+          "cell biology",
+          "genomics",
+          "evolutionary biology"
+        ]
       }
     },
     {
@@ -207,33 +287,79 @@ const DocumentationPage = () => {
           averagePapersPerMonth: 2876,
           activeSubjects: 42,
           activeServers: 3
+        },
+        metadata: {
+          lastUpdated: "2024-01-15T10:30:00",
+          totalRecords: 344843
         }
       }
     },
     {
       method: 'GET',
-      endpoint: '/api/analytics/subjects',
-      description: 'Get all unique subject areas from the database',
-      parameters: [],
+      endpoint: '/api/analytics/citations',
+      description: 'Get unified citation data for all citation-related visualizations',
+      parameters: [
+        { name: 'time_range', type: 'string', required: false, description: 'Time filter: all, last_year, last_5_years, last_10_years (default: all)' },
+        { name: 'subject', type: 'string', required: false, description: 'Subject area filter' },
+        { name: 'limit', type: 'integer', required: false, description: 'Limit for top papers (1-100, default: 10)' },
+        { name: 'sort_by', type: 'string', required: false, description: 'Sort: citations_desc, citations_asc, date_desc, date_asc, title_asc (default: citations_desc)' }
+      ],
       response: {
-        data: [
-          "neuroscience",
-          "microbiology", 
-          "bioinformatics",
-          "cell biology",
-          "genomics",
-          "evolutionary biology"
-        ]
+        impactData: [
+          {
+            PPC_Id: "PPC_001",
+            preprint_title: "High Impact Paper",
+            publication_date: "2023-01-01",
+            total_citation: 892,
+            preprint_subject: "molecular biology"
+          }
+        ],
+        trendsData: [
+          {
+            year: "2023",
+            citations: 15678,
+            papers: 234
+          }
+        ],
+        heatmapData: [
+          {
+            year: 2023,
+            month: 6,
+            day: 15,
+            citations: 45
+          }
+        ],
+        topPapersData: [
+          {
+            PPC_Id: "PPC_001",
+            preprint_title: "Top Cited Paper",
+            publication_date: "2023-01-01",
+            total_citation: 892,
+            preprint_subject: "molecular biology"
+          }
+        ],
+        metadata: {
+          time_range: "all",
+          subject: null,
+          limit: 10,
+          sort_by: "citations_desc",
+          total_impact_records: 500,
+          total_trends_records: 10,
+          total_heatmap_records: 120,
+          total_top_papers_records: 10
+        }
       }
     },
+
+    // Authors Endpoints
     {
       method: 'GET',
       endpoint: '/api/authors/search',
       description: 'Search papers by author name using submission contact field',
       parameters: [
-        { name: 'query', type: 'string', required: true, description: 'Author name search query' },
+        { name: 'query', type: 'string', required: true, description: 'Author name search query (min 1 character)' },
         { name: 'page', type: 'integer', required: false, description: 'Page number (default: 1)' },
-        { name: 'page_size', type: 'integer', required: false, description: 'Items per page (max: 100)' }
+        { name: 'page_size', type: 'integer', required: false, description: 'Items per page (max: 100, default: 10)' }
       ],
       response: {
         papers: [
@@ -242,13 +368,231 @@ const DocumentationPage = () => {
             preprint_title: "Author's Research Paper",
             preprint_doi: "10.1101/2023.03.01.000003",
             submission_contact: "author@university.edu",
-            total_citation: 67
+            preprint_submission_date: "2023-03-01",
+            total_citation: 67,
+            preprint_server: "bioRxiv",
+            preprint_subject: "neuroscience",
+            country_name: "United States"
           }
         ],
         total: 45,
         page: 1,
         page_size: 10,
         has_next: true
+      }
+    },
+    {
+      method: 'GET',
+      endpoint: '/api/authors/list',
+      description: 'Get a list of unique authors for autocomplete/suggestions',
+      parameters: [
+        { name: 'page', type: 'integer', required: false, description: 'Page number (default: 1)' },
+        { name: 'page_size', type: 'integer', required: false, description: 'Items per page (1-200, default: 50)' }
+      ],
+      response: {
+        authors: [
+          {
+            author_name: "John Doe",
+            paper_count: 15,
+            max_citations: 234
+          }
+        ],
+        total: 125000,
+        page: 1,
+        page_size: 50,
+        has_next: true
+      }
+    },
+    {
+      method: 'GET',
+      endpoint: '/api/authors/{author_name}/papers',
+      description: 'Get all papers by a specific author',
+      parameters: [
+        { name: 'author_name', type: 'string', required: true, description: 'Author name (path parameter)' },
+        { name: 'page', type: 'integer', required: false, description: 'Page number (default: 1)' },
+        { name: 'page_size', type: 'integer', required: false, description: 'Items per page (max: 100, default: 10)' }
+      ],
+      response: {
+        papers: [],
+        total: 0,
+        page: 1,
+        page_size: 10,
+        has_next: false
+      }
+    },
+
+    // Subjects Endpoints
+    {
+      method: 'GET',
+      endpoint: '/api/subjects/analysis',
+      description: 'Unified endpoint for subject evolution, citations ranking, and version analysis',
+      parameters: [
+        { name: 'time_range', type: 'string', required: false, description: 'Time filter: all, last_year, last_5_years, last_10_years (default: all)' },
+        { name: 'subject', type: 'string', required: false, description: 'Subject filter (substring match)' },
+        { name: 'subjects', type: 'string', required: false, description: 'CSV of subjects for comparison (e.g., "bioinformatics,neuroscience")' },
+        { name: 'top', type: 'integer', required: false, description: 'Top N subjects to include when no specific subject selected (1-50, default: 10)' }
+      ],
+      response: {
+        evolutionData: [
+          {
+            year: "2023",
+            subject: "neuroscience",
+            count: 5678
+          }
+        ],
+        citationRanking: [
+          {
+            subject: "neuroscience",
+            paper_count: 42923,
+            total_citation: 567890,
+            avg_citation: 13.23
+          }
+        ],
+        versionDistribution: [
+          {
+            versions: 1,
+            count: 250000
+          }
+        ],
+        versionDistributionBySubject: [
+          {
+            subject: "neuroscience",
+            versions: 2,
+            count: 15000
+          }
+        ],
+        monthlyTrends: [
+          {
+            month: "2023-06",
+            subject: "neuroscience",
+            count: 456
+          }
+        ],
+        serverDistribution: [
+          {
+            subject: "neuroscience",
+            server: "bioRxiv",
+            count: 35000
+          }
+        ],
+        citationGrowth: [
+          {
+            year: "2023",
+            subject: "neuroscience",
+            paper_count: 5678,
+            avg_citation: 12.5,
+            max_citation: 892
+          }
+        ],
+        versionSummary: {
+          totalPapers: 344843,
+          multiVersionPapers: 89234,
+          percentMultiVersion: 25.88
+        },
+        metadata: {
+          time_range: "all",
+          subject: null,
+          subjects: [],
+          top: 10,
+          selectedSubjects: ["neuroscience", "bioinformatics"]
+        }
+      }
+    },
+
+    // Additional Root-Level Endpoints
+    {
+      method: 'GET',
+      endpoint: '/country-data',
+      description: 'Get country-wise paper distribution by year for geographic analysis',
+      parameters: [],
+      response: {
+        data: [
+          {
+            country_name: "United States",
+            year: "2023",
+            count: 45678
+          }
+        ]
+      }
+    },
+    {
+      method: 'GET',
+      endpoint: '/analytics-data',
+      description: 'Get comprehensive analytics dashboard data',
+      parameters: [],
+      response: {
+        timelineData: [],
+        subjectData: [],
+        serverData: [],
+        statisticsData: {},
+        metadata: {}
+      }
+    },
+    {
+      method: 'GET',
+      endpoint: '/subjects',
+      description: 'Get all unique subject areas from the database',
+      parameters: [],
+      response: {
+        data: ["neuroscience", "bioinformatics"]
+      }
+    },
+    {
+      method: 'GET',
+      endpoint: '/citation-data-unified',
+      description: 'Get unified citation data for all citation-related visualizations',
+      parameters: [
+        { name: 'time_range', type: 'string', required: false, description: 'Time filter: all, last_year, last_5_years, last_10_years' },
+        { name: 'subject', type: 'string', required: false, description: 'Subject filter' },
+        { name: 'limit', type: 'integer', required: false, description: 'Limit for top papers (1-100)' },
+        { name: 'sort_by', type: 'string', required: false, description: 'Sort order' }
+      ],
+      response: {
+        impactData: [],
+        trendsData: [],
+        heatmapData: [],
+        topPapersData: [],
+        metadata: {}
+      }
+    },
+    {
+      method: 'GET',
+      endpoint: '/papers',
+      description: 'Fetch papers with comprehensive filtering and pagination',
+      parameters: [
+        { name: 'country', type: 'string', required: false, description: 'Filter by country' },
+        { name: 'year', type: 'integer', required: false, description: 'Filter by year' },
+        { name: 'subject', type: 'string', required: false, description: 'Filter by subject' },
+        { name: 'page', type: 'integer', required: false, description: 'Page number' },
+        { name: 'page_size', type: 'integer', required: false, description: 'Items per page' }
+      ],
+      response: {
+        papers: [],
+        total: 0,
+        page: 1,
+        page_size: 10,
+        has_next: false
+      }
+    },
+    {
+      method: 'GET',
+      endpoint: '/paper/{ppc_id}',
+      description: 'Get complete paper details by PPC_Id',
+      parameters: [
+        { name: 'ppc_id', type: 'string', required: true, description: 'Paper ID (path parameter)' }
+      ],
+      response: {
+        PPC_Id: "PPC_001",
+        preprint_title: "Sample Paper"
+      }
+    },
+    {
+      method: 'GET',
+      endpoint: '/search',
+      description: 'Search papers - redirects to /api/papers/search',
+      parameters: [],
+      response: {
+        redirect: "/api/papers/search"
       }
     }
   ];
@@ -589,72 +933,6 @@ const DocumentationPage = () => {
                 ))}
               </div>
 
-              <Card className={styles.dataProcessing}>
-                <Card.Header>
-                  <h3 className="text-heading-3">Advanced Data Processing Pipeline</h3>
-                </Card.Header>
-                <Card.Content>
-                  <div className={styles.processingSteps}>
-                    <div className={styles.step}>
-                      <div className={styles.stepNumber}>1</div>
-                      <div className={styles.stepContent}>
-                        <h4>Systematic Data Acquisition</h4>
-                        <p>Programmatic retrieval via dedicated APIs from bioRxiv (239,847), medRxiv (55,695), and arXiv q-bio (49,301) ensuring comprehensive coverage</p>
-                      </div>
-                    </div>
-                    <div className={styles.step}>
-                      <div className={styles.stepNumber}>2</div>
-                      <div className={styles.stepContent}>
-                        <h4>LLM-Powered Enhancement</h4>
-                        <p>NVIDIA/Llama-3.1-Nemotron-70B-Instruct-HF model deployed on 8 A100-SXM4 GPUs for geographic and institutional metadata extraction</p>
-                      </div>
-                    </div>
-                    <div className={styles.step}>
-                      <div className={styles.stepNumber}>3</div>
-                      <div className={styles.stepContent}>
-                        <h4>Multi-Stage Preprocessing</h4>
-                        <p>Duplicate removal, format harmonization, version tracking, and citation network integration via OpenCitations API</p>
-                      </div>
-                    </div>
-                    <div className={styles.step}>
-                      <div className={styles.stepNumber}>4</div>
-                      <div className={styles.stepContent}>
-                        <h4>Optimized Database Storage</h4>
-                        <p>Normalized PostgreSQL schema with structured JSON for version histories and optimized indexing for analytical queries</p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div style={{ 
-                    marginTop: 'var(--spacing-2xl)', 
-                    padding: 'var(--spacing-xl)', 
-                    background: 'var(--color-bg-secondary)', 
-                    borderRadius: 'var(--radius-lg)' 
-                  }}>
-                    <h4 className="text-heading-4" style={{ marginBottom: 'var(--spacing-md)' }}>
-                      Technical Specifications
-                    </h4>
-                    <div style={{ 
-                      display: 'grid', 
-                      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-                      gap: 'var(--spacing-lg)' 
-                    }}>
-                      <div>
-                        <strong>Computing Infrastructure:</strong><br />
-                        8 A100-SXM4 GPUs<br />
-                        256 CPU cores per job<br />
-                        24-hour maximum runtime
-                      </div>
-                      <div>
-                        <strong>LLM Processing:</strong><br />
-                        3,000 token chunks<br />
-                        10% overlap between chunks<br />
-                        Structured JSON output format
-                      </div>
-                    </div>
-                  </div>
-                </Card.Content>
-              </Card>
             </section>
           )}
 
@@ -667,8 +945,6 @@ const DocumentationPage = () => {
                 </p>
               </div>
 
-              <MethodologyFlow />
-
               <div className={styles.methodologyDetails}>
                 <Card>
                   <Card.Header>
@@ -676,7 +952,7 @@ const DocumentationPage = () => {
                   </Card.Header>
                   <Card.Content>
                     <p className="text-body mb-4">
-                      Advanced NVIDIA/Llama-3.1-Nemotron-70B-Instruct-HF model processes preprint text to extract 
+                      Advanced NVIDIA/Llama-3.1-Nemotron-70B-Instruct-HF model processes preprint text to extract
                       missing geographic and institutional metadata with structured JSON output format.
                     </p>
                     <div className={styles.aiProcess}>
@@ -694,14 +970,14 @@ const DocumentationPage = () => {
                       </div>
                     </div>
                     
-                    <div style={{ 
-                      marginTop: 'var(--spacing-lg)', 
-                      padding: 'var(--spacing-md)', 
-                      background: 'var(--color-warning)', 
-                      color: 'white', 
-                      borderRadius: 'var(--radius-md)' 
+                    <div style={{
+                      marginTop: 'var(--spacing-lg)',
+                      padding: 'var(--spacing-md)',
+                      background: 'var(--color-warning)',
+                      color: 'white',
+                      borderRadius: 'var(--radius-md)'
                     }}>
-                      <strong>Known Limitation:</strong> LLM processing limited to first two pages due to computational constraints, 
+                      <strong>Known Limitation:</strong> LLM processing limited to first two pages due to computational constraints,
                       which may result in missing affiliations located beyond this range.
                     </div>
                   </Card.Content>
@@ -727,12 +1003,13 @@ const DocumentationPage = () => {
                       </div>
                     </div>
                     <p className="text-body-small" style={{ marginTop: 'var(--spacing-md)', color: 'var(--color-text-secondary)' }}>
-                      Quality control conducted through random sampling approach due to computational feasibility constraints. 
+                      Quality control conducted through random sampling approach due to computational feasibility constraints.
                       Primary error sources include LLM hallucination and input truncation limitations.
                     </p>
                   </Card.Content>
                 </Card>
               </div>
+              <MethodologyFlow />
             </section>
           )}
 
