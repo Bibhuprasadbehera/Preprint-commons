@@ -1,7 +1,7 @@
 # Preprint Commons
 
 <div align="center">
-  <img src="frontend/images/preprint_commons_logo2.jpg" alt="Preprint Commons Logo" width="500" style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"/>
+  <img src="frontend/images/preprint_commons_logo3.jpg" alt="Preprint Commons Logo" width="500" style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"/>
   
   <p><strong>A dedicated database and visualization platform for large-scale preprint meta-analysis</strong></p>
   
