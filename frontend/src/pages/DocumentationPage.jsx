@@ -28,33 +28,6 @@ const DocumentationPage = () => {
   }, [activeTab]);
 
   const apiEndpoints = [
-    // Root Endpoint
-    {
-      method: 'GET',
-      endpoint: '/',
-      description: 'Root endpoint providing API information and version',
-      parameters: [],
-      response: {
-        message: "PPC Research Papers API",
-        version: "2.0.0",
-        docs: "/docs",
-        health: "/api/health"
-      }
-    },
-
-    // Health Endpoints
-    {
-      method: 'GET',
-      endpoint: '/api/health/',
-      description: 'Health check endpoint to verify API and database status',
-      parameters: [],
-      response: {
-        status: "healthy",
-        database: true,
-        timestamp: "2024-01-15T10:30:00"
-      }
-    },
-
     // Papers Endpoints
     {
       method: 'GET',
@@ -166,55 +139,6 @@ const DocumentationPage = () => {
         versions: "[{\"version\": 1, \"date\": \"2023-01-01\"}]"
       }
     },
-    {
-      method: 'GET',
-      endpoint: '/api/papers/subjects',
-      description: 'Get unique subjects for filter dropdown',
-      parameters: [],
-      response: [
-        "neuroscience",
-        "microbiology",
-        "bioinformatics",
-        "cell biology",
-        "genomics"
-      ]
-    },
-    {
-      method: 'GET',
-      endpoint: '/api/papers/servers',
-      description: 'Get unique preprint servers for filter dropdown',
-      parameters: [],
-      response: [
-        "bioRxiv",
-        "medRxiv",
-        "arXiv"
-      ]
-    },
-    {
-      method: 'GET',
-      endpoint: '/api/papers/countries',
-      description: 'Get unique countries for filter dropdown',
-      parameters: [],
-      response: [
-        "United States",
-        "United Kingdom",
-        "Germany",
-        "China",
-        "India"
-      ]
-    },
-    {
-      method: 'GET',
-      endpoint: '/api/papers/licenses',
-      description: 'Get unique licenses for filter dropdown',
-      parameters: [],
-      response: [
-        "CC BY",
-        "CC BY-NC",
-        "CC BY-NC-ND",
-        "CC0"
-      ]
-    },
 
     // Analytics Endpoints
     {
@@ -229,22 +153,6 @@ const DocumentationPage = () => {
             year: "2023",
             count: 45678
           }
-        ]
-      }
-    },
-    {
-      method: 'GET',
-      endpoint: '/api/analytics/subjects',
-      description: 'Get all unique subject areas from the database',
-      parameters: [],
-      response: {
-        data: [
-          "neuroscience",
-          "microbiology",
-          "bioinformatics",
-          "cell biology",
-          "genomics",
-          "evolutionary biology"
         ]
       }
     },
@@ -381,45 +289,6 @@ const DocumentationPage = () => {
         has_next: true
       }
     },
-    {
-      method: 'GET',
-      endpoint: '/api/authors/list',
-      description: 'Get a list of unique authors for autocomplete/suggestions',
-      parameters: [
-        { name: 'page', type: 'integer', required: false, description: 'Page number (default: 1)' },
-        { name: 'page_size', type: 'integer', required: false, description: 'Items per page (1-200, default: 50)' }
-      ],
-      response: {
-        authors: [
-          {
-            author_name: "John Doe",
-            paper_count: 15,
-            max_citations: 234
-          }
-        ],
-        total: 125000,
-        page: 1,
-        page_size: 50,
-        has_next: true
-      }
-    },
-    {
-      method: 'GET',
-      endpoint: '/api/authors/{author_name}/papers',
-      description: 'Get all papers by a specific author',
-      parameters: [
-        { name: 'author_name', type: 'string', required: true, description: 'Author name (path parameter)' },
-        { name: 'page', type: 'integer', required: false, description: 'Page number (default: 1)' },
-        { name: 'page_size', type: 'integer', required: false, description: 'Items per page (max: 100, default: 10)' }
-      ],
-      response: {
-        papers: [],
-        total: 0,
-        page: 1,
-        page_size: 10,
-        has_next: false
-      }
-    },
 
     // Subjects Endpoints
     {
@@ -499,102 +368,6 @@ const DocumentationPage = () => {
       }
     },
 
-    // Additional Root-Level Endpoints
-    {
-      method: 'GET',
-      endpoint: '/country-data',
-      description: 'Get country-wise paper distribution by year for geographic analysis',
-      parameters: [],
-      response: {
-        data: [
-          {
-            country_name: "United States",
-            year: "2023",
-            count: 45678
-          }
-        ]
-      }
-    },
-    {
-      method: 'GET',
-      endpoint: '/analytics-data',
-      description: 'Get comprehensive analytics dashboard data',
-      parameters: [],
-      response: {
-        timelineData: [],
-        subjectData: [],
-        serverData: [],
-        statisticsData: {},
-        metadata: {}
-      }
-    },
-    {
-      method: 'GET',
-      endpoint: '/subjects',
-      description: 'Get all unique subject areas from the database',
-      parameters: [],
-      response: {
-        data: ["neuroscience", "bioinformatics"]
-      }
-    },
-    {
-      method: 'GET',
-      endpoint: '/citation-data-unified',
-      description: 'Get unified citation data for all citation-related visualizations',
-      parameters: [
-        { name: 'time_range', type: 'string', required: false, description: 'Time filter: all, last_year, last_5_years, last_10_years' },
-        { name: 'subject', type: 'string', required: false, description: 'Subject filter' },
-        { name: 'limit', type: 'integer', required: false, description: 'Limit for top papers (1-100)' },
-        { name: 'sort_by', type: 'string', required: false, description: 'Sort order' }
-      ],
-      response: {
-        impactData: [],
-        trendsData: [],
-        heatmapData: [],
-        topPapersData: [],
-        metadata: {}
-      }
-    },
-    {
-      method: 'GET',
-      endpoint: '/papers',
-      description: 'Fetch papers with comprehensive filtering and pagination',
-      parameters: [
-        { name: 'country', type: 'string', required: false, description: 'Filter by country' },
-        { name: 'year', type: 'integer', required: false, description: 'Filter by year' },
-        { name: 'subject', type: 'string', required: false, description: 'Filter by subject' },
-        { name: 'page', type: 'integer', required: false, description: 'Page number' },
-        { name: 'page_size', type: 'integer', required: false, description: 'Items per page' }
-      ],
-      response: {
-        papers: [],
-        total: 0,
-        page: 1,
-        page_size: 10,
-        has_next: false
-      }
-    },
-    {
-      method: 'GET',
-      endpoint: '/paper/{ppc_id}',
-      description: 'Get complete paper details by PPC_Id',
-      parameters: [
-        { name: 'ppc_id', type: 'string', required: true, description: 'Paper ID (path parameter)' }
-      ],
-      response: {
-        PPC_Id: "PPC_001",
-        preprint_title: "Sample Paper"
-      }
-    },
-    {
-      method: 'GET',
-      endpoint: '/search',
-      description: 'Search papers - redirects to /api/papers/search',
-      parameters: [],
-      response: {
-        redirect: "/api/papers/search"
-      }
-    }
   ];
 
   const dataSources = [
