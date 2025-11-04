@@ -27,7 +27,17 @@ const FaqPage = () => {
     },
     {
       question: "Does Preprint Commons use LLM for all the preprints?",
-      answer: "No, LLM processing is specifically applied to arXiv (Q-bio) preprints to extract missing author affiliation and geographic data. For bioRxiv and medRxiv preprints, JATS-XML was used to extract the relevant information.",
+      answer: "No, LLM processing is specifically applied to arXiv (Q-bio) preprints to extract missing author affiliation and geographic data. For bioRxiv and medRxiv preprints, JATS XML was used to extract the relevant information.",
+      category: "Technical"
+    },
+    {
+      question: "What is JATS XML and how is it used in Preprint Commons?",
+      answer: "JATS (Journal Article Tag Suite) XML is a standardized XML format for representing scholarly articles and their metadata. bioRxiv and medRxiv provide preprint metadata in JATS XML format, which includes structured information about authors, affiliations, institutions, and other bibliographic details. Preprint Commons parses this JATS XML to extract corresponding author affiliations and country information directly, eliminating the need for LLM processing for these repositories. This provides higher accuracy and consistency compared to unstructured text extraction.",
+      category: "Technical"
+    },
+    {
+      question: "Why is JATS XML preferred over LLM extraction when available?",
+      answer: "JATS XML provides structured, machine-readable metadata that can be parsed with near-perfect accuracy using rule-based methods. Unlike LLM processing which may hallucinate or miss information, JATS XML parsing is deterministic and reliable. For bioRxiv and medRxiv, JATS XML contains comprehensive author affiliation data in a standardized format, making it the preferred method for metadata extraction. LLM processing is only used for arXiv (q-bio) where JATS XML is not available.",
       category: "Technical"
     },
     {

@@ -911,7 +911,7 @@ const DocumentationPage = () => {
               <div className={styles.sectionHeader}>
                 <h2 className="text-heading-2">Data Sources</h2>
                 <p className="text-body-large">
-                  We aggregate data from leading preprint repositories worldwide
+                  Comprehensive metadata from three major life sciences preprint repositories
                 </p>
               </div>
 
@@ -933,6 +933,186 @@ const DocumentationPage = () => {
                   />
                 ))}
               </div>
+
+              {/* Repository Selection Rationale */}
+              <Card style={{ marginTop: 'var(--spacing-3xl)' }}>
+                <Card.Header>
+                  <h3 className="text-heading-3">Repository Selection Criteria</h3>
+                </Card.Header>
+                <Card.Content>
+                  <p className="text-body" style={{ marginBottom: 'var(--spacing-lg)' }}>
+                    Preprint Commons focuses on three primary repositories that provide structured, comprehensive, 
+                    and high-quality metadata through robust APIs with thematic consistency in life sciences.
+                  </p>
+                  
+                  <div style={{ 
+                    display: 'grid', 
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+                    gap: 'var(--spacing-lg)',
+                    marginBottom: 'var(--spacing-xl)'
+                  }}>
+                    <div style={{
+                      padding: 'var(--spacing-lg)',
+                      background: 'var(--color-bg-secondary)',
+                      borderRadius: 'var(--radius-lg)',
+                      borderLeft: '4px solid var(--color-success)'
+                    }}>
+                      <h4 className="text-heading-4" style={{ marginBottom: 'var(--spacing-md)', color: 'var(--color-success)' }}>
+                        ✓ Included Repositories
+                      </h4>
+                      <ul className={styles.techList} style={{ fontSize: 'var(--font-size-sm)' }}>
+                        <li><strong>bioRxiv:</strong> Robust API, JATS XML metadata, comprehensive coverage</li>
+                        <li><strong>medRxiv:</strong> Consistent schema, health sciences focus, structured data</li>
+                        <li><strong>arXiv (q-bio):</strong> Established platform, quantitative biology subset</li>
+                      </ul>
+                    </div>
+                    
+                    <div style={{
+                      padding: 'var(--spacing-lg)',
+                      background: 'var(--color-bg-secondary)',
+                      borderRadius: 'var(--radius-lg)',
+                      borderLeft: '4px solid var(--color-warning)'
+                    }}>
+                      <h4 className="text-heading-4" style={{ marginBottom: 'var(--spacing-md)', color: 'var(--color-warning)' }}>
+                        ⚠ Excluded Repositories
+                      </h4>
+                      <ul className={styles.techList} style={{ fontSize: 'var(--font-size-sm)' }}>
+                        <li><strong>ChemRxiv:</strong> Heterogeneous metadata schema</li>
+                        <li><strong>OSF Preprints:</strong> Inconsistent field definitions</li>
+                        <li><strong>F1000Research:</strong> Different data structure</li>
+                        <li><strong>Preprints.org:</strong> Limited API access</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div style={{
+                    padding: 'var(--spacing-lg)',
+                    background: 'linear-gradient(135deg, var(--color-primary-light), var(--color-accent-light))',
+                    borderRadius: 'var(--radius-lg)',
+                    border: '1px solid var(--color-primary)'
+                  }}>
+                    <h4 className="text-heading-4" style={{ marginBottom: 'var(--spacing-md)' }}>
+                      Future Expansion Plans
+                    </h4>
+                    <p className="text-body-small" style={{ color: 'var(--color-text-secondary)' }}>
+                      Future development will prioritize developing custom parsers and integration frameworks to include 
+                      additional repositories. This requires building harmonization pipelines for each server to handle 
+                      different metadata schemas and field definitions while maintaining data quality and consistency.
+                    </p>
+                  </div>
+                </Card.Content>
+              </Card>
+
+              {/* Metadata Collection Details */}
+              <Card style={{ marginTop: 'var(--spacing-2xl)' }}>
+                <Card.Header>
+                  <h3 className="text-heading-3">Metadata Collection & Processing</h3>
+                </Card.Header>
+                <Card.Content>
+                  <div style={{ 
+                    display: 'grid', 
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+                    gap: 'var(--spacing-xl)'
+                  }}>
+                    <div>
+                      <h4 className="text-heading-4" style={{ marginBottom: 'var(--spacing-md)', color: 'var(--color-primary)' }}>
+                        📋 Standard Metadata Fields
+                      </h4>
+                      <ul className={styles.techList}>
+                        <li>DOI (Digital Object Identifier)</li>
+                        <li>Title and abstract</li>
+                        <li>Authors and corresponding author</li>
+                        <li>Submission and publication dates</li>
+                        <li>Version information</li>
+                        <li>License type</li>
+                        <li>Subject category</li>
+                        <li>Preprint server</li>
+                      </ul>
+                    </div>
+
+                    <div>
+                      <h4 className="text-heading-4" style={{ marginBottom: 'var(--spacing-md)', color: 'var(--color-secondary)' }}>
+                        🔬 Enhanced Metadata
+                      </h4>
+                      <ul className={styles.techList}>
+                        <li>Author institutional affiliations</li>
+                        <li>Geographic country information</li>
+                        <li>Citation counts and networks</li>
+                        <li>Publication status (peer-reviewed DOI)</li>
+                        <li>Complete version history</li>
+                        <li>JATS XML structured data</li>
+                      </ul>
+                    </div>
+
+                    <div>
+                      <h4 className="text-heading-4" style={{ marginBottom: 'var(--spacing-md)', color: 'var(--color-accent)' }}>
+                        🔄 Data Processing
+                      </h4>
+                      <ul className={styles.techList}>
+                        <li>JSON to CSV conversion</li>
+                        <li>Duplicate detection and removal</li>
+                        <li>Date standardization (ISO format)</li>
+                        <li>Text normalization</li>
+                        <li>JATS XML parsing</li>
+                        <li>LLM-based enhancement (arXiv)</li>
+                      </ul>
+                    </div>
+                  </div>
+                </Card.Content>
+              </Card>
+
+              {/* Data Quality & Updates */}
+              <Card style={{ marginTop: 'var(--spacing-2xl)' }}>
+                <Card.Header>
+                  <h3 className="text-heading-3">Data Quality & Update Schedule</h3>
+                </Card.Header>
+                <Card.Content>
+                  <div style={{ 
+                    display: 'grid', 
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+                    gap: 'var(--spacing-lg)'
+                  }}>
+                    <div style={{
+                      padding: 'var(--spacing-lg)',
+                      background: 'var(--color-bg-secondary)',
+                      borderRadius: 'var(--radius-lg)',
+                      textAlign: 'center'
+                    }}>
+                      <div style={{ fontSize: 'var(--font-size-3xl)', marginBottom: 'var(--spacing-md)' }}>📅</div>
+                      <h4 className="text-heading-4" style={{ marginBottom: 'var(--spacing-sm)' }}>Current Coverage</h4>
+                      <p className="text-body-small" style={{ color: 'var(--color-text-secondary)' }}>
+                        Dataset includes preprints up to <strong>June 2024</strong>
+                      </p>
+                    </div>
+
+                    <div style={{
+                      padding: 'var(--spacing-lg)',
+                      background: 'var(--color-bg-secondary)',
+                      borderRadius: 'var(--radius-lg)',
+                      textAlign: 'center'
+                    }}>
+                      <div style={{ fontSize: 'var(--font-size-3xl)', marginBottom: 'var(--spacing-md)' }}>🔄</div>
+                      <h4 className="text-heading-4" style={{ marginBottom: 'var(--spacing-sm)' }}>Update Frequency</h4>
+                      <p className="text-body-small" style={{ color: 'var(--color-text-secondary)' }}>
+                        Planned <strong>quarterly updates</strong> to maintain current coverage
+                      </p>
+                    </div>
+
+                    <div style={{
+                      padding: 'var(--spacing-lg)',
+                      background: 'var(--color-bg-secondary)',
+                      borderRadius: 'var(--radius-lg)',
+                      textAlign: 'center'
+                    }}>
+                      <div style={{ fontSize: 'var(--font-size-3xl)', marginBottom: 'var(--spacing-md)' }}>✓</div>
+                      <h4 className="text-heading-4" style={{ marginBottom: 'var(--spacing-sm)' }}>Quality Assurance</h4>
+                      <p className="text-body-small" style={{ color: 'var(--color-text-secondary)' }}>
+                        <strong>85-90% accuracy</strong> validated through random sampling
+                      </p>
+                    </div>
+                  </div>
+                </Card.Content>
+              </Card>
 
             </section>
           )}
