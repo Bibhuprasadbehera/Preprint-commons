@@ -1,101 +1,16 @@
-/* Enhanced Hero Section with Animations */
+/* Hero Section */
 .hero {
   position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, 
-    var(--color-primary) 0%, 
-    var(--color-accent) 50%, 
-    var(--color-secondary) 100%);
-  color: var(--color-text-inverse);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
   overflow: hidden;
 }
 
-.floatingElements {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-}
 
-.floatingElement {
-  position: absolute;
-  width: 60px;
-  height: 60px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  animation: float 8s ease-in-out infinite;
-}
-
-.floatingElement:nth-child(1) {
-  top: 20%;
-  left: 10%;
-  animation-delay: 0s;
-}
-
-.floatingElement:nth-child(2) {
-  top: 60%;
-  right: 15%;
-  animation-delay: 2s;
-  width: 40px;
-  height: 40px;
-}
-
-.floatingElement:nth-child(3) {
-  top: 80%;
-  left: 20%;
-  animation-delay: 4s;
-  width: 80px;
-  height: 80px;
-}
-
-.floatingElement:nth-child(4) {
-  top: 30%;
-  right: 30%;
-  animation-delay: 1s;
-  width: 30px;
-  height: 30px;
-}
-
-.floatingElement:nth-child(5) {
-  top: 70%;
-  left: 60%;
-  animation-delay: 3s;
-  width: 50px;
-  height: 50px;
-}
-
-.floatingElement:nth-child(6) {
-  top: 40%;
-  left: 80%;
-  animation-delay: 5s;
-  width: 35px;
-  height: 35px;
-}
-
-@keyframes float {
-  0%, 100% { 
-    transform: translateY(0px) rotate(0deg); 
-    opacity: 0.7;
-  }
-  25% { 
-    transform: translateY(-20px) rotate(90deg); 
-    opacity: 1;
-  }
-  50% { 
-    transform: translateY(-40px) rotate(180deg); 
-    opacity: 0.8;
-  }
-  75% { 
-    transform: translateY(-20px) rotate(270deg); 
-    opacity: 1;
-  }
-}
 
 .container {
   position: relative;
@@ -116,7 +31,7 @@
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
   margin-bottom: var(--spacing-xl);
-  animation: slideInFromLeft 1s ease-out 0.2s both;
+  animation: fadeInUp 1s ease-out 0.2s both;
 }
 
 .subtitle {
@@ -127,7 +42,7 @@
   margin-left: auto;
   margin-right: auto;
   opacity: 0.95;
-  animation: slideInFromRight 1s ease-out 0.4s both;
+  animation: fadeInUp 1s ease-out 0.4s both;
 }
 
 .actions {
@@ -160,17 +75,9 @@
 .stat {
   text-align: center;
   padding: var(--spacing-lg);
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--color-neutral-50);
+  border: 1px solid var(--color-neutral-200);
   border-radius: var(--radius-lg);
-  transition: all var(--transition-normal);
-}
-
-.stat:hover {
-  transform: translateY(-5px);
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .statNumber {
@@ -193,7 +100,6 @@
   bottom: var(--spacing-2xl);
   left: 50%;
   transform: translateX(-50%);
-  animation: bounce 2s ease-in-out infinite;
 }
 
 .scrollIndicator svg {
@@ -210,40 +116,6 @@
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes slideInFromLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInFromRight {
-  from {
-    opacity: 0;
-    transform: translateX(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% { 
-    transform: translateX(-50%) translateY(0); 
-  }
-  40% { 
-    transform: translateX(-50%) translateY(-10px); 
-  }
-  60% { 
-    transform: translateX(-50%) translateY(-5px); 
   }
 }
 

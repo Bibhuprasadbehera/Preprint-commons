@@ -6,13 +6,6 @@ import styles from './Hero.module.css';
 const Hero = () => {
   return (
     <section className={styles.hero}>
-      {/* Floating background elements */}
-      <div className={styles.floatingElements}>
-        {[...Array(6)].map((_, i) => (
-          <div key={i} className={styles.floatingElement}></div>
-        ))}
-      </div>
-
       <div className={styles.container}>
         <div className={styles.content}>
           <h1 className={styles.title}>
