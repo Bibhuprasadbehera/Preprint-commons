@@ -30,7 +30,7 @@ const Hero = () => {
               </Button>
             </Link>
             <Link to="/about">
-              <Button variant="outline" size="xlarge">
+              <Button variant="primary" size="xlarge">
                 Learn More
               </Button>
             </Link>

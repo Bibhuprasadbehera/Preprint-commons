@@ -37,7 +37,11 @@ const Navbar = () => {
     <nav className={`${styles.navbar} ${isScrolled ? styles.scrolled : ''}`}>
       <div className={styles.container}>
         <Link to="/" className={styles.logo}>
-          Preprint Commons
+          <img 
+            src="/images/preprint_commons_logo3.jpg" 
+            alt="Preprint Commons" 
+            className={styles.logoImage}
+          />
         </Link>
         
         {/* Desktop Navigation */}

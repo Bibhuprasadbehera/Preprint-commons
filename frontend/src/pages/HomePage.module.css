@@ -117,32 +117,35 @@
 .ctaButton {
   display: inline-block;
   padding: 1rem 2rem;
-  background: #3b82f6;
+  background: var(--color-secondary);
   color: white;
   text-decoration: none;
   border-radius: 8px;
   font-weight: 600;
   transition: all 0.2s ease;
+  box-shadow: var(--shadow-md);
 }
 
 .ctaButton:hover {
-  background: #2563eb;
+  background: var(--color-secondary-dark);
   transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
 
 .ctaButtonSecondary {
   display: inline-block;
   padding: 1rem 2rem;
-  background: transparent;
+  background: var(--color-primary);
   color: white;
   text-decoration: none;
-  border: 2px solid white;
   border-radius: 8px;
   font-weight: 600;
   transition: all 0.2s ease;
+  box-shadow: var(--shadow-md);
 }
 
 .ctaButtonSecondary:hover {
-  background: white;
-  color: #1e293b;
+  background: var(--color-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }

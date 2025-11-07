@@ -302,52 +302,8 @@ If you encounter any issues or have questions:
 
 Built by researchers, for researchers:
 - **Bibhu Prasad Behera** - Research & Development
-- **Binay Panda** - Academic Supervision
+- **Binay Panda** - Supervisor
 
 **Institutional Support:**
 - Jawaharlal Nehru University (JNU)
 - Centre for Development of Advanced Computing (C-DAC)
-
-## 🎯 Target Audience
-
-- **Researchers & Scientists** - Analyze trends and discover collaborations
-- **Graduate Students** - Explore research landscapes and identify opportunities
-- **Data Scientists** - Access comprehensive APIs for custom analytics
-- **Publishers & Editors** - Monitor research trends and publication patterns
-- **Research Organizations** - Track global trends and assess scientific output
-- **Open Science Advocates** - Support preprint adoption and transparency
-
-## 🔮 Roadmap
-
-### Completed ✅
-- Core database with 344,000+ preprints
-- RESTful API with 20+ endpoints
-- Interactive frontend with React 19
-- Geographic analytics and mapping
-- Citation analysis and tracking
-- Author search and profiles
-- Subject analysis and trends
-- Comprehensive documentation
-
-### In Progress 🚧
-- Advanced search filters
-- Enhanced analytics dashboards
-- Performance optimizations
-- Mobile responsiveness improvements
-
-### Planned 📋
-- Integration with additional repositories
-- Real-time data updates
-- Advanced machine learning insights
-- Author network visualization
-- Retraction watch integration
-- Similar papers recommendations
-- User authentication and personalization
-
----
-
-<div align="center">
-  <strong>Made with ❤️ for the open science community</strong>
-  
-  <p>Empowering the next generation to drive the democratization of science</p>
-</div>

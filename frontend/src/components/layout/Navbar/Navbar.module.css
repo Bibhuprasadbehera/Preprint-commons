@@ -24,20 +24,20 @@
 }
 
 .logo {
-  font-family: var(--font-family-display);
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
   text-decoration: none;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
   transition: all var(--transition-fast);
 }
 
 .logo:hover {
   transform: scale(1.05);
+}
+
+.logoImage {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
 }
 
 .nav {
@@ -201,8 +201,8 @@
     padding: 0 var(--spacing-md);
   }
   
-  .logo {
-    font-size: var(--font-size-xl);
+  .logoImage {
+    height: 40px;
   }
 }
 
@@ -211,7 +211,7 @@
     height: 70px;
   }
   
-  .logo {
-    font-size: var(--font-size-lg);
+  .logoImage {
+    height: 35px;
   }
 }
