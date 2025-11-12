@@ -23,7 +23,7 @@ const FaqPage = () => {
     },
     {
       question: "How does Preprint Commons use AI to enhance meta-analysis?",
-      answer: "The database employs the NVIDIA/Llama-3.1-Nemotron-70B-Instruct-HF model deployed across 8 A100-SXM4 GPUs to extract missing author affiliations and geographic information for arXiv (Q-bio) repository. The LLM processes the first two pages of each preprint using structured prompts to return JSON-formatted data including corresponding author details, affiliations, countries, and email addresses.",
+      answer: "The database employs the <a href=\"https://huggingface.co/nvidia/Llama-3.1-Nemotron-70B-Instruct-HF\" target=\"_blank\" rel=\"noopener noreferrer\">NVIDIA/Llama-3.1-Nemotron-70B-Instruct-HF</a> model deployed across 8 A100-SXM4 GPUs to extract missing author affiliations and geographic information for arXiv (Q-bio) repository. The LLM processes the first two pages of each preprint using structured prompts to return JSON-formatted data including corresponding author details, affiliations, countries, and email addresses.",
       category: "Technical"
     },
     {
@@ -253,13 +253,15 @@ const FaqPage = () => {
                         background: 'var(--color-bg-secondary)',
                         animation: 'fadeInUp 0.3s ease-out'
                       }}>
-                        <p className="text-body" style={{ 
-                          margin: 0,
-                          lineHeight: 'var(--line-height-relaxed)',
-                          color: 'var(--color-text-secondary)'
-                        }}>
-                          {faq.answer}
-                        </p>
+                        <p
+                          className="text-body"
+                          style={{
+                            margin: 0,
+                            lineHeight: 'var(--line-height-relaxed)',
+                            color: 'var(--color-text-secondary)'
+                          }}
+                          dangerouslySetInnerHTML={{ __html: faq.answer }}
+                        />
                       </div>
                     )}
                   </div>

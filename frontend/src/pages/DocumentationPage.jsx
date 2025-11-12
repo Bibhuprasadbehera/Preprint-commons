@@ -558,12 +558,14 @@ const DocumentationPage = () => {
                         }}>
                           {feature.title}
                         </h4>
-                        <p className="text-body-small" style={{ 
-                          color: 'var(--color-text-secondary)',
-                          lineHeight: 'var(--line-height-relaxed)'
-                        }}>
-                          {feature.desc}
-                        </p>
+                        <p
+                          className="text-body-small"
+                          style={{
+                            color: 'var(--color-text-secondary)',
+                            lineHeight: 'var(--line-height-relaxed)'
+                          }}
+                          dangerouslySetInnerHTML={{ __html: feature.desc }}
+                        />
                       </div>
                     ))}
                   </div>
@@ -933,8 +935,8 @@ const DocumentationPage = () => {
                       </div>
                       <div className={styles.aiStep}>
                         <h4>Geographic Data Enhancement</h4>
-                        <p>Tiered extraction strategy: JATS XML parsing for author affiliations and country names, followed by 
-                        LLM analysis (NVIDIA/Llama-3.1-Nemotron-70B-Instruct-HF) for records with unavailable or incomplete 
+                        <p>Tiered extraction strategy: JATS XML parsing for author affiliations and country names, followed by
+                        LLM analysis (<a href="https://huggingface.co/nvidia/Llama-3.1-Nemotron-70B-Instruct-HF" target="_blank" rel="noopener noreferrer">NVIDIA/Llama-3.1-Nemotron-70B-Instruct-HF</a>) for records with unavailable or incomplete
                         JATS XML data.</p>
                       </div>
                       <div className={styles.aiStep}>
@@ -1049,10 +1051,10 @@ const DocumentationPage = () => {
                           desc: 'Modern responsive application with React Router for navigation, Chart.js for charting, and custom D3.js components for advanced visualizations',
                           color: 'var(--color-accent)'
                         },
-                        { 
-                          icon: '🤖', 
-                          title: 'AI Enhancement', 
-                          desc: 'NVIDIA/Llama-3.1-Nemotron-70B-Instruct-HF model deployed across 8 A100-SXM4 GPUs for metadata extraction and geographic classification',
+                        {
+                          icon: '🤖',
+                          title: 'AI Enhancement',
+                          desc: '<a href="https://huggingface.co/nvidia/Llama-3.1-Nemotron-70B-Instruct-HF" target="_blank" rel="noopener noreferrer">NVIDIA/Llama-3.1-Nemotron-70B-Instruct-HF</a> model deployed across 8 A100-SXM4 GPUs for metadata extraction and geographic classification',
                           color: 'var(--color-success)'
                         }
                       ].map((tech, index) => (
@@ -1074,11 +1076,10 @@ const DocumentationPage = () => {
                           }}>
                             {tech.title}
                           </h4>
-                          <p className="text-body-small" style={{ 
+                          <p className="text-body-small" style={{
                             color: 'var(--color-text-secondary)',
                             lineHeight: 'var(--line-height-relaxed)'
-                          }}>
-                            {tech.desc}
+                          }} dangerouslySetInnerHTML={{ __html: tech.desc }}>
                           </p>
                         </div>
                       ))}
