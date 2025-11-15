@@ -200,6 +200,20 @@ const PaperDetailsPage = () => {
     });
   };
 
+  const getPreprintUrl = (doi, server) => {
+    if (!doi) return null;
+    
+    const serverLower = server?.toLowerCase() || '';
+    
+    // arXiv uses a different URL format
+    if (serverLower === 'arxiv') {
+      return `https://arxiv.org/abs/${doi}`;
+    }
+    
+    // bioRxiv and medRxiv use DOI URLs
+    return `https://doi.org/${doi}`;
+  };
+
   return (
     <Layout>
       <div className={layoutStyles.pageContainer}>
@@ -269,7 +283,7 @@ const PaperDetailsPage = () => {
             <div className={styles.actionButtons}>
               {paper.preprint_doi && (
                 <a 
-                  href={`https://doi.org/${paper.preprint_doi}`}
+                  href={getPreprintUrl(paper.preprint_doi, paper.preprint_server)}
                   target="_blank"
                   rel="noopener noreferrer"
                 >

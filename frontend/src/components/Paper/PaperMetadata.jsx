@@ -13,6 +13,20 @@ const PaperMetadata = ({ paper }) => {
     }
   };
 
+  const getPreprintUrl = (doi, server) => {
+    if (!doi) return null;
+    
+    const serverLower = server?.toLowerCase() || '';
+    
+    // arXiv uses a different URL format
+    if (serverLower === 'arxiv') {
+      return `https://arxiv.org/abs/${doi}`;
+    }
+    
+    // bioRxiv and medRxiv use DOI URLs
+    return `https://doi.org/${doi}`;
+  };
+
   useEffect(() => {
     const handleClick = (e) => {
       const target = e.target;
@@ -30,7 +44,7 @@ const PaperMetadata = ({ paper }) => {
   }, [navigate]);
 
   const meta = [
-    { k: 'preprint_doi', l: 'DOI', v: d => `<a href="https://doi.org/${d}" target="_blank" rel="noopener noreferrer" class="${styles.externalLink}">${d}</a>` },
+    { k: 'preprint_doi', l: 'DOI', v: d => `<a href="${getPreprintUrl(d, paper.preprint_server)}" target="_blank" rel="noopener noreferrer" class="${styles.externalLink}">${d}</a>` },
     { k: 'preprint_submission_date', l: 'Submission Date', v: d => new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) },
     { k: 'preprint_server', l: 'Preprint Server' },
     {
