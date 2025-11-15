@@ -52,7 +52,14 @@ const PaperMetadata = ({ paper }) => {
       l: 'Submission Contact',
       v: (d) => `<span class="${styles.authorLink}" data-author="${d}" title="View papers by ${d}">${d}</span>`
     },
-    { k: 'corresponding_institution', l: 'Corresponding Institution' },
+    { 
+      k: 'corresponding_institution', 
+      l: 'Corresponding Institution',
+      v: (d) => {
+        const isArxiv = paper.preprint_server?.toLowerCase() === 'arxiv';
+        return isArxiv ? `${d} (LLM)` : d;
+      }
+    },
     { k: 'country_name', l: 'Country' },
     { k: 'versions', l: 'Versions', v: d => {
       try {

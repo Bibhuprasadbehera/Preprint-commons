@@ -36,6 +36,10 @@ class ApiService {
     return this.get(`/papers/search?query=${encodeURIComponent(query)}&page=${page}&page_size=${pageSize}`);
   }
 
+  static async advancedSearchPapers(criteria, page = 1, pageSize = 20) {
+    return this.post(`/papers/advanced-search?page=${page}&page_size=${pageSize}`, criteria);
+  }
+
   static async getPaper(ppcId) {
     return this.get(`/papers/${ppcId}`);
   }

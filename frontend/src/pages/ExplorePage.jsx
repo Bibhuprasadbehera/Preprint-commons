@@ -238,6 +238,157 @@ const ExplorePage = () => {
     linkElement.click();
   };
 
+  const handleExportSearchResults = (format = 'json') => {
+    if (!searchResults || searchResults.length === 0) {
+      alert('No search results to export');
+      return;
+    }
+
+    const timestamp = new Date().toISOString().split('T')[0];
+    const searchType = isAdvancedSearch ? 'advanced' : 'basic';
+    
+    if (format === 'json') {
+      const exportData = {
+        searchType,
+        searchQuery: isAdvancedSearch ? lastSearchCriteria : searchQuery,
+        totalResults,
+        currentPage,
+        resultsPerPage: RESULTS_PER_PAGE,
+        exportedAt: new Date().toISOString(),
+        papers: searchResults
+      };
+      
+      const dataStr = JSON.stringify(exportData, null, 2);
+      const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+      const exportFileDefaultName = `search-results-${searchType}-${timestamp}.json`;
+      
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileDefaultName);
+      linkElement.click();
+    } else if (format === 'csv') {
+      // CSV export
+      const headers = [
+        'PPC_Id',
+        'Title',
+        'Authors',
+        'DOI',
+        'Server',
+        'Subject',
+        'Submission Date',
+        'Country',
+        'Institution',
+        'Citations',
+        'Published DOI',
+        'Publication Date'
+      ];
+      
+      const csvRows = [headers.join(',')];
+      
+      searchResults.forEach(paper => {
+        const row = [
+          paper.PPC_Id || '',
+          `"${(paper.preprint_title || '').replace(/"/g, '""')}"`,
+          `"${(paper.all_authors || '').replace(/"/g, '""')}"`,
+          paper.preprint_doi || '',
+          paper.preprint_server || '',
+          paper.preprint_subject || '',
+          paper.preprint_submission_date || '',
+          paper.country_name || '',
+          `"${(paper.corresponding_institution || '').replace(/"/g, '""')}"`,
+          paper.total_citation || '0',
+          paper.published_DOI || '',
+          paper.publication_date || ''
+        ];
+        csvRows.push(row.join(','));
+      });
+      
+      const csvContent = csvRows.join('\n');
+      const dataUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent);
+      const exportFileDefaultName = `search-results-${searchType}-${timestamp}.csv`;
+      
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileDefaultName);
+      linkElement.click();
+    }
+  };
+
+  const handleExportAuthorResults = (format = 'json') => {
+    if (!authorResults || authorResults.length === 0) {
+      alert('No author search results to export');
+      return;
+    }
+
+    const timestamp = new Date().toISOString().split('T')[0];
+    
+    if (format === 'json') {
+      const exportData = {
+        searchType: 'author',
+        authorQuery,
+        totalResults: authorTotalResults,
+        currentPage: authorCurrentPage,
+        resultsPerPage: RESULTS_PER_PAGE,
+        exportedAt: new Date().toISOString(),
+        papers: authorResults
+      };
+      
+      const dataStr = JSON.stringify(exportData, null, 2);
+      const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+      const exportFileDefaultName = `author-search-results-${timestamp}.json`;
+      
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileDefaultName);
+      linkElement.click();
+    } else if (format === 'csv') {
+      // CSV export
+      const headers = [
+        'PPC_Id',
+        'Title',
+        'Authors',
+        'DOI',
+        'Server',
+        'Subject',
+        'Submission Date',
+        'Country',
+        'Institution',
+        'Citations',
+        'Published DOI',
+        'Publication Date'
+      ];
+      
+      const csvRows = [headers.join(',')];
+      
+      authorResults.forEach(paper => {
+        const row = [
+          paper.PPC_Id || '',
+          `"${(paper.preprint_title || '').replace(/"/g, '""')}"`,
+          `"${(paper.all_authors || '').replace(/"/g, '""')}"`,
+          paper.preprint_doi || '',
+          paper.preprint_server || '',
+          paper.preprint_subject || '',
+          paper.preprint_submission_date || '',
+          paper.country_name || '',
+          `"${(paper.corresponding_institution || '').replace(/"/g, '""')}"`,
+          paper.total_citation || '0',
+          paper.published_DOI || '',
+          paper.publication_date || ''
+        ];
+        csvRows.push(row.join(','));
+      });
+      
+      const csvContent = csvRows.join('\n');
+      const dataUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent);
+      const exportFileDefaultName = `author-search-results-${timestamp}.csv`;
+      
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileDefaultName);
+      linkElement.click();
+    }
+  };
+
   const handleRefreshData = () => {
     handleSearchClick(true); // Force refresh
   };
@@ -304,27 +455,15 @@ const ExplorePage = () => {
   };
 
   // Advanced search handler
-  const handleAdvancedSearch = async (criteria, page = 1) => {
+  const handleAdvancedSearch = async (criteria, page = 1, attemptNumber = 1) => {
     setIsLoading(true);
     setCurrentPage(page);
     setIsAdvancedSearch(true);
     setLastSearchCriteria(criteria);
 
     try {
-      console.log('Advanced search criteria:', criteria);
-      const response = await fetch(`${API_BASE_URL}/api/papers/advanced-search?page=${page}&page_size=${RESULTS_PER_PAGE}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(criteria),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-
-      const data = await response.json();
+      console.log(`Advanced search (attempt ${attemptNumber}):`, criteria);
+      const data = await ApiService.advancedSearchPapers(criteria, page, RESULTS_PER_PAGE);
       console.log('Advanced search results:', data);
 
       const results = data.papers || [];
@@ -336,12 +475,23 @@ const ExplorePage = () => {
       setHasSearched(true);
       setIsLoading(false);
     } catch (error) {
-      console.error('Advanced search error:', error);
-      setSearchResults([]);
-      setTotalResults(0);
-      setTotalPages(0);
-      setHasSearched(true);
-      setIsLoading(false);
+      console.error(`Advanced search error (attempt ${attemptNumber}):`, error);
+      
+      // Auto-retry up to 3 times with exponential backoff
+      if (attemptNumber < 3) {
+        const delay = Math.pow(2, attemptNumber - 1) * 1000; // 1s, 2s, 4s
+        console.log(`Retrying advanced search in ${delay}ms...`);
+        
+        setTimeout(() => {
+          handleAdvancedSearch(criteria, page, attemptNumber + 1);
+        }, delay);
+      } else {
+        setSearchResults([]);
+        setTotalResults(0);
+        setTotalPages(0);
+        setHasSearched(true);
+        setIsLoading(false);
+      }
     }
   };
 
@@ -470,7 +620,7 @@ const ExplorePage = () => {
                     className={styles.searchBar}
                   />
 
-                  {hasSearched && searchQuery && (
+                  {hasSearched && (
                     <div className={styles.searchActions}>
                       <Button
                         variant="ghost"
@@ -480,6 +630,26 @@ const ExplorePage = () => {
                       >
                         Clear Search
                       </Button>
+                      {searchResults.length > 0 && (
+                        <>
+                          <Button
+                            variant="outline"
+                            size="small"
+                            onClick={() => handleExportSearchResults('json')}
+                            className={styles.exportButton}
+                          >
+                            Export JSON
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="small"
+                            onClick={() => handleExportSearchResults('csv')}
+                            className={styles.exportButton}
+                          >
+                            Export CSV
+                          </Button>
+                        </>
+                      )}
                     </div>
                   )}
                 </div>
@@ -487,10 +657,32 @@ const ExplorePage = () => {
 
               {/* Advanced Search */}
               {searchSubTab === 'advanced' && (
-                <AdvancedSearch
-                  onSearch={(criteria) => handleAdvancedSearch(criteria)}
-                  loading={isLoading}
-                />
+                <>
+                  <AdvancedSearch
+                    onSearch={(criteria) => handleAdvancedSearch(criteria)}
+                    loading={isLoading}
+                  />
+                  {hasSearched && searchResults.length > 0 && (
+                    <div className={styles.searchActions}>
+                      <Button
+                        variant="outline"
+                        size="small"
+                        onClick={() => handleExportSearchResults('json')}
+                        className={styles.exportButton}
+                      >
+                        Export JSON
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="small"
+                        onClick={() => handleExportSearchResults('csv')}
+                        className={styles.exportButton}
+                      >
+                        Export CSV
+                      </Button>
+                    </div>
+                  )}
+                </>
               )}
               
               <div id="search-results" className={styles.resultsSection}>
@@ -700,7 +892,7 @@ const ExplorePage = () => {
                   className={styles.searchBar}
                 />
 
-                {hasAuthorSearched && authorQuery && (
+                {hasAuthorSearched && (
                   <div className={styles.searchActions}>
                     <Button
                       variant="ghost"
@@ -710,6 +902,26 @@ const ExplorePage = () => {
                     >
                       Clear Search
                     </Button>
+                    {authorResults.length > 0 && (
+                      <>
+                        <Button
+                          variant="outline"
+                          size="small"
+                          onClick={() => handleExportAuthorResults('json')}
+                          className={styles.exportButton}
+                        >
+                          Export JSON
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="small"
+                          onClick={() => handleExportAuthorResults('csv')}
+                          className={styles.exportButton}
+                        >
+                          Export CSV
+                        </Button>
+                      </>
+                    )}
                   </div>
                 )}
               </div>
