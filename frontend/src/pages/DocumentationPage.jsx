@@ -28,30 +28,39 @@ const DocumentationPage = () => {
   }, [activeTab]);
 
   const apiEndpoints = [
-    // Papers Endpoints
+    // Papers Endpoints - Data Collection
     {
       method: 'GET',
       endpoint: '/api/papers/',
-      description: 'Fetch papers with comprehensive filtering and pagination',
+      description: 'Fetch papers with filtering and pagination. Returns summary fields optimized for listing.',
       parameters: [
-        { name: 'country', type: 'string', required: false, description: 'Filter by country name' },
-        { name: 'year', type: 'integer', required: false, description: 'Filter by year (YYYY)' },
-        { name: 'subject', type: 'string', required: false, description: 'Filter by subject area' },
-        { name: 'page', type: 'integer', required: false, description: 'Page number (default: 1)' },
-        { name: 'page_size', type: 'integer', required: false, description: 'Items per page (max: 100)' }
+        { name: 'country', type: 'string', required: false, description: 'Filter by exact country name' },
+        { name: 'year', type: 'integer', required: false, description: 'Filter by submission year (YYYY format)' },
+        { name: 'subject', type: 'string', required: false, description: 'Filter by subject area (substring match)' },
+        { name: 'page', type: 'integer', required: false, description: 'Page number (default: 1, minimum: 1)' },
+        { name: 'page_size', type: 'integer', required: false, description: 'Items per page (default: 10, maximum: 100)' }
       ],
       response: {
         papers: [
           {
-            PPC_Id: "PPC_001",
+            PPC_Id: "PPC00000001",
             preprint_title: "Sample Research Paper",
-            preprint_doi: "10.1101/2023.01.01.000001",
             total_citation: 156,
             preprint_submission_date: "2023-01-01",
             all_authors: "John Doe, Jane Smith",
             preprint_subject: "bioinformatics",
             preprint_server: "bioRxiv",
-            country_name: "United States"
+            country_name: "United States",
+            preprint_doi: null,
+            preprint_abstract: null,
+            submission_contact: null,
+            corresponding_institution: null,
+            versions: null,
+            submission_type: null,
+            submission_license: null,
+            published_DOI: null,
+            publication_date: null,
+            citation: null
           }
         ],
         total: 344843,
@@ -63,20 +72,33 @@ const DocumentationPage = () => {
     {
       method: 'GET',
       endpoint: '/api/papers/search',
-      description: 'Search papers by title, DOI, or author with pagination',
+      description: 'Search papers by title, DOI, or author name. Results sorted by citation count (descending).',
       parameters: [
-        { name: 'query', type: 'string', required: true, description: 'Search query (min 1 character)' },
-        { name: 'page', type: 'integer', required: false, description: 'Page number (default: 1)' },
-        { name: 'page_size', type: 'integer', required: false, description: 'Items per page (max: 100)' }
+        { name: 'query', type: 'string', required: true, description: 'Search query string (minimum 1 character)' },
+        { name: 'page', type: 'integer', required: false, description: 'Page number (default: 1, minimum: 1)' },
+        { name: 'page_size', type: 'integer', required: false, description: 'Items per page (default: 10, maximum: 100)' }
       ],
       response: {
         papers: [
           {
-            PPC_Id: "PPC_002",
+            PPC_Id: "PPC00000002",
             preprint_title: "COVID-19 Research Analysis",
             preprint_doi: "10.1101/2023.02.01.000002",
             total_citation: 89,
-            all_authors: "Jane Smith, Bob Johnson"
+            all_authors: "Jane Smith, Bob Johnson",
+            preprint_submission_date: "2023-02-01",
+            preprint_subject: "epidemiology",
+            preprint_server: "medRxiv",
+            country_name: "United Kingdom",
+            preprint_abstract: null,
+            submission_contact: null,
+            corresponding_institution: null,
+            versions: null,
+            submission_type: null,
+            submission_license: null,
+            published_DOI: null,
+            publication_date: null,
+            citation: null
           }
         ],
         total: 1247,
@@ -88,19 +110,12 @@ const DocumentationPage = () => {
     {
       method: 'POST',
       endpoint: '/api/papers/advanced-search',
-      description: 'Advanced search with multiple criteria and operators',
+      description: 'Advanced search with multiple criteria. All filters are optional and combined with AND logic.',
       parameters: [
-        { name: 'search_criteria', type: 'object', required: true, description: 'Search criteria object (see below)' },
-        { name: 'page', type: 'integer', required: false, description: 'Page number (default: 1)' },
-        { name: 'page_size', type: 'integer', required: false, description: 'Items per page (max: 100)' }
+        { name: 'search_criteria', type: 'object', required: true, description: 'JSON object with search criteria (see request body example)' },
+        { name: 'page', type: 'integer', required: false, description: 'Page number (default: 1, minimum: 1)' },
+        { name: 'page_size', type: 'integer', required: false, description: 'Items per page (default: 10, maximum: 100)' }
       ],
-      response: {
-        papers: [],
-        total: 0,
-        page: 1,
-        page_size: 10,
-        has_next: false
-      },
       requestBody: {
         year_from: "2020",
         year_to: "2023",
@@ -113,38 +128,217 @@ const DocumentationPage = () => {
         license: "CC BY",
         citation_min: 10,
         citation_max: 1000
+      },
+      response: {
+        papers: [
+          {
+            PPC_Id: "PPC00000003",
+            preprint_title: "Neuroscience Study",
+            total_citation: 45,
+            preprint_submission_date: "2023-06-15",
+            all_authors: "John Doe, Alice Brown",
+            preprint_subject: "neuroscience",
+            preprint_server: "bioRxiv",
+            country_name: "United States",
+            preprint_doi: null,
+            preprint_abstract: null,
+            submission_contact: null,
+            corresponding_institution: null,
+            versions: null,
+            submission_type: null,
+            submission_license: null,
+            published_DOI: null,
+            publication_date: null,
+            citation: null
+          }
+        ],
+        total: 234,
+        page: 1,
+        page_size: 10,
+        has_next: true
       }
     },
     {
       method: 'GET',
       endpoint: '/api/papers/{ppc_id}',
-      description: 'Get complete paper details by PPC_Id',
+      description: 'Get complete details for a specific paper by its unique PPC_Id.',
       parameters: [
-        { name: 'ppc_id', type: 'string', required: true, description: 'Unique paper identifier (path parameter)' }
+        { name: 'ppc_id', type: 'string', required: true, description: 'Unique paper identifier (path parameter, e.g., PPC00000001)' }
       ],
       response: {
-        PPC_Id: "PPC_001",
+        PPC_Id: "PPC00000001",
         preprint_title: "Sample Research Paper",
         preprint_doi: "10.1101/2023.01.01.000001",
         preprint_subject: "bioinformatics",
         preprint_server: "bioRxiv",
         preprint_submission_date: "2023-01-01",
-        preprint_abstract: "Abstract text...",
-        all_authors: "John Doe, Jane Smith",
+        preprint_abstract: "This is the abstract of the research paper...",
+        all_authors: "John Doe, Jane Smith, Bob Johnson",
         submission_contact: "john.doe@university.edu",
         corresponding_institution: "University of Example",
         country_name: "United States",
         total_citation: 156,
         published_DOI: "10.1038/s41586-023-12345-6",
-        versions: "[{\"version\": 1, \"date\": \"2023-01-01\"}]"
+        publication_date: "2023-06-01",
+        submission_type: "new results",
+        submission_license: "CC BY 4.0",
+        versions: "[{\"version\": 1, \"date\": \"2023-01-01\"}, {\"version\": 2, \"date\": \"2023-02-15\"}]",
+        citation: "[{\"doi\": \"10.1234/cite1\", \"count\": 50}, {\"doi\": \"10.1234/cite2\", \"count\": 106}]"
+      }
+    },
+    {
+      method: 'GET',
+      endpoint: '/api/papers/subjects',
+      description: 'Get list of unique subject areas available in the database for filter dropdowns. Returns a plain array of strings.',
+      parameters: [],
+      response: [
+        "bioinformatics",
+        "neuroscience",
+        "molecular biology",
+        "epidemiology",
+        "genetics",
+        "immunology"
+      ]
+    },
+    {
+      method: 'GET',
+      endpoint: '/api/papers/servers',
+      description: 'Get list of unique preprint servers available in the database for filter dropdowns. Returns a plain array of strings.',
+      parameters: [],
+      response: [
+        "bioRxiv",
+        "medRxiv",
+        "arXiv"
+      ]
+    },
+    {
+      method: 'GET',
+      endpoint: '/api/papers/countries',
+      description: 'Get list of unique countries available in the database for filter dropdowns. Returns a plain array of strings.',
+      parameters: [],
+      response: [
+        "United States",
+        "United Kingdom",
+        "China",
+        "Germany",
+        "France",
+        "Canada"
+      ]
+    },
+    {
+      method: 'GET',
+      endpoint: '/api/papers/licenses',
+      description: 'Get list of unique license types available in the database for filter dropdowns. Returns a plain array of strings.',
+      parameters: [],
+      response: [
+        "CC BY 4.0",
+        "CC BY-NC 4.0",
+        "CC BY-NC-ND 4.0",
+        "CC0 1.0"
+      ]
+    },
+
+    // Authors Endpoints - Data Collection
+    {
+      method: 'GET',
+      endpoint: '/api/authors/search',
+      description: 'Search papers by author name using the submission_contact field. Results sorted by citation count.',
+      parameters: [
+        { name: 'query', type: 'string', required: true, description: 'Author name search query (minimum 1 character, substring match)' },
+        { name: 'page', type: 'integer', required: false, description: 'Page number (default: 1, minimum: 1)' },
+        { name: 'page_size', type: 'integer', required: false, description: 'Items per page (default: 10, maximum: 100)' }
+      ],
+      response: {
+        papers: [
+          {
+            PPC_Id: "PPC00000123",
+            preprint_title: "Author's Research Paper",
+            preprint_doi: "10.1101/2023.03.01.000003",
+            submission_contact: "author@university.edu",
+            preprint_submission_date: "2023-03-01",
+            total_citation: 67,
+            preprint_server: "bioRxiv",
+            preprint_subject: "neuroscience",
+            country_name: "United States"
+          }
+        ],
+        total: 45,
+        page: 1,
+        page_size: 10,
+        has_next: true
+      }
+    },
+    {
+      method: 'GET',
+      endpoint: '/api/authors/list',
+      description: 'Get paginated list of unique authors with their publication counts and maximum citations.',
+      parameters: [
+        { name: 'page', type: 'integer', required: false, description: 'Page number (default: 1, minimum: 1)' },
+        { name: 'page_size', type: 'integer', required: false, description: 'Items per page (default: 50, maximum: 200)' }
+      ],
+      response: {
+        authors: [
+          {
+            author_name: "Duccio Cavalieri",
+            paper_count: 15,
+            max_citations: 892
+          },
+          {
+            author_name: "David Morrison",
+            paper_count: 12,
+            max_citations: 456
+          }
+        ],
+        total: 125000,
+        page: 1,
+        page_size: 50,
+        has_next: true
+      }
+    },
+    {
+      method: 'GET',
+      endpoint: '/api/authors/{author_name}/papers',
+      description: 'Get all papers by a specific author. Results sorted by citation count (descending).',
+      parameters: [
+        { name: 'author_name', type: 'string', required: true, description: 'Author name or email (path parameter, substring match)' },
+        { name: 'page', type: 'integer', required: false, description: 'Page number (default: 1, minimum: 1)' },
+        { name: 'page_size', type: 'integer', required: false, description: 'Items per page (default: 10, maximum: 100)' }
+      ],
+      response: {
+        papers: [
+          {
+            PPC_Id: "PPC00000045",
+            preprint_title: "Research Paper by Author",
+            preprint_doi: "10.1101/2023.04.01.000004",
+            total_citation: 234,
+            preprint_submission_date: "2023-04-01",
+            preprint_subject: "molecular biology",
+            preprint_server: "bioRxiv",
+            country_name: "United States",
+            preprint_abstract: null,
+            submission_contact: "author@university.edu",
+            corresponding_institution: null,
+            versions: null,
+            submission_type: null,
+            submission_license: null,
+            published_DOI: null,
+            publication_date: null,
+            citation: null,
+            all_authors: null
+          }
+        ],
+        total: 15,
+        page: 1,
+        page_size: 10,
+        has_next: true
       }
     },
 
-    // Analytics Endpoints
+    // Analytics Endpoints - Data Collection
     {
       method: 'GET',
       endpoint: '/api/analytics/country-data',
-      description: 'Get country-wise paper distribution by year for geographic analysis',
+      description: 'Get country-wise paper distribution grouped by year for geographic analysis and mapping. Returns data wrapped in a "data" property.',
       parameters: [],
       response: {
         data: [
@@ -152,20 +346,49 @@ const DocumentationPage = () => {
             country_name: "United States",
             year: "2023",
             count: 45678
+          },
+          {
+            country_name: "United Kingdom",
+            year: "2023",
+            count: 12345
+          },
+          {
+            country_name: "China",
+            year: "2023",
+            count: 23456
           }
         ]
       }
     },
     {
       method: 'GET',
+      endpoint: '/api/analytics/subjects',
+      description: 'Get list of all unique subject areas for analytics filtering. Returns data wrapped in a "data" property.',
+      parameters: [],
+      response: {
+        data: [
+          "bioinformatics",
+          "neuroscience",
+          "molecular biology",
+          "epidemiology",
+          "genetics"
+        ]
+      }
+    },
+    {
+      method: 'GET',
       endpoint: '/api/analytics/dashboard',
-      description: 'Get comprehensive analytics dashboard data',
+      description: 'Get comprehensive analytics dashboard data including timeline, subject distribution, server statistics, and key metrics.',
       parameters: [],
       response: {
         timelineData: [
           {
             month: "2023-01",
             submissions: 1234
+          },
+          {
+            month: "2023-02",
+            submissions: 1456
           }
         ],
         subjectData: [
@@ -173,6 +396,11 @@ const DocumentationPage = () => {
             subject: "neuroscience",
             count: 42923,
             percentage: 12.4
+          },
+          {
+            subject: "bioinformatics",
+            count: 38456,
+            percentage: 11.2
           }
         ],
         serverData: [
@@ -180,6 +408,11 @@ const DocumentationPage = () => {
             server: "bioRxiv",
             count: 239847,
             percentage: 69.6
+          },
+          {
+            server: "medRxiv",
+            count: 55695,
+            percentage: 16.1
           }
         ],
         statisticsData: {
@@ -205,17 +438,17 @@ const DocumentationPage = () => {
     {
       method: 'GET',
       endpoint: '/api/analytics/citations',
-      description: 'Get unified citation data for all citation-related visualizations',
+      description: 'Get unified citation data including impact analysis, trends, heatmaps, and top cited papers.',
       parameters: [
-        { name: 'time_range', type: 'string', required: false, description: 'Time filter: all, last_year, last_5_years, last_10_years (default: all)' },
-        { name: 'subject', type: 'string', required: false, description: 'Subject area filter' },
-        { name: 'limit', type: 'integer', required: false, description: 'Limit for top papers (1-100, default: 10)' },
-        { name: 'sort_by', type: 'string', required: false, description: 'Sort: citations_desc, citations_asc, date_desc, date_asc, title_asc (default: citations_desc)' }
+        { name: 'time_range', type: 'string', required: false, description: 'Time filter: all | last_year | last_5_years | last_10_years (default: all)' },
+        { name: 'subject', type: 'string', required: false, description: 'Subject area filter (substring match)' },
+        { name: 'limit', type: 'integer', required: false, description: 'Limit for top papers (minimum: 1, maximum: 100, default: 10)' },
+        { name: 'sort_by', type: 'string', required: false, description: 'Sort order: citations_desc | citations_asc | date_desc | date_asc | title_asc (default: citations_desc)' }
       ],
       response: {
         impactData: [
           {
-            PPC_Id: "PPC_001",
+            PPC_Id: "PPC00000001",
             preprint_title: "High Impact Paper",
             publication_date: "2023-01-01",
             total_citation: 892,
@@ -227,6 +460,11 @@ const DocumentationPage = () => {
             year: "2023",
             citations: 15678,
             papers: 234
+          },
+          {
+            year: "2022",
+            citations: 14523,
+            papers: 198
           }
         ],
         heatmapData: [
@@ -235,11 +473,17 @@ const DocumentationPage = () => {
             month: 6,
             day: 15,
             citations: 45
+          },
+          {
+            year: 2023,
+            month: 7,
+            day: 20,
+            citations: 52
           }
         ],
         topPapersData: [
           {
-            PPC_Id: "PPC_001",
+            PPC_Id: "PPC00000001",
             preprint_title: "Top Cited Paper",
             publication_date: "2023-01-01",
             total_citation: 892,
@@ -259,47 +503,16 @@ const DocumentationPage = () => {
       }
     },
 
-    // Authors Endpoints
-    {
-      method: 'GET',
-      endpoint: '/api/authors/search',
-      description: 'Search papers by author name using submission contact field',
-      parameters: [
-        { name: 'query', type: 'string', required: true, description: 'Author name search query (min 1 character)' },
-        { name: 'page', type: 'integer', required: false, description: 'Page number (default: 1)' },
-        { name: 'page_size', type: 'integer', required: false, description: 'Items per page (max: 100, default: 10)' }
-      ],
-      response: {
-        papers: [
-          {
-            PPC_Id: "PPC_003",
-            preprint_title: "Author's Research Paper",
-            preprint_doi: "10.1101/2023.03.01.000003",
-            submission_contact: "author@university.edu",
-            preprint_submission_date: "2023-03-01",
-            total_citation: 67,
-            preprint_server: "bioRxiv",
-            preprint_subject: "neuroscience",
-            country_name: "United States"
-          }
-        ],
-        total: 45,
-        page: 1,
-        page_size: 10,
-        has_next: true
-      }
-    },
-
-    // Subjects Endpoints
+    // Subjects Endpoints - Data Collection
     {
       method: 'GET',
       endpoint: '/api/subjects/analysis',
-      description: 'Unified endpoint for subject evolution, citations ranking, and version analysis',
+      description: 'Unified endpoint providing comprehensive subject analysis including evolution trends, citation rankings, version statistics, monthly trends, server distribution, and citation growth patterns.',
       parameters: [
-        { name: 'time_range', type: 'string', required: false, description: 'Time filter: all, last_year, last_5_years, last_10_years (default: all)' },
-        { name: 'subject', type: 'string', required: false, description: 'Subject filter (substring match)' },
-        { name: 'subjects', type: 'string', required: false, description: 'CSV of subjects for comparison (e.g., "bioinformatics,neuroscience")' },
-        { name: 'top', type: 'integer', required: false, description: 'Top N subjects to include when no specific subject selected (1-50, default: 10)' }
+        { name: 'time_range', type: 'string', required: false, description: 'Time filter: all | last_year | last_5_years | last_10_years (default: all)' },
+        { name: 'subject', type: 'string', required: false, description: 'Single subject filter (substring match)' },
+        { name: 'subjects', type: 'string', required: false, description: 'CSV list of subjects for comparison (e.g., "bioinformatics,neuroscience")' },
+        { name: 'top', type: 'integer', required: false, description: 'Number of top subjects to include when no specific subject selected (minimum: 1, maximum: 50, default: 10)' }
       ],
       response: {
         evolutionData: [
@@ -307,6 +520,11 @@ const DocumentationPage = () => {
             year: "2023",
             subject: "neuroscience",
             count: 5678
+          },
+          {
+            year: "2022",
+            subject: "neuroscience",
+            count: 5234
           }
         ],
         citationRanking: [
@@ -315,19 +533,38 @@ const DocumentationPage = () => {
             paper_count: 42923,
             total_citation: 567890,
             avg_citation: 13.23
+          },
+          {
+            subject: "bioinformatics",
+            paper_count: 38456,
+            total_citation: 498765,
+            avg_citation: 12.97
           }
         ],
         versionDistribution: [
           {
             versions: 1,
             count: 250000
+          },
+          {
+            versions: 2,
+            count: 75000
+          },
+          {
+            versions: 3,
+            count: 15000
           }
         ],
         versionDistributionBySubject: [
           {
             subject: "neuroscience",
+            versions: 1,
+            count: 30000
+          },
+          {
+            subject: "neuroscience",
             versions: 2,
-            count: 15000
+            count: 10000
           }
         ],
         monthlyTrends: [
@@ -335,6 +572,11 @@ const DocumentationPage = () => {
             month: "2023-06",
             subject: "neuroscience",
             count: 456
+          },
+          {
+            month: "2023-07",
+            subject: "neuroscience",
+            count: 489
           }
         ],
         serverDistribution: [
@@ -342,6 +584,11 @@ const DocumentationPage = () => {
             subject: "neuroscience",
             server: "bioRxiv",
             count: 35000
+          },
+          {
+            subject: "neuroscience",
+            server: "medRxiv",
+            count: 5000
           }
         ],
         citationGrowth: [
@@ -351,6 +598,13 @@ const DocumentationPage = () => {
             paper_count: 5678,
             avg_citation: 12.5,
             max_citation: 892
+          },
+          {
+            year: "2022",
+            subject: "neuroscience",
+            paper_count: 5234,
+            avg_citation: 11.8,
+            max_citation: 756
           }
         ],
         versionSummary: {
@@ -366,8 +620,7 @@ const DocumentationPage = () => {
           selectedSubjects: ["neuroscience", "bioinformatics"]
         }
       }
-    },
-
+    }
   ];
 
   const dataSources = [
@@ -641,12 +894,13 @@ const DocumentationPage = () => {
 
               <Card className={styles.apiInfo}>
                 <Card.Header>
-                  <h3 className="text-heading-3">Authentication & Rate Limits</h3>
+                  <h3 className="text-heading-3">API Information</h3>
                 </Card.Header>
                 <Card.Content>
                   <p className="text-body mb-4">
-                    Currently, the API is open and does not require authentication. 
-                    Rate limiting may be implemented in future versions.
+                    The API provides RESTful endpoints for accessing preprint data. All endpoints listed above are 
+                    data collection endpoints used for retrieving research papers and analytics. Health check and 
+                    maintenance endpoints are not included in this documentation.
                   </p>
                   <div className={styles.apiDetails}>
                     <div>
@@ -656,8 +910,24 @@ const DocumentationPage = () => {
                       <strong>Content Type:</strong> <code>application/json</code>
                     </div>
                     <div>
+                      <strong>Authentication:</strong> Not required (open API)
+                    </div>
+                    <div>
                       <strong>CORS:</strong> Enabled for development origins
                     </div>
+                    <div>
+                      <strong>Rate Limiting:</strong> Not currently implemented
+                    </div>
+                  </div>
+                  <div style={{ 
+                    marginTop: 'var(--spacing-lg)',
+                    padding: 'var(--spacing-md)',
+                    background: 'var(--color-bg-secondary)',
+                    borderRadius: 'var(--radius-md)',
+                    borderLeft: '4px solid var(--color-primary)'
+                  }}>
+                    <strong>Note:</strong> All endpoints support pagination where applicable. Maximum page size is 100 items 
+                    for papers endpoints and 200 items for author list endpoint. Results are cached for improved performance.
                   </div>
                 </Card.Content>
               </Card>
