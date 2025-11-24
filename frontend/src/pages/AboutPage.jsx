@@ -50,6 +50,123 @@ const AboutPage = () => {
           </div>
         </div>
 
+        {/* Open Science Philosophy Section */}
+        <div className={layoutStyles.contentSection}>
+          <div style={{ textAlign: 'center', marginBottom: 'var(--spacing-2xl)' }}>
+            <h2 className="text-heading-2" style={{ marginBottom: 'var(--spacing-md)' }}>
+              Our Mission & Commitment to Open Science
+            </h2>
+            <p className="text-body" style={{ 
+              maxWidth: '800px', 
+              margin: '0 auto',
+              color: 'var(--color-text-secondary)'
+            }}>
+              To address the critical gap in preprint ecosystem analysis by providing a centralized platform 
+              for large-scale meta-analysis, enabling cross-disciplinary trend analysis and comparative impact assessment.
+            </p>
+          </div>
+
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+            gap: 'var(--spacing-lg)'
+          }}>
+            {[
+              { 
+                icon: '🌐', 
+                title: 'Open Access', 
+                desc: 'Complete dataset available via public REST API with bulk download options in JSON and CSV formats.'
+              },
+              { 
+                icon: '🔍', 
+                title: 'Transparent', 
+                desc: 'Full methodology documentation with known limitations clearly stated and validation metrics publicly shared.'
+              },
+              { 
+                icon: '📊', 
+                title: 'Reproducible', 
+                desc: 'Comprehensive API documentation with structured data formats and version-controlled datasets for reproducibility.'
+              },
+              { 
+                icon: '💡', 
+                title: 'Democratic', 
+                desc: 'Empowering the next generation of researchers by making preprint analytics freely and openly accessible.'
+              }
+            ].map((principle, index) => (
+              <div key={index} className={styles.principleCard}>
+                <div style={{
+                  fontSize: 'var(--font-size-3xl)',
+                  marginBottom: 'var(--spacing-md)'
+                }}>
+                  {principle.icon}
+                </div>
+                <h3 className="text-heading-4" style={{ 
+                  marginBottom: 'var(--spacing-sm)',
+                  color: 'var(--color-text-primary)'
+                }}>
+                  {principle.title}
+                </h3>
+                <p className="text-body-small" style={{ 
+                  color: 'var(--color-text-secondary)',
+                  lineHeight: 'var(--line-height-relaxed)'
+                }}>
+                  {principle.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+
+        {/* Data Sources - Brief Overview */}
+        <div className={layoutStyles.contentSection} style={{
+          background: 'var(--color-bg-secondary)',
+          borderRadius: 'var(--radius-xl)',
+          padding: 'var(--spacing-2xl)',
+          marginBottom: 'var(--spacing-2xl)',
+          marginTop: 'var(--spacing-2xl)',
+          textAlign: 'center',
+          border: '1px solid var(--color-neutral-200)'
+        }}>
+          <h2 className="text-heading-2" style={{ marginBottom: 'var(--spacing-md)' }}>
+            Data Sources
+          </h2>
+          <p className="text-body" style={{ 
+            maxWidth: '700px', 
+            margin: '0 auto var(--spacing-lg)',
+            color: 'var(--color-text-secondary)'
+          }}>
+            Preprint-Commons used data from three major repositories: <strong>bioRxiv</strong> (239,847), 
+            <strong> medRxiv</strong> (55,695), and <strong>arXiv q-bio</strong> (49,301).
+          </p>
+          <a 
+            href="/documentation#sources" 
+            style={{
+              display: 'inline-block',
+              color: 'var(--color-primary)',
+              textDecoration: 'none',
+              fontWeight: 'var(--font-weight-semibold)',
+              fontSize: 'var(--font-size-base)',
+              padding: 'var(--spacing-md) var(--spacing-xl)',
+              background: 'var(--color-bg-primary)',
+              borderRadius: 'var(--radius-md)',
+              border: '2px solid var(--color-primary)',
+              transition: 'all var(--transition-normal)'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.background = 'var(--color-primary)';
+              e.target.style.color = 'white';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = 'var(--color-bg-primary)';
+              e.target.style.color = 'var(--color-primary)';
+            }}
+          >
+            View Detailed Methodology & Data Processing →
+          </a>
+        </div>
+
+
         {/* Logo & Brand Identity Section */}
         <div className={layoutStyles.contentSection} style={{
           background: 'var(--color-bg-secondary)',
@@ -123,13 +240,13 @@ const AboutPage = () => {
                 lineHeight: 'var(--line-height-relaxed)',
                 marginBottom: 'var(--spacing-md)'
               }}>
-                The lower layer represents the preceding generation and its established methods. Resting above it is a brighter layer, symbolizing the new generation of scientists and graduates which has not settled yet.
+                The lower two layers represent the preceding generation and the established norms. Resting above is the top layer, symbolizing the new generation using the power of internet to make the fruits of science open.
               </p>
               <p className="text-body-small" style={{ 
                 color: 'var(--color-text-secondary)',
                 lineHeight: 'var(--line-height-relaxed)'
               }}>
-                The shape of the stacked sheets subtly evokes graduation caps, symbolizing the academic mantle being passed. This entire structure signifies the platform's core mission: empowering the new generation to drive the democratization of science.
+                The shape looks like a stack of mortarboards, symbolizing the academic mantle being passed. 
               </p>
             </div>
 
@@ -147,7 +264,7 @@ const AboutPage = () => {
                 color: 'var(--color-text-secondary)',
                 marginBottom: 'var(--spacing-lg)'
               }}>
-                The name was chosen to communicate both our focus and our foundational mission.
+                The name was chosen to communicate both our focus and the foundational mission.
               </p>
               
               <div style={{
@@ -168,7 +285,7 @@ const AboutPage = () => {
                   lineHeight: 'var(--line-height-relaxed)',
                   color: 'var(--color-text-secondary)'
                 }}>
-                  Clearly defines the core subject matter—rapid, open, and early communication of research. This signals our commitment to advancing the modern scientific publishing workflow.
+                  Clearly defines the core subject matter—rapid, open, and early communication of research. 
                 </p>
               </div>
 
@@ -189,215 +306,13 @@ const AboutPage = () => {
                   lineHeight: 'var(--line-height-relaxed)',
                   color: 'var(--color-text-secondary)'
                 }}>
-                  A deliberate choice rooted in the concept of a shared public resource. In the digital age, it signifies a shared, accessible, and democratized space for knowledge.
+                  A shared public resource.
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Open Science Philosophy Section */}
-        <div className={layoutStyles.contentSection}>
-          <div style={{ textAlign: 'center', marginBottom: 'var(--spacing-2xl)' }}>
-            <h2 className="text-heading-2" style={{ marginBottom: 'var(--spacing-md)' }}>
-              Our Mission & Commitment to Open Science
-            </h2>
-            <p className="text-body" style={{ 
-              maxWidth: '800px', 
-              margin: '0 auto',
-              color: 'var(--color-text-secondary)'
-            }}>
-              To address the critical gap in preprint ecosystem analysis by providing a centralized platform 
-              for large-scale meta-analysis, enabling cross-disciplinary trend analysis and comparative impact assessment.
-            </p>
-          </div>
-
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
-            gap: 'var(--spacing-lg)'
-          }}>
-            {[
-              { 
-                icon: '🌐', 
-                title: 'Open Access', 
-                desc: 'Complete dataset available via public REST API with bulk download options in JSON and CSV formats. No paywalls, no registration barriers.'
-              },
-              { 
-                icon: '🔍', 
-                title: 'Transparency', 
-                desc: 'Full methodology documentation with known limitations clearly stated and validation metrics publicly shared.'
-              },
-              { 
-                icon: '🤝', 
-                title: 'Community-Driven', 
-                desc: 'Built by researchers, for researchers with feedback-driven development and a collaborative approach to data quality.'
-              },
-              { 
-                icon: '📊', 
-                title: 'Reproducible Research', 
-                desc: 'Comprehensive API documentation with structured data formats and version-controlled datasets for reproducibility.'
-              },
-              { 
-                icon: '💡', 
-                title: 'Democratizing Science', 
-                desc: 'Empowering the next generation of researchers, breaking down barriers to research insights, and making preprint analytics accessible globally.'
-              },
-              { 
-                icon: '🚀', 
-                title: 'Accelerating Discovery', 
-                desc: 'Supporting rapid dissemination of research findings and enabling faster scientific progress through open preprint data.'
-              }
-            ].map((principle, index) => (
-              <div key={index} className={styles.principleCard}>
-                <div style={{
-                  fontSize: 'var(--font-size-3xl)',
-                  marginBottom: 'var(--spacing-md)'
-                }}>
-                  {principle.icon}
-                </div>
-                <h3 className="text-heading-4" style={{ 
-                  marginBottom: 'var(--spacing-sm)',
-                  color: 'var(--color-text-primary)'
-                }}>
-                  {principle.title}
-                </h3>
-                <p className="text-body-small" style={{ 
-                  color: 'var(--color-text-secondary)',
-                  lineHeight: 'var(--line-height-relaxed)'
-                }}>
-                  {principle.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Data Sources - Brief Overview */}
-        <div className={layoutStyles.contentSection} style={{
-          background: 'var(--color-bg-secondary)',
-          borderRadius: 'var(--radius-xl)',
-          padding: 'var(--spacing-2xl)',
-          marginBottom: 'var(--spacing-2xl)',
-          marginTop: 'var(--spacing-2xl)',
-          textAlign: 'center',
-          border: '1px solid var(--color-neutral-200)'
-        }}>
-          <h2 className="text-heading-2" style={{ marginBottom: 'var(--spacing-md)' }}>
-            Data Sources
-          </h2>
-          <p className="text-body" style={{ 
-            maxWidth: '700px', 
-            margin: '0 auto var(--spacing-lg)',
-            color: 'var(--color-text-secondary)'
-          }}>
-            We aggregate preprints from three major repositories: <strong>bioRxiv</strong> (239,847), 
-            <strong> medRxiv</strong> (55,695), and <strong>arXiv q-bio</strong> (49,301).
-          </p>
-          <a 
-            href="/documentation#sources" 
-            style={{
-              display: 'inline-block',
-              color: 'var(--color-primary)',
-              textDecoration: 'none',
-              fontWeight: 'var(--font-weight-semibold)',
-              fontSize: 'var(--font-size-base)',
-              padding: 'var(--spacing-md) var(--spacing-xl)',
-              background: 'var(--color-bg-primary)',
-              borderRadius: 'var(--radius-md)',
-              border: '2px solid var(--color-primary)',
-              transition: 'all var(--transition-normal)'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.background = 'var(--color-primary)';
-              e.target.style.color = 'white';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = 'var(--color-bg-primary)';
-              e.target.style.color = 'var(--color-primary)';
-            }}
-          >
-            View Detailed Methodology & Data Processing →
-          </a>
-        </div>
-
-        {/* Target Audience */}
-        <div className={layoutStyles.contentSection} style={{
-          marginTop: 'var(--spacing-2xl)'
-        }}>
-          <div style={{ textAlign: 'center', marginBottom: 'var(--spacing-2xl)' }}>
-            <h2 className="text-heading-2" style={{ marginBottom: 'var(--spacing-md)' }}>
-              Empowering the Research Community
-            </h2>
-            <p className="text-body" style={{ 
-              maxWidth: '700px', 
-              margin: '0 auto',
-              color: 'var(--color-text-secondary)'
-            }}>
-              Designed to serve various stakeholders in the global research ecosystem with actionable insights.
-            </p>
-          </div>
-
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-            gap: 'var(--spacing-lg)'
-          }}>
-            {[
-              { 
-                title: 'Researchers & Scientists', 
-                desc: 'Analyze disciplinary adoption rates, discover collaboration opportunities, track research impact, and identify emerging trends in your field',
-                icon: '🔬'
-              },
-              { 
-                title: 'Graduate Students & Early Career Researchers', 
-                desc: 'Explore research landscapes, identify trending topics, discover potential collaborators, and understand publication patterns in your field',
-                icon: '🎓'
-              },
-              { 
-                title: 'Data Scientists & Developers', 
-                desc: 'Access comprehensive APIs for custom analytics, integrate preprint data into applications, and build innovative research tools',
-                icon: '💻'
-              },
-              { 
-                title: 'Academic Publishers & Editors', 
-                desc: 'Monitor research trends, assess publication patterns, understand preprint adoption, and support open science initiatives',
-                icon: '📖'
-              },
-              { 
-                title: 'International Research Organizations', 
-                desc: 'Monitor global research trends, identify regional strengths, track collaborative networks, and assess worldwide scientific output',
-                icon: '🌍'
-              },
-              { 
-                title: 'Open Science Advocates & Communities', 
-                desc: 'Support preprint adoption, promote research transparency, track open science growth, and advocate for accessible knowledge',
-                icon: '🤝'
-              }
-            ].map((audience, index) => (
-              <div key={index} className={styles.audienceCard}>
-                <div style={{
-                  fontSize: 'var(--font-size-3xl)',
-                  marginBottom: 'var(--spacing-md)'
-                }}>
-                  {audience.icon}
-                </div>
-                <h3 className="text-heading-4" style={{ 
-                  marginBottom: 'var(--spacing-sm)',
-                  color: 'var(--color-text-primary)'
-                }}>
-                  {audience.title}
-                </h3>
-                <p className="text-body-small" style={{ 
-                  color: 'var(--color-text-secondary)',
-                  lineHeight: 'var(--line-height-relaxed)'
-                }}>
-                  {audience.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
     </Layout>
   );

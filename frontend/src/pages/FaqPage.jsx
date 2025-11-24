@@ -13,12 +13,12 @@ const FaqPage = () => {
   const faqs = [
     {
       question: "What is Preprint Commons and what makes it unique?",
-      answer: "Preprint Commons is the first dedicated database and analytical platform for large-scale preprint meta-analysis, featuring over 344,000 curated preprints. Built on rigorous academic research, it addresses the critical gap in preprint ecosystem through analysis, AI-enhanced metadata extraction and comprehensive visualization tools.",
+      answer: "Preprint Commons is a dedicated database and analytical platform for large-scale preprint meta-analysis, featuring over 344,000 curated preprints. Built on rigorous academic research, it addresses the critical gap in preprint ecosystem through analysis, AI-enhanced metadata extraction and comprehensive visualization tools.",
       category: "General"
     },
     {
       question: "Which preprint repositories are included in the database?",
-      answer: "Preprint Commons includes 344,843 preprints from three repositories: bioRxiv (239,847 entries), medRxiv (55,695 entries), and arXiv q-bio section (49,301 entries). We focused on these sources due to their consistent, high-quality metadata availablibility via robust APIs and thematic focus on life sciences.",
+      answer: "Preprint Commons includes 344,843 preprints from three repositories: bioRxiv (239,847 entries), medRxiv (55,695 entries), and arXiv q-bio section (49,301 entries). We focused on these sources due to their consistent, high-quality metadata availablibility via APIs and thematic focus on life sciences.",
       category: "General"
     },
     {

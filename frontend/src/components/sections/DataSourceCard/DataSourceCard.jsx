@@ -32,7 +32,7 @@ const DataSourceCard = ({
         </div>
 
         <div className={styles.fieldsSection}>
-          <h4 className={styles.fieldsTitle}>Primary Focus Areas</h4>
+          <h4 className={styles.fieldsTitle}>Subject Areas</h4>
           <div className={styles.fieldsList}>
             {fields.map((field, index) => (
               <span key={index} className={styles.fieldTag} style={{ borderColor: color }}>
