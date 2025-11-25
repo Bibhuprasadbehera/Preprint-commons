@@ -6,7 +6,6 @@ import Card from '../components/ui/Card/Card';
 import CodeBlock from '../components/ui/CodeBlock/CodeBlock';
 import ApiEndpoint from '../components/sections/ApiEndpoint/ApiEndpoint';
 import DataSourceCard from '../components/sections/DataSourceCard/DataSourceCard';
-import MethodologyFlow from '../components/sections/MethodologyFlow/MethodologyFlow';
 import styles from './DocumentationPage.module.css';
 
 const DocumentationPage = () => {
@@ -1171,19 +1170,42 @@ const DocumentationPage = () => {
                   </Card.Content>
                 </Card>
 
-                {/* Data Processing Pipeline */}
+                {/* Data Analysis and Visualization */}
                 <Card>
                   <Card.Header>
-                    <h3 className="text-heading-3">Data Processing Pipeline</h3>
+                    <h3 className="text-heading-3">Data Analysis and Visualization</h3>
                   </Card.Header>
                   <Card.Content>
                     <p className="text-body mb-4">
-                      Systematic workflow from data collection through visualization and API deployment.
+                      The integrated and cleaned data were analyzed using Python libraries to generate comprehensive insights 
+                      and interactive visualizations.
                     </p>
+                    <div className={styles.aiProcess}>
+                      <div className={styles.aiStep}>
+                        <h4>Analytical Tools</h4>
+                        <p>Data analyzed using Python libraries including Pandas, NumPy, Seaborn, Plotly, and Matplotlib for 
+                        efficient data manipulation and statistical computations.</p>
+                      </div>
+                      <div className={styles.aiStep}>
+                        <h4>Analytical Approaches</h4>
+                        <p>Multiple analytical dimensions implemented: time-series analysis of preprint growth trajectories, 
+                        comparative citation analysis across disciplines and countries, geographic distribution mapping, and 
+                        field-specific analyses of subject adoption patterns.</p>
+                      </div>
+                      <div className={styles.aiStep}>
+                        <h4>Data Export and Formatting</h4>
+                        <p>Processed data exported to JSON and CSV formats to support web platform development and enable 
+                        bulk data access for researchers.</p>
+                      </div>
+                      <div className={styles.aiStep}>
+                        <h4>Interactive Visualizations</h4>
+                        <p>Dynamic visualizations engineered using D3.js and integrated into front-end interface. Users can 
+                        explore trends through time-series plots, heatmaps, comparative bar graphs, and global maps with 
+                        interactive features including zoom controls, pan sliders, and tooltips.</p>
+                      </div>
+                    </div>
                   </Card.Content>
                 </Card>
-                <MethodologyFlow />
-
 
                 {/* Technical Infrastructure */}
                 <Card>
