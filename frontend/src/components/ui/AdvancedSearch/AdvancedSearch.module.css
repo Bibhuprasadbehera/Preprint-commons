@@ -17,11 +17,31 @@
   flex-direction: column;
 }
 
+.fieldLabelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
 .fieldLabel {
   font-size: 14px;
   font-weight: 600;
   color: var(--color-text-primary, #1e293b);
   margin-bottom: 8px;
+}
+
+.refreshButton {
+  padding: 2px 6px !important;
+  font-size: 14px;
+  min-width: auto !important;
+  height: auto !important;
+}
+
+.errorHint {
+  font-size: 12px;
+  color: var(--color-error, #ef4444);
+  margin-top: 4px;
 }
 
 .yearRange {
