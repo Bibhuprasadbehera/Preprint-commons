@@ -27,6 +27,7 @@ const ExplorePage = () => {
   const [activeTab, setActiveTab] = useState('map');
   const [searchSubTab, setSearchSubTab] = useState('basic');
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchType, setSearchType] = useState('all');
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -128,16 +129,27 @@ const ExplorePage = () => {
     setLastSearchCriteria(null);
 
     try {
-      console.log(`Searching papers: "${searchQuery}" page ${page} (attempt ${attemptNumber})`);
-      const data = await ApiService.searchPapers(searchQuery, page, RESULTS_PER_PAGE);
+      // Use larger page size for DOI search to increase chance of finding exact match
+      const pageSize = searchType === 'doi' ? 100 : RESULTS_PER_PAGE;
+      
+      console.log(`Searching papers: "${searchQuery}" page ${page} type ${searchType} (attempt ${attemptNumber})`);
+      const data = await ApiService.searchPapers(searchQuery, page, pageSize);
       console.log('Search results:', data);
 
-      const results = data.papers || [];
-      const total = Math.min(data.total || results.length, MAX_RESULTS);
+      let results = data.papers || [];
+      
+      // Frontend filtering for exact DOI match
+      if (searchType === 'doi') {
+        const trimmedQuery = searchQuery.trim();
+        results = results.filter(paper => paper.preprint_doi === trimmedQuery);
+        console.log(`Filtered to ${results.length} exact DOI match(es)`);
+      }
+      
+      const total = searchType === 'doi' ? results.length : Math.min(data.total || results.length, MAX_RESULTS);
 
       setSearchResults(results);
       setTotalResults(total);
-      setTotalPages(Math.ceil(total / RESULTS_PER_PAGE));
+      setTotalPages(searchType === 'doi' ? 1 : Math.ceil(total / RESULTS_PER_PAGE));
       setHasSearched(true);
       setIsLoading(false);
     } catch (error) {
@@ -615,6 +627,7 @@ const ExplorePage = () => {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onSearch={() => handleSearch(1)}
+                    onSearchTypeChange={setSearchType}
                     placeholder="Search by title, DOI or keyword"
                     isLoading={isLoading}
                     className={styles.searchBar}

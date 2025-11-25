@@ -7,7 +7,6 @@ import CodeBlock from '../components/ui/CodeBlock/CodeBlock';
 import ApiEndpoint from '../components/sections/ApiEndpoint/ApiEndpoint';
 import DataSourceCard from '../components/sections/DataSourceCard/DataSourceCard';
 import MethodologyFlow from '../components/sections/MethodologyFlow/MethodologyFlow';
-import ResearchPaper from '../components/sections/ResearchPaper/ResearchPaper';
 import styles from './DocumentationPage.module.css';
 
 const DocumentationPage = () => {
@@ -17,7 +16,7 @@ const DocumentationPage = () => {
   // Handle hash-based navigation from footer links
   useEffect(() => {
     const hash = location.hash.replace('#', '');
-    if (hash && ['overview', 'api', 'sources', 'methodology', 'paper'].includes(hash)) {
+    if (hash && ['overview', 'api', 'sources', 'methodology'].includes(hash)) {
       setActiveTab(hash);
     }
   }, [location.hash]);
@@ -676,8 +675,7 @@ const DocumentationPage = () => {
                 { id: 'overview', label: 'Overview' },
                 { id: 'api', label: 'API Reference' },
                 { id: 'sources', label: 'Data Sources' },
-                { id: 'methodology', label: 'Methodology' },
-                { id: 'paper', label: 'Research Paper' }
+                { id: 'methodology', label: 'Methodology' }
               ].map(tab => (
                 <button
                   key={tab.id}
@@ -1279,11 +1277,6 @@ const DocumentationPage = () => {
             </section>
           )}
 
-          {activeTab === 'paper' && (
-            <section className={styles.paperSection}>
-              <ResearchPaper />
-            </section>
-          )}
         </div>
       </div>
     </Layout>
