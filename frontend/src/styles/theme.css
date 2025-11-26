@@ -29,7 +29,8 @@
   --color-success: hsl(142, 76%, 36%);
   --color-warning: hsl(38, 92%, 50%);
   --color-error: hsl(0, 84%, 60%);
-  --color-info: hsl(204, 94%, 94%);
+  --color-info: hsl(204, 94%, 40%);
+  --color-info-light: hsl(204, 94%, 85%);
   
   /* Background Colors */
   --color-bg-primary: hsl(0, 0%, 100%);

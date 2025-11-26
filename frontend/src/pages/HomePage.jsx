@@ -102,6 +102,52 @@ const HomePage = () => {
           </div>
         </section>
 
+        {/* How to Cite Section */}
+        <section className={styles.citationSection}>
+          <div className={styles.container}>
+            <h3 className={styles.citationTitle}>How to Cite Preprint Commons</h3>
+            
+            <div className={styles.citationGrid}>
+              <div className={styles.citationCard}>
+                <span className={styles.citationFormat}>APA</span>
+                <p className={styles.citationText}>
+                  Preprint Commons. (2024). <em>Preprint Commons</em>. https://preprintcommons.org
+                </p>
+                <button 
+                  className={styles.citationCopy}
+                  onClick={() => {
+                    navigator.clipboard.writeText('Preprint Commons. (2024). Preprint Commons. https://preprintcommons.org');
+                  }}
+                  title="Copy citation"
+                >
+                  Copy
+                </button>
+              </div>
+              
+              <div className={styles.citationCard}>
+                <span className={styles.citationFormat}>BibTeX</span>
+                <pre className={styles.citationText}>
+{`@misc{preprintcommons2024,
+  author = {Preprint Commons},
+  title = {Preprint Commons},
+  year = {2024},
+  url = {https://preprintcommons.org}
+}`}
+                </pre>
+                <button 
+                  className={styles.citationCopy}
+                  onClick={() => {
+                    navigator.clipboard.writeText(`@misc{preprintcommons2024,\n  author = {Preprint Commons},\n  title = {Preprint Commons},\n  year = {2024},\n  url = {https://preprintcommons.org}\n}`);
+                  }}
+                  title="Copy citation"
+                >
+                  Copy
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Call to Action Section */}
         <section className={styles.ctaSection}>
           <div className={styles.container}>

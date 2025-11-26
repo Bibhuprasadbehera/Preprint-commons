@@ -903,6 +903,7 @@ const ExplorePage = () => {
                   placeholder="Search by author name..."
                   isLoading={isAuthorLoading}
                   className={styles.searchBar}
+                  showSearchTypeDropdown={false}
                 />
 
                 {hasAuthorSearched && (

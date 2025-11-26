@@ -9,7 +9,8 @@ const SearchBar = ({
   placeholder = "Search...",
   isLoading = false,
   className = '',
-  onSearchTypeChange
+  onSearchTypeChange,
+  showSearchTypeDropdown = true
 }) => {
   const [searchType, setSearchType] = useState('all');
 
@@ -47,15 +48,17 @@ const SearchBar = ({
             disabled={isLoading}
           />
         </div>
-        <select 
-          value={searchType} 
-          onChange={handleSearchTypeChange}
-          className={styles.searchTypeSelect}
-          disabled={isLoading}
-        >
-          <option value="all">All Fields</option>
-          <option value="doi">DOI Only</option>
-        </select>
+        {showSearchTypeDropdown && (
+          <select 
+            value={searchType} 
+            onChange={handleSearchTypeChange}
+            className={styles.searchTypeSelect}
+            disabled={isLoading}
+          >
+            <option value="all">All Fields</option>
+            <option value="doi">DOI Only</option>
+          </select>
+        )}
         <Button
           variant="primary"
           onClick={onSearch}
