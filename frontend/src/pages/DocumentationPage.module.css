@@ -67,7 +67,7 @@
   z-index: 100;
   backdrop-filter: blur(20px);
   box-shadow: var(--shadow-lg);
-  margin-bottom: var(--spacing-2xl);
+  margin-bottom: var(--spacing-lg);
 }
 
 .tabNav {
@@ -106,12 +106,12 @@
 /* Section Headers */
 .sectionHeader {
   text-align: center;
-  margin-bottom: var(--spacing-2xl);
-  padding-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
+  padding-top: var(--spacing-md);
 }
 
 .sectionHeader h2 {
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-sm);
   color: var(--color-text-primary);
 }
 
@@ -123,13 +123,13 @@
 
 /* Overview Section */
 .overview {
-  padding: var(--spacing-2xl) 0;
+  padding: var(--spacing-lg) 0;
 }
 
 .overviewGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: var(--spacing-xl);
+  gap: var(--spacing-lg);
 }
 
 .overviewCard {
@@ -196,14 +196,14 @@
 
 /* API Section */
 .apiSection {
-  padding: var(--spacing-xl) 0 var(--spacing-2xl);
+  padding: var(--spacing-lg) 0 var(--spacing-xl);
 }
 
 .apiEndpoints {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xl);
-  margin-bottom: var(--spacing-2xl);
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
 }
 
 .apiInfo {
@@ -227,14 +227,14 @@
 
 /* Sources Section */
 .sourcesSection {
-  padding: var(--spacing-xl) 0 var(--spacing-2xl);
+  padding: var(--spacing-lg) 0 var(--spacing-xl);
 }
 
 .sourcesGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: var(--spacing-xl);
-  margin-bottom: var(--spacing-2xl);
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
 }
 
 .dataProcessing {
@@ -284,14 +284,14 @@
 
 /* Methodology Section */
 .methodologySection {
-  padding: var(--spacing-xl) 0 var(--spacing-2xl);
+  padding: var(--spacing-lg) 0 var(--spacing-xl);
 }
 
 .methodologyDetails {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xl);
-  margin-top: var(--spacing-2xl);
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-lg);
 }
 
 .aiProcess {

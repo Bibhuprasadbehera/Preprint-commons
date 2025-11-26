@@ -32,48 +32,7 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* How It Works Section */}
-        <section className={styles.howItWorks}>
-          <div className={styles.container}>
-            <div className={styles.sectionHeader}>
-              <h2 className={styles.sectionTitle}>How It Works</h2>
-              <p className={styles.sectionSubtitle}>
-                Our comprehensive approach to tracking and analyzing preprint data
-              </p>
-            </div>
-            
-            <div className={styles.processGrid}>
-              <div className={styles.processStep}>
-                <div className={styles.stepNumber}>01</div>
-                <h3 className={styles.stepTitle}>Data Collection</h3>
-                <p className={styles.stepDescription}>
-                  We aggregate preprints from medRxiv, bioRxiv, 
-                  and q-bio section of arXiv ensuring comprehensive coverage.
-                </p>
-              </div>
-              
-              <div className={styles.processStep}>
-                <div className={styles.stepNumber}>02</div>
-                <h3 className={styles.stepTitle}>AI-Powered Enrichment</h3>
-                <p className={styles.stepDescription}>
-                   Large Language Model was used to fill missing metadata such as author affiliations, 
-                   and country information.
-                </p>
-              </div>
-              
-              <div className={styles.processStep}>
-                <div className={styles.stepNumber}>03</div>
-                <h3 className={styles.stepTitle}>Interactive Visualization</h3>
-                <p className={styles.stepDescription}>
-                  Explore insights through dynamic dashboards, interactive maps, 
-                  and comprehensive visualization.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Testimonials Section */}
+        {/* What Researchers Say Section */}
         <section className={styles.testimonials}>
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
@@ -148,7 +107,7 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* Call to Action Section */}
+        {/* Ready to Explore Section */}
         <section className={styles.ctaSection}>
           <div className={styles.container}>
             <div className={styles.ctaContent}>

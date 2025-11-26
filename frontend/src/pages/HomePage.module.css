@@ -1,6 +1,6 @@
 /* HomePage specific styles */
 .dataSnapshot {
-  padding: 4rem 0;
+  padding: 2rem 0;
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
 }
 
@@ -12,7 +12,7 @@
 
 .sectionHeader {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
 }
 
 .sectionTitle {
@@ -29,62 +29,20 @@
   margin: 0 auto;
 }
 
-.howItWorks {
-  padding: 4rem 0;
-  background: #ffffff;
-}
-
-.processGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 3rem;
-}
-
-.processStep {
-  text-align: center;
-  padding: 2rem;
-}
-
-.stepNumber {
-  display: inline-block;
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-  color: white;
-  border-radius: 50%;
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 60px;
-  margin-bottom: 1.5rem;
-}
-
-.stepTitle {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 1rem;
-}
-
-.stepDescription {
-  color: #64748b;
-  line-height: 1.6;
-}
-
 .testimonials {
-  padding: 4rem 0;
+  padding: 2rem 0;
   background: #f8fafc;
 }
 
 .testimonialsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 3rem;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
 }
 
 .citationSection {
-  padding: 2.5rem 0;
+  padding: 2rem 0;
   background: #f8fafc;
   border-top: 1px solid #e2e8f0;
 }
@@ -93,14 +51,14 @@
   font-size: 2.5rem;
   font-weight: 600;
   color: #1e293b;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   text-align: center;
 }
 
 .citationGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
+  gap: 1.25rem;
   max-width: 900px;
   margin: 0 auto;
 }
@@ -171,7 +129,7 @@
 }
 
 .ctaSection {
-  padding: 4rem 0;
+  padding: 2rem 0;
   background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
   color: white;
 }
@@ -190,7 +148,7 @@
 
 .ctaDescription {
   font-size: 1.125rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.25rem;
   opacity: 0.9;
 }
 

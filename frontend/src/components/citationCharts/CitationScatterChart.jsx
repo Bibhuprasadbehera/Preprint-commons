@@ -240,8 +240,8 @@ const CitationScatterChart = ({ data, loading = false }) => {
     ctx.font = 'bold 14px Inter, sans-serif';
     ctx.textAlign = 'center';
     
-    // X-axis title
-    ctx.fillText('Publication Date', width / 2, height - 10);
+    // X-axis title - moved down for better visibility
+    ctx.fillText('Publication Date', width / 2, height - 20);
     
     // Y-axis title (rotated)
     ctx.save();
@@ -317,15 +317,51 @@ const CitationScatterChart = ({ data, loading = false }) => {
 
     if (closestIndex !== -1 && closestIndex !== hoveredPoint) {
       setHoveredPoint(closestIndex);
+      
+      // Calculate smart tooltip position
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      const tooltipWidth = 350; // Actual tooltip width
+      const tooltipHeight = 120; // Approximate tooltip height
+      const offset = 15; // Offset from cursor
+      
+      // Determine if cursor is on right or left half of screen
+      const isRightSide = event.clientX > viewportWidth / 2;
+      
+      // Calculate horizontal position
+      let tooltipX, translateX;
+      
+      if (isRightSide) {
+        // On right side: show tooltip to the LEFT of cursor
+        tooltipX = event.clientX - offset;
+        translateX = -100; // Align right edge to cursor
+      } else {
+        // On left side: show tooltip to the RIGHT of cursor
+        tooltipX = event.clientX + offset;
+        translateX = -100; // Align left edge to cursor
+      }
+      
+      // Calculate vertical position - always above cursor
+      let tooltipY = event.clientY - tooltipHeight - offset;
+      let translateY = -100;
+      
+      // If too close to top edge, show below cursor instead
+      if (event.clientY < tooltipHeight + 20) {
+        tooltipY = event.clientY + offset;
+        translateY = 0;
+      }
+      
       setTooltip({
         show: true,
-        x: event.clientX,
-        y: event.clientY,
+        x: tooltipX,
+        y: tooltipY,
+        translateX,
+        translateY,
         data: data[closestIndex]
       });
     } else if (closestIndex === -1) {
       setHoveredPoint(null);
-      setTooltip({ show: false, x: 0, y: 0, data: null });
+      setTooltip({ show: false, x: 0, y: 0, translateX: -50, translateY: -50, data: null });
     }
   }, [data, dimensions, zoomState, hoveredPoint]);
 
@@ -529,10 +565,11 @@ const CitationScatterChart = ({ data, loading = false }) => {
         <div 
           className={styles.tooltip}
           style={{
-            left: tooltip.x + 10,
-            top: tooltip.y - 10,
+            left: tooltip.x,
+            top: tooltip.y,
             position: 'fixed',
-            zIndex: 1000
+            zIndex: 1000,
+            transform: `translate(${tooltip.translateX}%, ${tooltip.translateY}%)`
           }}
         >
           <div className={styles.tooltipTitle}>

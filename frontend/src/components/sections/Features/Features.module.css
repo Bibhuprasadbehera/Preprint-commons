@@ -1,6 +1,6 @@
 /* Enhanced Features Section with Animations */
 .features {
-  padding: var(--spacing-4xl) 0;
+  padding: var(--spacing-3xl) 0;
   background: var(--color-bg-secondary);
   position: relative;
 }
@@ -26,7 +26,7 @@
 
 .header {
   text-align: center;
-  margin-bottom: var(--spacing-4xl);
+  margin-bottom: var(--spacing-2xl);
   animation: fadeInUp 0.8s ease-out;
 }
 
@@ -35,7 +35,7 @@
   font-size: var(--font-size-4xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
 }
 
 .subtitle {
@@ -49,13 +49,13 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--spacing-2xl);
-  margin-bottom: var(--spacing-4xl);
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
 }
 
 .featureCard {
   background: var(--color-bg-primary);
-  padding: var(--spacing-2xl);
+  padding: var(--spacing-xl);
   border-radius: var(--radius-xl);
   text-align: center;
   box-shadow: var(--shadow-md);
@@ -94,9 +94,9 @@
 }
 
 .iconWrapper {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto var(--spacing-lg);
+  width: 70px;
+  height: 70px;
+  margin: 0 auto var(--spacing-md);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -136,7 +136,7 @@
 .additionalGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
 }
 
 .miniFeature {

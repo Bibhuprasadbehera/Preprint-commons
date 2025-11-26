@@ -29,15 +29,15 @@
 }
 
 .content {
-  padding: var(--spacing-xl);
+  padding: 0 var(--spacing-lg) var(--spacing-lg);
 }
 
 .header {
-  padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-md);
+  padding: var(--spacing-lg) var(--spacing-lg) 0;
 }
 
 .footer {
-  padding: var(--spacing-md) var(--spacing-xl) var(--spacing-xl);
+  padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-lg);
 }
 
 /* Card Variants */
