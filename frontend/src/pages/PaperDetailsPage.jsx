@@ -120,7 +120,7 @@ const PaperDetailsPage = () => {
   if (isLoading) {
     return (
       <Layout>
-        <div className={layoutStyles.pageContainer}>
+        <div className={`${layoutStyles.pageContainer} animate-fadeInUp`}>
           <div className={styles.loadingContainer}>
             <div className={styles.loadingSpinner}></div>
             <h2 className="text-heading-3">Loading paper details...</h2>
@@ -218,7 +218,7 @@ const PaperDetailsPage = () => {
     <Layout>
       <div className={layoutStyles.pageContainer}>
         {/* Breadcrumb Navigation */}
-        <div className={styles.breadcrumb}>
+        <div className={`${styles.breadcrumb} animate-fadeInUp`}>
           <Link to="/" className={styles.breadcrumbLink}>Home</Link>
           <span className={styles.breadcrumbSeparator}>›</span>
           <Link to="/explore" className={styles.breadcrumbLink}>Explore</Link>
@@ -226,7 +226,7 @@ const PaperDetailsPage = () => {
           <span className={styles.breadcrumbCurrent}>Paper Details</span>
         </div>
 
-        <div className={styles.paperContainer}>
+        <div className={`${styles.paperContainer} animate-fadeInUp animate-delay-1`}>
           {/* Main Content */}
           <div className={styles.mainContent}>
             {/* Paper Header */}

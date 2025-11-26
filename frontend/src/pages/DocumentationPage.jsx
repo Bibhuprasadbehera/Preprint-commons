@@ -694,7 +694,7 @@ const DocumentationPage = () => {
         {/* Content Sections */}
         <div className={styles.container}>
           {activeTab === 'overview' && (
-            <section className={styles.overview}>
+            <section className={`${styles.overview} animate-fadeInUp`}>
               <div className={styles.overviewGrid}>
                 <Card className={styles.overviewCard}>
                   <Card.Header>
@@ -729,7 +729,7 @@ const DocumentationPage = () => {
                       </div>
                     </div>
                     <div style={{ marginTop: 'var(--spacing-md)', fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)' }}>
-                      bioRxiv: 239,847 • medRxiv: 55,695 • arXiv (q-bio): 49,301
+
                     </div>
                   </Card.Content>
                 </Card>
@@ -825,7 +825,7 @@ const DocumentationPage = () => {
           )}
 
           {activeTab === 'api' && (
-            <section className={styles.apiSection}>
+            <section className={`${styles.apiSection} animate-fadeInUp`}>
               <div className={styles.sectionHeader}>
                 <h2 className="text-heading-2">API Reference</h2>
                 <p className="text-body-large">
@@ -881,7 +881,7 @@ const DocumentationPage = () => {
           )}
 
           {activeTab === 'sources' && (
-            <section className={styles.sourcesSection}>
+            <section className={`${styles.sourcesSection} animate-fadeInUp`}>
               <div className={styles.sectionHeader}>
                 <h2 className="text-heading-2">Data Sources</h2>
                 <p className="text-body-large">
@@ -1008,7 +1008,7 @@ const DocumentationPage = () => {
           )}
 
           {activeTab === 'methodology' && (
-            <section className={styles.methodologySection}>
+            <section className={`${styles.methodologySection} animate-fadeInUp`}>
               <div className={styles.sectionHeader}>
                 <h2 className="text-heading-2">Research Methodology</h2>
                 <p className="text-body-large">

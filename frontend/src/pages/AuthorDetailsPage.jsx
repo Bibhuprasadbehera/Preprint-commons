@@ -183,7 +183,7 @@ const AuthorDetailsPage = () => {
   if (isLoading) {
     return (
       <Layout>
-        <div className={layoutStyles.pageContainer}>
+        <div className={`${layoutStyles.pageContainer} animate-fadeInUp`}>
           <div className={styles.loadingContainer}>
             <div className={styles.loadingSpinner}></div>
             <h2 className="text-heading-3">Loading author information...</h2>
@@ -224,7 +224,7 @@ const AuthorDetailsPage = () => {
     <Layout>
       <div className={layoutStyles.pageContainer}>
         {/* Breadcrumb Navigation */}
-        <div className={styles.breadcrumb}>
+        <div className={`${styles.breadcrumb} animate-fadeInUp`}>
           <Link to="/" className={styles.breadcrumbLink}>Home</Link>
           <span className={styles.breadcrumbSeparator}>›</span>
           <Link to="/explore" className={styles.breadcrumbLink}>Explore</Link>
@@ -232,7 +232,7 @@ const AuthorDetailsPage = () => {
           <span className={styles.breadcrumbCurrent}>Author Details</span>
         </div>
 
-        <div className={styles.authorContainer}>
+        <div className={`${styles.authorContainer} animate-fadeInUp animate-delay-1`}>
           {/* Author Header */}
           <div className={styles.authorHeader}>
             <div className={styles.authorBadge}>

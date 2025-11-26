@@ -8,7 +8,7 @@ const AboutPage = () => {
     <Layout>
       <div className={layoutStyles.pageContainer}>
         {/* Hero Section - Simplified */}
-        <div className={layoutStyles.contentSection} style={{
+        <div className={`${layoutStyles.contentSection} animate-fadeInUp`} style={{
           background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%)',
           color: 'white',
           borderRadius: 'var(--radius-xl)',
@@ -51,7 +51,7 @@ const AboutPage = () => {
         </div>
 
         {/* Open Science Philosophy Section */}
-        <div className={layoutStyles.contentSection}>
+        <div className={`${layoutStyles.contentSection} animate-fadeInUp animate-delay-1`}>
           <div style={{ textAlign: 'center', marginBottom: 'var(--spacing-2xl)' }}>
             <h2 className="text-heading-2" style={{ marginBottom: 'var(--spacing-md)' }}>
               Our Mission & Commitment to Open Science
@@ -93,7 +93,9 @@ const AboutPage = () => {
                 desc: 'Empowering the next generation of researchers by making preprint analytics freely and openly accessible.'
               }
             ].map((principle, index) => (
-              <div key={index} className={styles.principleCard}>
+              <div key={index} className={`${styles.principleCard} animate-fadeInUp`} style={{
+                animationDelay: `${0.2 + index * 0.1}s`
+              }}>
                 <div style={{
                   fontSize: 'var(--font-size-3xl)',
                   marginBottom: 'var(--spacing-md)'
@@ -119,7 +121,7 @@ const AboutPage = () => {
 
 
         {/* Data Sources - Brief Overview */}
-        <div className={layoutStyles.contentSection} style={{
+        <div className={`${layoutStyles.contentSection} animate-fadeInUp animate-delay-2`} style={{
           background: 'var(--color-bg-secondary)',
           borderRadius: 'var(--radius-xl)',
           padding: 'var(--spacing-2xl)',
@@ -168,7 +170,7 @@ const AboutPage = () => {
 
 
         {/* Logo & Brand Identity Section */}
-        <div className={layoutStyles.contentSection} style={{
+        <div className={`${layoutStyles.contentSection} animate-fadeInUp animate-delay-3`} style={{
           background: 'var(--color-bg-secondary)',
           borderRadius: 'var(--radius-xl)',
           padding: 'var(--spacing-2xl)',
@@ -206,7 +208,9 @@ const AboutPage = () => {
             marginBottom: 'var(--spacing-xl)'
           }}>
             {/* Icon Story */}
-            <div className={styles.logoCard}>
+            <div className={`${styles.logoCard} animate-slideInLeft`} style={{
+              animationDelay: '0.4s'
+            }}>
               <div style={{
                 display: 'flex',
                 justifyContent: 'center',
@@ -251,7 +255,9 @@ const AboutPage = () => {
             </div>
 
             {/* Name Story */}
-            <div className={styles.logoCard}>
+            <div className={`${styles.logoCard} animate-slideInRight`} style={{
+              animationDelay: '0.4s'
+            }}>
               <h3 className="text-heading-3" style={{ 
                 marginBottom: 'var(--spacing-md)',
                 color: 'var(--color-primary)',

@@ -510,15 +510,17 @@ const ExplorePage = () => {
   return (
     <Layout>
       <div className="centered-page">
+        <div className="animate-fadeInUp">
         <Header 
           title="Explore Preprint Data"
-          subtitle="Discover insights through interactive visualizations and comprehensive search capabilities."
+          subtitle="Discover insights through interactive visualizations and search capabilities."
           variant="page"
           size="large"
         />
+        </div>
         
         {/* Tab Navigation */}
-        <div className={styles.tabNavigation}>
+        <div className={`${styles.tabNavigation} animate-fadeInUp animate-delay-1`}>
           <Button
             variant={activeTab === 'map' ? 'primary' : 'outline'}
             onClick={() => openTab('map')}

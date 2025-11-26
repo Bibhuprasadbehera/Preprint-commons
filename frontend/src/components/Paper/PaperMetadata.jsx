@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../ui/Card/Card';
 import styles from './Paper.module.css';
@@ -6,11 +6,16 @@ import styles from './Paper.module.css';
 const PaperMetadata = ({ paper }) => {
   const navigate = useNavigate();
   const metadataRef = useRef(null);
+  const [isAuthorsExpanded, setIsAuthorsExpanded] = useState(false);
 
   const handleAuthorClick = (authorName) => {
     if (authorName && authorName.trim()) {
       navigate(`/author/${encodeURIComponent(authorName)}`);
     }
+  };
+
+  const toggleAuthorsExpanded = () => {
+    setIsAuthorsExpanded(!isAuthorsExpanded);
   };
 
   const getPreprintUrl = (doi, server) => {
@@ -121,11 +126,33 @@ const PaperMetadata = ({ paper }) => {
       {authors.length > 0 && (
         <Card className={styles.authorsCard}>
           <Card.Header>
-            <h3 className={styles.sectionTitle}>Authors</h3>
+            <div className={styles.authorsHeader}>
+              <h3 className={styles.sectionTitle}>
+                Authors ({authors.length})
+              </h3>
+              {authors.length > 5 && (
+                <button
+                  className={styles.expandButton}
+                  onClick={toggleAuthorsExpanded}
+                  aria-expanded={isAuthorsExpanded}
+                  aria-label={isAuthorsExpanded ? 'Show fewer authors' : 'Show all authors'}
+                >
+                  <svg 
+                    className={`${styles.chevronIcon} ${isAuthorsExpanded ? styles.chevronExpanded : ''}`}
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="2"
+                  >
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+              )}
+            </div>
           </Card.Header>
           <Card.Content>
             <div className={styles.authorsList}>
-              {authors.map((author, index) => (
+              {(isAuthorsExpanded ? authors : authors.slice(0, 5)).map((author, index) => (
                 <div key={index} className={styles.authorItem}>
                   <div className={styles.authorName}>
                     {author.author_name}

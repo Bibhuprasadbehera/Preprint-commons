@@ -99,14 +99,20 @@
         const tooltip = d3.select("#tooltip");
         const color = d3.scaleSequential().interpolator(d3.interpolatePlasma);
 
-        const years = Array.from(new Set(countryData.map(d => d.year))).filter(Boolean).sort((a, b) => a - b);
+        const allYears = Array.from(new Set(countryData.map(d => d.year))).filter(Boolean).sort((a, b) => a - b);
+        // Filter years to start from 2013
+        const years = allYears.filter(year => year >= 2013);
         const yearFilter = document.getElementById("year-filter");
         const yearValue = document.getElementById("year-value");
         const toggleMode = document.getElementById("toggle-mode");
 
         yearFilter.min = 0;
         yearFilter.max = years.length;
-        yearFilter.value = 0;
+        
+        // Set initial value to 2024 if available, otherwise latest year
+        const defaultYearIndex = years.indexOf(2024);
+        const initialIndex = defaultYearIndex !== -1 ? defaultYearIndex + 1 : years.length;
+        yearFilter.value = initialIndex;
 
         function addLegend(maxValue) {
           const legendWidth = 260, legendHeight = 12, legendMargin = 20;
@@ -262,6 +268,9 @@
           yearFilter.style.setProperty("--thumb-color", isCumulative ? "hsl(0, 84%, 60%)" : "hsl(210, 85%, 45%)");
           updateMap(isCumulative, yearFilter.value);
         });
+        
+        // Set initial year value display
+        yearValue.textContent = initialIndex === 0 ? "All Year Cumulative" : years[initialIndex - 1];
 
         function handleResize() {
           const container = document.getElementById('map-container');
@@ -279,7 +288,8 @@
         window.addEventListener('resize', handleResize);
         // Initial resize to fit container
         setTimeout(handleResize, 100);
-        updateMap(false, 0);
+        // Initialize map with 2024 (or latest year)
+        updateMap(false, initialIndex);
       } catch (error) {
         console.error("Error creating map:", error);
         document.getElementById("map-container").innerHTML = `

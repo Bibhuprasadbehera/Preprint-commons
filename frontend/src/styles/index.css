@@ -88,6 +88,7 @@ body {
 /* Animation Classes */
 .animate-fadeInUp {
   animation: fadeInUp 0.6s ease-out;
+  animation-fill-mode: both;
 }
 
 .animate-delay-1 {
@@ -106,12 +107,23 @@ body {
   animation-delay: 0.8s;
 }
 
+.animate-delay-5 {
+  animation-delay: 1s;
+}
+
 .animate-slideInLeft {
   animation: slideInLeft 0.6s ease-out;
+  animation-fill-mode: both;
 }
 
 .animate-slideInRight {
   animation: slideInRight 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.5s ease-out;
+  animation-fill-mode: both;
 }
 
 @keyframes fadeInUp {
@@ -144,6 +156,17 @@ body {
   to {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 

@@ -242,6 +242,44 @@
   border-bottom-color: var(--color-primary-dark);
 }
 
+.authorsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.expandButton {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.expandButton:hover {
+  color: var(--color-primary);
+}
+
+.expandButton:focus {
+  outline: none;
+  color: var(--color-primary);
+}
+
+.chevronIcon {
+  width: 20px;
+  height: 20px;
+  transition: transform var(--transition-normal);
+}
+
+.chevronExpanded {
+  transform: rotate(180deg);
+}
+
 .authorsList {
   display: grid;
   gap: var(--spacing-md);
