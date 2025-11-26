@@ -111,7 +111,6 @@ const AdvancedSearch = ({ onSearch, loading = false }) => {
     month: '',
     subject: '',
     server: '',
-    authors: '',
     institution: '',
     license: '',
     citation_min: '',
@@ -176,7 +175,6 @@ const AdvancedSearch = ({ onSearch, loading = false }) => {
       month: '',
       subject: '',
       server: '',
-      authors: '',
       institution: '',
       license: '',
       citation_min: '',
@@ -308,18 +306,6 @@ const AdvancedSearch = ({ onSearch, loading = false }) => {
           )}
         </div>
 
-
-        {/* Authors */}
-        <div className={styles.fieldGroup}>
-          <label className={styles.fieldLabel}>Authors</label>
-          <input
-            type="text"
-            value={searchCriteria.authors}
-            onChange={(e) => handleInputChange('authors', e.target.value)}
-            placeholder="Search by author name"
-            className={styles.textInput}
-          />
-        </div>
 
         {/* Institution */}
         <div className={styles.fieldGroup}>

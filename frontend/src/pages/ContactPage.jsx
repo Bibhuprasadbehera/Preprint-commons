@@ -71,27 +71,14 @@ const ContactPage = () => {
                   boxShadow: 'var(--shadow-md)',
                   transition: 'all var(--transition-normal)'
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-lg)' }}>
-                    <div style={{
-                      width: '50px',
-                      height: '50px',
-                      background: 'linear-gradient(135deg, var(--color-primary), var(--color-accent))',
-                      borderRadius: 'var(--radius-lg)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: 'var(--font-size-xl)',
-                      flexShrink: 0
+                  <div>
+                    <h3 className="text-heading-4" style={{ 
+                      marginBottom: 'var(--spacing-sm)',
+                      color: 'var(--color-text-primary)'
                     }}>
-                      {contact.icon}
-                    </div>
-                    <div style={{ flex: 1 }}>
-                      <h3 className="text-heading-4" style={{ 
-                        marginBottom: 'var(--spacing-sm)',
-                        color: 'var(--color-text-primary)'
-                      }}>
-                        {contact.title}
-                      </h3>
+                      {contact.icon} {contact.title}
+                    </h3>
+                    <div>
                       <p className="text-body" style={{ 
                         marginBottom: 'var(--spacing-md)',
                         color: 'var(--color-text-secondary)'
@@ -137,23 +124,9 @@ const ContactPage = () => {
                 border: '1px solid var(--color-neutral-200)',
                 boxShadow: 'var(--shadow-md)'
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)', marginBottom: 'var(--spacing-lg)' }}>
-                  <div style={{
-                    width: '40px',
-                    height: '40px',
-                    background: 'linear-gradient(135deg, var(--color-secondary), var(--color-accent))',
-                    borderRadius: 'var(--radius-lg)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: 'var(--font-size-lg)'
-                  }}>
-                    🌐
-                  </div>
-                  <h3 className="text-heading-4" style={{ color: 'var(--color-text-primary)' }}>
-                    Social Media
-                  </h3>
-                </div>
+                <h3 className="text-heading-4" style={{ color: 'var(--color-text-primary)', marginBottom: 'var(--spacing-lg)' }}>
+                  🌐 Social Media
+                </h3>
                 <div style={{ display: 'flex', gap: 'var(--spacing-lg)', flexWrap: 'wrap' }}>
                   {['Twitter', 'GitHub', 'LinkedIn'].map((platform, index) => (
                     <a 
@@ -191,10 +164,9 @@ const ContactPage = () => {
                 borderRadius: 'var(--radius-xl)',
                 padding: 'var(--spacing-xl)'
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)', marginBottom: 'var(--spacing-lg)' }}>
-                  <div style={{ fontSize: 'var(--font-size-2xl)' }}>📬</div>
-                  <h3 className="text-heading-4" style={{ color: 'white' }}>Newsletter</h3>
-                </div>
+                <h3 className="text-heading-4" style={{ color: 'white', marginBottom: 'var(--spacing-lg)' }}>
+                  📬 Newsletter
+                </h3>
                 <p className="text-body" style={{ 
                   color: 'rgba(255, 255, 255, 0.9)',
                   marginBottom: 'var(--spacing-lg)'
@@ -224,23 +196,9 @@ const ContactPage = () => {
                 border: '1px solid var(--color-neutral-200)',
                 boxShadow: 'var(--shadow-md)'
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)', marginBottom: 'var(--spacing-lg)' }}>
-                  <div style={{
-                    width: '40px',
-                    height: '40px',
-                    background: 'linear-gradient(135deg, var(--color-accent), var(--color-secondary))',
-                    borderRadius: 'var(--radius-lg)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: 'var(--font-size-lg)'
-                  }}>
-                    👥
-                  </div>
-                  <h3 className="text-heading-4" style={{ color: 'var(--color-text-primary)' }}>
-                    Community for developers
-                  </h3>
-                </div>
+                <h3 className="text-heading-4" style={{ color: 'var(--color-text-primary)', marginBottom: 'var(--spacing-lg)' }}>
+                  👥 Community for developers
+                </h3>
                 <p className="text-body" style={{ 
                   color: 'var(--color-text-secondary)',
                   marginBottom: 'var(--spacing-lg)'
@@ -273,21 +231,8 @@ const ContactPage = () => {
             textAlign: 'center',
             border: '1px solid var(--color-neutral-200)'
           }}>
-            <div style={{
-              width: '80px',
-              height: '80px',
-              background: 'linear-gradient(135deg, var(--color-primary), var(--color-secondary))',
-              borderRadius: 'var(--radius-full)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto var(--spacing-xl)',
-              fontSize: 'var(--font-size-3xl)'
-            }}>
-              👥
-            </div>
             <h2 className="text-heading-2" style={{ marginBottom: 'var(--spacing-lg)' }}>
-              Citations
+              👥 Citations
             </h2>
             <p className="text-body" style={{ 
               maxWidth: '700px',

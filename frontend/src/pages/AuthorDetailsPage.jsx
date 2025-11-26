@@ -45,7 +45,9 @@ const AuthorDetailsPage = () => {
           // Get author metadata from the first paper
           const firstPaper = papersList[0];
           const institution = firstPaper.corresponding_institution || 'Not available';
-          const country = firstPaper.country_name || 'Not available';
+          const country = (firstPaper.country_name && firstPaper.country_name !== 'NaN') 
+            ? firstPaper.country_name 
+            : 'Not available';
 
           setAuthorData({
             name: decodedAuthorName,
@@ -106,6 +108,9 @@ const AuthorDetailsPage = () => {
       const ctx = chartRef.current.getContext('2d');
       const data = authorData.papersOverTime;
 
+      const blueColor = 'rgba(54, 162, 235, 1)';
+      const pinkColor = 'rgba(255, 99, 132, 1)';
+
       chartInstance.current = new Chart(ctx, {
         type: 'line',
         data: {
@@ -114,18 +119,24 @@ const AuthorDetailsPage = () => {
             {
               label: 'Papers Published',
               data: data.map(d => d.papers),
-              borderColor: 'rgba(54, 162, 235, 1)',
+              borderColor: blueColor,
               backgroundColor: 'rgba(54, 162, 235, 0.1)',
               yAxisID: 'y',
-              tension: 0.4
+              tension: 0.4,
+              borderWidth: 2,
+              pointRadius: 4,
+              pointHoverRadius: 6
             },
             {
               label: 'Total Citations',
               data: data.map(d => d.citations),
-              borderColor: 'rgba(255, 99, 132, 1)',
+              borderColor: pinkColor,
               backgroundColor: 'rgba(255, 99, 132, 0.1)',
               yAxisID: 'y1',
-              tension: 0.4
+              tension: 0.4,
+              borderWidth: 2,
+              pointRadius: 4,
+              pointHoverRadius: 6
             }
           ]
         },
@@ -139,10 +150,21 @@ const AuthorDetailsPage = () => {
           plugins: {
             title: {
               display: true,
-              text: 'Author Publications & Citations Over Time'
+              text: 'Author Publications & Citations Over Time',
+              font: {
+                size: 16,
+                weight: 'bold'
+              }
             },
             legend: {
               position: 'top',
+              labels: {
+                usePointStyle: true,
+                padding: 15,
+                font: {
+                  size: 12
+                }
+              }
             },
           },
           scales: {
@@ -152,7 +174,22 @@ const AuthorDetailsPage = () => {
               position: 'left',
               title: {
                 display: true,
-                text: 'Number of Papers'
+                text: 'Number of Papers',
+                color: blueColor,
+                font: {
+                  size: 13,
+                  weight: 'bold'
+                }
+              },
+              ticks: {
+                color: blueColor,
+                font: {
+                  size: 11,
+                  weight: '600'
+                }
+              },
+              grid: {
+                color: 'rgba(54, 162, 235, 0.1)'
               }
             },
             y1: {
@@ -161,11 +198,33 @@ const AuthorDetailsPage = () => {
               position: 'right',
               title: {
                 display: true,
-                text: 'Total Citations'
+                text: 'Total Citations',
+                color: pinkColor,
+                font: {
+                  size: 13,
+                  weight: 'bold'
+                }
+              },
+              ticks: {
+                color: pinkColor,
+                font: {
+                  size: 11,
+                  weight: '600'
+                }
               },
               grid: {
                 drawOnChartArea: false,
               },
+            },
+            x: {
+              ticks: {
+                font: {
+                  size: 11
+                }
+              },
+              grid: {
+                color: 'rgba(0, 0, 0, 0.05)'
+              }
             }
           }
         }
@@ -266,7 +325,7 @@ const AuthorDetailsPage = () => {
                   <span className={styles.statLabel}>Institution</span>
                 </div>
                 
-                {authorData?.country && authorData.country !== 'Not available' && authorData.country.trim() !== '' && (
+                {authorData?.country && authorData.country !== 'Not available' && authorData.country !== 'Nan' && authorData.country.trim() !== '' && (
                   <div className={`${styles.statItem} ${styles.countryItem}`}>
                     <span className={styles.statNumber}>{authorData.country}</span>
                     <span className={styles.statLabel}>Country</span>

@@ -105,7 +105,7 @@ const PaperMetadata = ({ paper }) => {
         <Card.Content>
           <div className={styles.metadataGrid}>
             {meta.map(m => {
-              if (!paper[m.k]) return null;
+              if (!paper[m.k] || paper[m.k] === 'Nan') return null;
               let val = m.v ? m.v(paper[m.k]) : paper[m.k];
               return (
                 <div key={m.k} className={styles.metadataItem}>
