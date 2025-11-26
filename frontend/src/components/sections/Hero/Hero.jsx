@@ -16,7 +16,7 @@ const Hero = () => {
       <div className={styles.container}>
         <div className={styles.content}>
           <h1 className={styles.title}>
-            Preprint Commons <br /> Tracking Global Impact of Preprints 
+            <span className={styles.gradientText}>Preprint Commons</span> <br /> Tracking Global Impact of Preprints 
           </h1>
           <p className={styles.subtitle}>
             Explore trends, landscape, and citations across arXiv, bioRxiv & medRxiv preprint servers 

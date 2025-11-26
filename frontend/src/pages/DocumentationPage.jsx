@@ -632,7 +632,7 @@ const DocumentationPage = () => {
     },
     {
       name: 'medRxiv',
-      description: 'Medical and health sciences preprints with focus on clinical research',
+      description: 'Medical & health sciences preprints with focus on clinical research',
       url: 'https://www.medrxiv.org',
       coverage: '55,695',
       fields: ['Medicine', 'Health Sciences', 'Public Health', 'Epidemiology', 'Clinical Research'],
@@ -802,7 +802,7 @@ const DocumentationPage = () => {
                         </div>
                         <h4 className="text-heading-4" style={{ 
                           marginBottom: 'var(--spacing-sm)',
-                          color: feature.color
+                          color: 'var(--color-primary)'
                         }}>
                           {feature.title}
                         </h4>
@@ -810,7 +810,8 @@ const DocumentationPage = () => {
                           className="text-body-small"
                           style={{
                             color: 'var(--color-text-secondary)',
-                            lineHeight: 'var(--line-height-relaxed)'
+                            lineHeight: 'var(--line-height-relaxed)',
+                            textAlign: 'justify'
                           }}
                           dangerouslySetInnerHTML={{ __html: feature.desc }}
                         />
@@ -913,35 +914,21 @@ const DocumentationPage = () => {
                   <h3 className="text-heading-3">Repository Selection Criteria</h3>
                 </Card.Header>
                 <Card.Content>
-                  <p className="text-body" style={{ marginBottom: 'var(--spacing-lg)' }}>
+                  <p className="text-body mb-4">
                     Preprint Commons focuses on three primary repositories that provide structured, comprehensive, 
                     and high-quality metadata through well documented APIs covering multiple subjects in life and health sciences.
                   </p>
                   
-                  <div style={{ 
-                    display: 'grid', 
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
-                    gap: 'var(--spacing-lg)',
-                    marginBottom: 'var(--spacing-xl)'
-                  }}>
-                    <div style={{
-                      padding: 'var(--spacing-lg)',
-                      background: 'var(--color-bg-secondary)',
-                      borderRadius: 'var(--radius-lg)',
-                      borderLeft: '4px solid var(--color-success)'
-                    }}>
-                      <h4 className="text-heading-4" style={{ marginBottom: 'var(--spacing-md)', color: 'var(--color-success)' }}>
-                        ✓ Included Repositories
-                      </h4>
-                      <ul className={styles.techList} style={{ fontSize: 'var(--font-size-sm)' }}>
+                  <div className={styles.aiProcess}>
+                    <div className={styles.aiStep}>
+                      <h4>Included Repositories</h4>
+                      <ul className={styles.techList} style={{ fontSize: 'var(--font-size-sm)', textAlign: 'left' }}>
                         <li><strong>bioRxiv:</strong> Well documented API and JATS XML metadata</li>
                         <li><strong>medRxiv:</strong> Well documented API and health sciences focus</li>
                         <li><strong>arXiv (q-bio):</strong> Well documented API</li>
                       </ul>
                     </div>
-                    </div>
-
-                 
+                  </div>
                 </Card.Content>
               </Card>
 
@@ -951,16 +938,10 @@ const DocumentationPage = () => {
                   <h3 className="text-heading-3">Metadata Collection & Processing</h3>
                 </Card.Header>
                 <Card.Content>
-                  <div style={{ 
-                    display: 'grid', 
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-                    gap: 'var(--spacing-xl)'
-                  }}>
-                    <div>
-                      <h4 className="text-heading-4" style={{ marginBottom: 'var(--spacing-md)', color: 'var(--color-primary)' }}>
-                        📋 Standard Metadata Fields
-                      </h4>
-                      <ul className={styles.techList}>
+                  <div className={styles.aiProcess}>
+                    <div className={styles.aiStep}>
+                      <h4>Standard Metadata Fields</h4>
+                      <ul className={styles.techList} style={{ textAlign: 'left' }}>
                         <li>DOI (Digital Object Identifier)</li>
                         <li>Title and abstract</li>
                         <li>Authors and corresponding author</li>
@@ -972,11 +953,9 @@ const DocumentationPage = () => {
                       </ul>
                     </div>
 
-                    <div>
-                      <h4 className="text-heading-4" style={{ marginBottom: 'var(--spacing-md)', color: 'var(--color-secondary)' }}>
-                        🔬 Enhanced Metadata
-                      </h4>
-                      <ul className={styles.techList}>
+                    <div className={styles.aiStep}>
+                      <h4>Enhanced Metadata</h4>
+                      <ul className={styles.techList} style={{ textAlign: 'left' }}>
                         <li>Author institutional affiliations</li>
                         <li>Geographic country information</li>
                         <li>Citation counts</li>
@@ -986,11 +965,9 @@ const DocumentationPage = () => {
                       </ul>
                     </div>
 
-                    <div>
-                      <h4 className="text-heading-4" style={{ marginBottom: 'var(--spacing-md)', color: 'var(--color-accent)' }}>
-                        🔄 Data Processing
-                      </h4>
-                      <ul className={styles.techList}>
+                    <div className={styles.aiStep}>
+                      <h4>Data Processing</h4>
+                      <ul className={styles.techList} style={{ textAlign: 'left' }}>
                         <li>JSON to CSV conversion</li>
                         <li>Duplicate detection and removal</li>
                         <li>Date standardization (ISO format)</li>
@@ -1009,33 +986,17 @@ const DocumentationPage = () => {
                   <h3 className="text-heading-3">Coverage and Data Quality</h3>
                 </Card.Header>
                 <Card.Content>
-                  <div style={{ 
-                    display: 'grid', 
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
-                    gap: 'var(--spacing-lg)'
-                  }}>
-                    <div style={{
-                      padding: 'var(--spacing-lg)',
-                      background: 'var(--color-bg-secondary)',
-                      borderRadius: 'var(--radius-lg)',
-                      textAlign: 'center'
-                    }}>
-                      <div style={{ fontSize: 'var(--font-size-3xl)', marginBottom: 'var(--spacing-md)' }}>📅</div>
-                      <h4 className="text-heading-4" style={{ marginBottom: 'var(--spacing-sm)' }}>Current Coverage</h4>
-                      <p className="text-body-small" style={{ color: 'var(--color-text-secondary)' }}>
+                  <div className={styles.aiProcess}>
+                    <div className={styles.aiStep}>
+                      <h4>Current Coverage</h4>
+                      <p>
                         Dataset includes preprints up to <strong>June 2024</strong>
                       </p>
                     </div>
 
-                    <div style={{
-                      padding: 'var(--spacing-lg)',
-                      background: 'var(--color-bg-secondary)',
-                      borderRadius: 'var(--radius-lg)',
-                      textAlign: 'center'
-                    }}>
-                      <div style={{ fontSize: 'var(--font-size-3xl)', marginBottom: 'var(--spacing-md)' }}>✓</div>
-                      <h4 className="text-heading-4" style={{ marginBottom: 'var(--spacing-sm)' }}>Quality Assurance</h4>
-                      <p className="text-body-small" style={{ color: 'var(--color-text-secondary)' }}>
+                    <div className={styles.aiStep}>
+                      <h4>Quality Assurance</h4>
+                      <p>
                         <strong>85-90% accuracy</strong> validated through random sampling
                       </p>
                     </div>
@@ -1059,7 +1020,7 @@ const DocumentationPage = () => {
                 {/* Data Acquisition */}
                 <Card>
                   <Card.Header>
-                    <h3 className="text-heading-3">Data Acquisition</h3>
+                    <h3 className="text-heading-3">📥 Data Acquisition</h3>
                   </Card.Header>
                   <Card.Content>
                     <p className="text-body mb-4">
@@ -1089,7 +1050,7 @@ const DocumentationPage = () => {
                 {/* Data Preprocessing */}
                 <Card>
                   <Card.Header>
-                    <h3 className="text-heading-3">Data Preprocessing and Integration</h3>
+                    <h3 className="text-heading-3">⚙️ Data Preprocessing and Integration</h3>
                   </Card.Header>
                   <Card.Content>
                     <p className="text-body mb-4">
@@ -1126,7 +1087,7 @@ const DocumentationPage = () => {
                 {/* LLM Processing */}
                 <Card>
                   <Card.Header>
-                    <h3 className="text-heading-3">LLM-Based Country Extraction Pipeline</h3>
+                    <h3 className="text-heading-3">🤖 LLM-Based Country Extraction Pipeline</h3>
                   </Card.Header>
                   <Card.Content>
                     <p className="text-body mb-4">
@@ -1173,7 +1134,7 @@ const DocumentationPage = () => {
                 {/* Data Analysis and Visualization */}
                 <Card>
                   <Card.Header>
-                    <h3 className="text-heading-3">Data Analysis and Visualization</h3>
+                    <h3 className="text-heading-3">📊 Data Analysis and Visualization</h3>
                   </Card.Header>
                   <Card.Content>
                     <p className="text-body mb-4">
@@ -1210,7 +1171,7 @@ const DocumentationPage = () => {
                 {/* Technical Infrastructure */}
                 <Card>
                   <Card.Header>
-                    <h3 className="text-heading-3">Technical Infrastructure & Implementation</h3>
+                    <h3 className="text-heading-3">🏗️ Technical Infrastructure & Implementation</h3>
                   </Card.Header>
                   <Card.Content>
                     <p className="text-body mb-4">
@@ -1226,51 +1187,27 @@ const DocumentationPage = () => {
                         { 
                           icon: '🚀', 
                           title: 'FastAPI Backend', 
-                          desc: 'Python-based backend with 20+ RESTful endpoints, asynchronous capabilities, automatic OpenAPI documentation, and high performance.',
-                          color: 'var(--color-primary)'
+                          desc: 'Python-based backend with 20+ RESTful endpoints, asynchronous capabilities, automatic OpenAPI documentation, and high performance.'
                         },
                         { 
                           icon: '🗄️', 
                           title: 'PostgreSQL Database', 
-                          desc: 'Normalized relational schema optimized for preprint data with efficient indexing, caching strategies, and connection pooling.',
-                          color: 'var(--color-secondary)'
+                          desc: 'Normalized relational schema optimized for preprint data with efficient indexing, caching strategies, and connection pooling.'
                         },
                         { 
                           icon: '⚛️', 
                           title: 'React Frontend', 
-                          desc: 'Modern responsive application with React Router for navigation, Chart.js for charting, and custom D3.js components for advanced visualizations.',
-                          color: 'var(--color-accent)'
+                          desc: 'Modern responsive application with React Router for navigation, Chart.js for charting, and custom D3.js components for advanced visualizations.'
                         },
                         {
                           icon: '🤖',
                           title: 'AI Enhancement',
-                          desc: '<a href="https://huggingface.co/nvidia/Llama-3.1-Nemotron-70B-Instruct-HF" target="_blank" rel="noopener noreferrer">NVIDIA/Llama-3.1-Nemotron-70B-Instruct-HF</a> model for metadata extraction and geographic classification.',
-                          color: 'var(--color-success)'
+                          desc: '<a href="https://huggingface.co/nvidia/Llama-3.1-Nemotron-70B-Instruct-HF" target="_blank" rel="noopener noreferrer">NVIDIA/Llama-3.1-Nemotron-70B-Instruct-HF</a> model for metadata extraction and geographic classification.'
                         }
                       ].map((tech, index) => (
-                        <div key={index} style={{
-                          padding: 'var(--spacing-lg)',
-                          background: 'var(--color-bg-secondary)',
-                          borderRadius: 'var(--radius-lg)',
-                          borderLeft: `4px solid ${tech.color}`
-                        }}>
-                          <div style={{
-                            fontSize: 'var(--font-size-2xl)',
-                            marginBottom: 'var(--spacing-md)'
-                          }}>
-                            {tech.icon}
-                          </div>
-                          <h4 className="text-heading-4" style={{ 
-                            marginBottom: 'var(--spacing-sm)',
-                            color: tech.color
-                          }}>
-                            {tech.title}
-                          </h4>
-                          <p className="text-body-small" style={{
-                            color: 'var(--color-text-secondary)',
-                            lineHeight: 'var(--line-height-relaxed)'
-                          }} dangerouslySetInnerHTML={{ __html: tech.desc }}>
-                          </p>
+                        <div key={index} className={styles.aiStep}>
+                          <h4>{tech.icon} {tech.title}</h4>
+                          <p dangerouslySetInnerHTML={{ __html: tech.desc }}></p>
                         </div>
                       ))}
                     </div>

@@ -45,7 +45,7 @@ const DataSourceCard = ({
         <div className={styles.sourceActions}>
           <Button 
             variant="outline" 
-            size="small"
+            size="medium"
             onClick={() => window.open(url, '_blank')}
           >
             Visit Repository

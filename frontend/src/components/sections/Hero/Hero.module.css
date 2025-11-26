@@ -113,6 +113,13 @@
   animation: fadeInUp 0.8s ease-out 0.2s both;
 }
 
+.gradientText {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 .subtitle {
   font-size: var(--font-size-lg);
   line-height: var(--line-height-relaxed);

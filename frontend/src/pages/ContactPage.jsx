@@ -71,7 +71,7 @@ const ContactPage = () => {
                   boxShadow: 'var(--shadow-md)',
                   transition: 'all var(--transition-normal)'
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-lg)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-lg)' }}>
                     <div style={{
                       width: '50px',
                       height: '50px',
