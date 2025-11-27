@@ -57,6 +57,16 @@
   gap: var(--spacing-xl);
 }
 
+.fullWidthCard {
+  grid-column: 1 / -1;
+}
+
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-lg);
+}
+
 .chartCard {
   background: var(--color-bg-primary);
   border-radius: var(--radius-xl);

@@ -84,6 +84,35 @@ class ApiService {
   static async getHealth() {
     return this.get('/health/');
   }
+
+  // Advanced Analytics API
+  static async getPublicationTimeline(filters = {}) {
+    const params = new URLSearchParams(
+      Object.entries(filters).filter(([_, v]) => v !== '' && v !== null)
+    );
+    return this.get(`/advanced-analytics/publication-timeline?${params}`);
+  }
+
+  static async getSubmissionTypeAnalytics(filters = {}) {
+    const params = new URLSearchParams(
+      Object.entries(filters).filter(([_, v]) => v !== '' && v !== null)
+    );
+    return this.get(`/advanced-analytics/submission-type-analytics?${params}`);
+  }
+
+  static async getLicenseAnalytics(filters = {}) {
+    const params = new URLSearchParams(
+      Object.entries(filters).filter(([_, v]) => v !== '' && v !== null)
+    );
+    return this.get(`/advanced-analytics/license-analytics?${params}`);
+  }
+
+  static async getPublicationStatus(filters = {}) {
+    const params = new URLSearchParams(
+      Object.entries(filters).filter(([_, v]) => v !== '' && v !== null)
+    );
+    return this.get(`/advanced-analytics/publication-status?${params}`);
+  }
 }
 
 export default ApiService;

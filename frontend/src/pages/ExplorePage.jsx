@@ -16,6 +16,7 @@ import DynamicSectionTitle from '../components/ui/DynamicSectionTitle/DynamicSec
 import AnalyticsDashboard from '../components/analytics/AnalyticsDashboard/AnalyticsDashboard';
 import SubjectAnalysis from '../components/analytics/SubjectAnalysis/SubjectAnalysis';
 import AdvancedSearch from '../components/ui/AdvancedSearch/AdvancedSearch';
+import PublicationStatusChart from '../components/analytics/PublicationStatusChart';
 import { useUnifiedCitationData } from '../hooks/useUnifiedCitationData';
 import ApiService from '../services/api';
 import Chart from 'chart.js/auto';
@@ -52,6 +53,10 @@ const ExplorePage = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [sortOption, setSortOption] = useState('citations_desc');
   const [isSearching, setIsSearching] = useState(false);
+  
+  // Publication Status Analytics state
+  const [publicationStatusData, setPublicationStatusData] = useState(null);
+  const [statusLoading, setStatusLoading] = useState(false);
   
   const RESULTS_PER_PAGE = 20;
   const MAX_RESULTS = 200;
@@ -466,6 +471,26 @@ const ExplorePage = () => {
     setHasAuthorSearched(false);
   };
 
+  // Fetch publication status analytics
+  const fetchPublicationStatus = async () => {
+    setStatusLoading(true);
+    try {
+      const data = await ApiService.getPublicationStatus({});
+      setPublicationStatusData(data);
+    } catch (error) {
+      console.error('Error fetching publication status:', error);
+    } finally {
+      setStatusLoading(false);
+    }
+  };
+
+  // Load publication status when analytics tab is active
+  useEffect(() => {
+    if (activeTab === 'analytics' && !publicationStatusData) {
+      fetchPublicationStatus();
+    }
+  }, [activeTab]);
+
   // Advanced search handler
   const handleAdvancedSearch = async (criteria, page = 1, attemptNumber = 1) => {
     setIsLoading(true);
@@ -537,13 +562,6 @@ const ExplorePage = () => {
             Search Preprints
           </Button>
           <Button
-            variant={activeTab === 'analytics' ? 'primary' : 'outline'}
-            onClick={() => openTab('analytics')}
-            className={styles.tabButton}
-          >
-            Citation Analytics
-          </Button>
-          <Button
             variant={activeTab === 'authors' ? 'primary' : 'outline'}
             onClick={() => openTab('authors')}
             className={styles.tabButton}
@@ -551,11 +569,11 @@ const ExplorePage = () => {
             Search Authors
           </Button>
           <Button
-            variant={activeTab === 'dashboard' ? 'primary' : 'outline'}
-            onClick={() => openTab('dashboard')}
+            variant={activeTab === 'analytics' ? 'primary' : 'outline'}
+            onClick={() => openTab('analytics')}
             className={styles.tabButton}
           >
-            Analytics Dashboard
+            Citation Analytics
           </Button>
           <Button
             variant={activeTab === 'subjects' ? 'primary' : 'outline'}
@@ -563,6 +581,13 @@ const ExplorePage = () => {
             className={styles.tabButton}
           >
             Subject Analysis
+          </Button>
+          <Button
+            variant={activeTab === 'dashboard' ? 'primary' : 'outline'}
+            onClick={() => openTab('dashboard')}
+            className={styles.tabButton}
+          >
+            Analytics Dashboard
           </Button>
         </div>
         
@@ -877,6 +902,7 @@ const ExplorePage = () => {
                   </Card.Content>
                 </Card>
               </div>
+
             </div>
           </div>
         )}
@@ -1017,6 +1043,7 @@ const ExplorePage = () => {
         {activeTab === 'subjects' && (
           <SubjectAnalysis />
         )}
+
       </div>
     </Layout>
   );
