@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Chart from 'chart.js/auto';
+import annotationPlugin from 'chartjs-plugin-annotation';
 import Layout from '../components/layout/Layout/Layout';
+
+// Register the annotation plugin
+Chart.register(annotationPlugin);
 import Card from '../components/ui/Card/Card';
 import Button from '../components/ui/Button/Button';
 import PaperMetadata from '../components/Paper/PaperMetadata';
@@ -77,6 +81,103 @@ const PaperDetailsPage = () => {
         const citations = JSON.parse(fixedCitation);
         console.log('Citations parsed successfully:', citations);
 
+        // Parse versions if available
+        let versions = [];
+        if (paper.versions) {
+          try {
+            const fixedVersions = paper.versions.replace(/'/g, '"');
+            versions = JSON.parse(fixedVersions);
+          } catch (e) {
+            console.error('Error parsing versions:', e);
+          }
+        }
+
+        // Extract years for the chart
+        const years = citations.map(c => c.year);
+        const submissionYear = paper.preprint_submission_date ? new Date(paper.preprint_submission_date).getFullYear().toString() : null;
+        const publicationYear = paper.publication_date ? new Date(paper.publication_date).getFullYear().toString() : null;
+
+        // Create annotations for versions, submission date, and publication date
+        const annotations = {};
+
+        // Add submission date annotation
+        if (submissionYear && years.includes(submissionYear)) {
+          annotations.submissionLine = {
+            type: 'line',
+            xMin: submissionYear,
+            xMax: submissionYear,
+            borderColor: 'rgba(75, 192, 192, 0.8)',
+            borderWidth: 2,
+            borderDash: [5, 5],
+            label: {
+              display: true,
+              content: 'Submitted',
+              position: 'start',
+              backgroundColor: 'rgba(75, 192, 192, 0.8)',
+              color: 'white',
+              font: {
+                size: 10,
+                weight: 'bold'
+              },
+              padding: 4
+            }
+          };
+        }
+
+        // Add publication date annotation
+        if (publicationYear && years.includes(publicationYear)) {
+          annotations.publicationLine = {
+            type: 'line',
+            xMin: publicationYear,
+            xMax: publicationYear,
+            borderColor: 'rgba(255, 99, 132, 0.8)',
+            borderWidth: 2,
+            borderDash: [5, 5],
+            label: {
+              display: true,
+              content: 'Published',
+              position: 'end',
+              backgroundColor: 'rgba(255, 99, 132, 0.8)',
+              color: 'white',
+              font: {
+                size: 10,
+                weight: 'bold'
+              },
+              padding: 4
+            }
+          };
+        }
+
+        // Add version annotations
+        versions.forEach((version, index) => {
+          const versionDate = new Date(version.created);
+          const versionYear = versionDate.getFullYear().toString();
+          
+          if (years.includes(versionYear)) {
+            annotations[`version${index}`] = {
+              type: 'point',
+              xValue: versionYear,
+              yValue: citations.find(c => c.year === versionYear)?.value || 0,
+              backgroundColor: 'rgba(153, 102, 255, 0.8)',
+              borderColor: 'rgba(153, 102, 255, 1)',
+              borderWidth: 2,
+              radius: 6,
+              label: {
+                display: true,
+                content: version.version || `v${index + 1}`,
+                position: 'top',
+                backgroundColor: 'rgba(153, 102, 255, 0.8)',
+                color: 'white',
+                font: {
+                  size: 9,
+                  weight: 'bold'
+                },
+                padding: 3
+              }
+            };
+          }
+        });
+
         const ctx = document.createElement('canvas');
         chartRef.current.innerHTML = '';
         chartRef.current.appendChild(ctx);
@@ -84,7 +185,7 @@ const PaperDetailsPage = () => {
         new Chart(ctx, {
           type: 'bar',
           data: {
-            labels: citations.map(c => c.year),
+            labels: years,
             datasets: [{
               label: 'Citations per year',
               data: citations.map(c => c.value),
@@ -95,17 +196,125 @@ const PaperDetailsPage = () => {
           },
           options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
-              legend: { display: false },
+              legend: { 
+                display: true,
+                position: 'bottom',
+                labels: {
+                  generateLabels: (chart) => {
+                    const labels = [
+                      {
+                        text: 'Citations',
+                        fillStyle: 'rgba(54, 162, 235, 0.7)',
+                        strokeStyle: 'rgba(54, 162, 235, 1)',
+                        lineWidth: 1
+                      }
+                    ];
+                    
+                    if (submissionYear) {
+                      labels.push({
+                        text: 'Submission Date',
+                        fillStyle: 'rgba(75, 192, 192, 0.8)',
+                        strokeStyle: 'rgba(75, 192, 192, 0.8)',
+                        lineWidth: 2,
+                        lineDash: [5, 5]
+                      });
+                    }
+                    
+                    if (publicationYear) {
+                      labels.push({
+                        text: 'Publication Date',
+                        fillStyle: 'rgba(255, 99, 132, 0.8)',
+                        strokeStyle: 'rgba(255, 99, 132, 0.8)',
+                        lineWidth: 2,
+                        lineDash: [5, 5]
+                      });
+                    }
+                    
+                    if (versions.length > 0) {
+                      labels.push({
+                        text: 'Versions',
+                        fillStyle: 'rgba(153, 102, 255, 0.8)',
+                        strokeStyle: 'rgba(153, 102, 255, 1)',
+                        lineWidth: 2,
+                        pointStyle: 'circle'
+                      });
+                    }
+                    
+                    return labels;
+                  }
+                }
+              },
               title: {
                 display: true,
-                text: 'Citation History'
+                text: 'Citation History with Timeline Events',
+                font: {
+                  size: 16,
+                  weight: 'bold'
+                }
+              },
+              annotation: {
+                annotations: annotations
+              },
+              tooltip: {
+                callbacks: {
+                  afterBody: (tooltipItems) => {
+                    const year = tooltipItems[0].label;
+                    const info = [];
+                    
+                    // Add version info
+                    const yearVersions = versions.filter(v => 
+                      new Date(v.created).getFullYear().toString() === year
+                    );
+                    if (yearVersions.length > 0) {
+                      info.push('');
+                      yearVersions.forEach(v => {
+                        const date = new Date(v.created).toLocaleDateString('en-US', { 
+                          month: 'short', 
+                          day: 'numeric' 
+                        });
+                        info.push(`${v.version || 'Version'}: ${date}`);
+                      });
+                    }
+                    
+                    // Add submission info
+                    if (year === submissionYear) {
+                      info.push('');
+                      info.push(`Submitted: ${new Date(paper.preprint_submission_date).toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric' 
+                      })}`);
+                    }
+                    
+                    // Add publication info
+                    if (year === publicationYear) {
+                      info.push('');
+                      info.push(`Published: ${new Date(paper.publication_date).toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric' 
+                      })}`);
+                    }
+                    
+                    return info;
+                  }
+                }
               }
             },
             scales: {
               y: {
                 beginAtZero: true,
-                ticks: { precision: 0 }
+                ticks: { precision: 0 },
+                title: {
+                  display: true,
+                  text: 'Number of Citations'
+                }
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: 'Year'
+                }
               }
             }
           }
@@ -272,6 +481,9 @@ const PaperDetailsPage = () => {
               <Card className={styles.chartCard}>
                 <Card.Header>
                   <h2 className={styles.sectionTitle}>Citation History</h2>
+                  <p className={styles.chartDescription}>
+                    Track citation trends over time with key milestones including submission date, publication date, and version releases.
+                  </p>
                 </Card.Header>
                 <Card.Content>
                   <div ref={chartRef} className={styles.chartContainer}></div>
