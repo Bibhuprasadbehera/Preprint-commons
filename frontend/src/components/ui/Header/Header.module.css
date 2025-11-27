@@ -14,6 +14,14 @@
   position: relative;
 }
 
+.gradientTitle {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
 .subtitle {
   color: var(--color-text-secondary);
   line-height: var(--line-height-relaxed);

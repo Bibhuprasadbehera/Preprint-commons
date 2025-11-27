@@ -25,12 +25,12 @@ const Hero = () => {
           
           <div className={styles.actions}>
             <Link to="/explore">
-              <Button variant="secondary" size="xlarge">
+              <Button variant="primary" size="xlarge">
                 Explore Data
               </Button>
             </Link>
             <Link to="/about">
-              <Button variant="primary" size="xlarge">
+              <Button variant="secondary" size="xlarge">
                 Learn More
               </Button>
             </Link>

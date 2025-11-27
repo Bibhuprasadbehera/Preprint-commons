@@ -8,7 +8,7 @@ const ContactPage = () => {
       <div className={styles.pageContainer}>
         {/* Hero Section */}
         <div className={`${styles.contentSection} animate-fadeInUp`} style={{
-          background: 'linear-gradient(135deg, var(--color-secondary) 0%, var(--color-accent) 100%)',
+          background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%)',
           color: 'white',
           borderRadius: 'var(--radius-xl)',
           padding: 'var(--spacing-3xl)',
@@ -159,7 +159,7 @@ const ContactPage = () => {
               {/* Newsletter */}
               <div className="animate-slideInRight" style={{
                 animationDelay: '0.3s',
-                background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%)',
+                background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%)',
                 color: 'white',
                 borderRadius: 'var(--radius-xl)',
                 padding: 'var(--spacing-xl)'

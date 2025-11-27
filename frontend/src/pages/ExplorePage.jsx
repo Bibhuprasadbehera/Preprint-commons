@@ -512,10 +512,11 @@ const ExplorePage = () => {
       <div className="centered-page">
         <div className="animate-fadeInUp">
         <Header 
-          title="Explore Preprint Data"
+          title="Explore Preprint Commons Data"
           subtitle="Discover insights through interactive visualizations and search capabilities."
           variant="page"
           size="large"
+          gradientText={true}
         />
         </div>
         

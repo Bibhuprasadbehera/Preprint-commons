@@ -111,6 +111,7 @@ const AdvancedSearch = ({ onSearch, loading = false }) => {
     month: '',
     subject: '',
     server: '',
+    country: '',
     institution: '',
     license: '',
     citation_min: '',
@@ -143,6 +144,14 @@ const AdvancedSearch = ({ onSearch, loading = false }) => {
     refreshOptions: refreshLicenses,
     retryCount: licensesRetryCount
   } = useFilterOptions('/api/papers/licenses', 'licenses');
+  
+  const { 
+    options: countries, 
+    loading: countriesLoading, 
+    error: countriesError,
+    refreshOptions: refreshCountries,
+    retryCount: countriesRetryCount
+  } = useFilterOptions('/api/papers/countries', 'countries');
 
   const handleInputChange = (field, value) => {
     setSearchCriteria(prev => ({
@@ -175,6 +184,7 @@ const AdvancedSearch = ({ onSearch, loading = false }) => {
       month: '',
       subject: '',
       server: '',
+      country: '',
       institution: '',
       license: '',
       citation_min: '',
@@ -211,6 +221,40 @@ const AdvancedSearch = ({ onSearch, loading = false }) => {
   const licenseOptions = [
     { value: '', label: 'All Licenses' },
     ...licenses.map(l => ({ value: l, label: l }))
+  ];
+
+  // Sort countries: standard names first, then special characters and (LLM) at bottom
+  const sortedCountries = [...countries].sort((a, b) => {
+    // Check if country has (LLM) suffix
+    const aHasLLM = a.includes('(LLM)');
+    const bHasLLM = b.includes('(LLM)');
+    
+    // Check if country starts with special characters (*, !, ., etc.)
+    const aHasSpecialChar = /^[^a-zA-Z]/.test(a);
+    const bHasSpecialChar = /^[^a-zA-Z]/.test(b);
+    
+    // Priority: standard names (0) > special chars (1) > LLM (2)
+    const getPriority = (country) => {
+      if (country.includes('(LLM)')) return 2;
+      if (/^[^a-zA-Z]/.test(country)) return 1;
+      return 0;
+    };
+    
+    const aPriority = getPriority(a);
+    const bPriority = getPriority(b);
+    
+    // Sort by priority first
+    if (aPriority !== bPriority) {
+      return aPriority - bPriority;
+    }
+    
+    // Within same priority, sort alphabetically
+    return a.localeCompare(b);
+  });
+
+  const countryOptions = [
+    { value: '', label: 'All Countries' },
+    ...sortedCountries.map(c => ({ value: c, label: c }))
   ];
 
   return (
@@ -306,6 +350,39 @@ const AdvancedSearch = ({ onSearch, loading = false }) => {
           )}
         </div>
 
+        {/* Country */}
+        <div className={styles.fieldGroup}>
+          <div className={styles.fieldLabelRow}>
+            <label className={styles.fieldLabel}>Country</label>
+            {countriesError && (
+              <Button
+                variant="ghost"
+                size="small"
+                onClick={refreshCountries}
+                disabled={countriesLoading}
+                className={styles.refreshButton}
+                title="Refresh countries list"
+              >
+                🔄
+              </Button>
+            )}
+          </div>
+          <Select
+            options={countryOptions}
+            value={searchCriteria.country}
+            onChange={(value) => handleInputChange('country', value)}
+            disabled={countriesLoading}
+            placeholder={countriesLoading ? 
+              (countriesRetryCount > 0 ? `Retrying... (${countriesRetryCount}/3)` : "Loading countries...") : 
+              "Select country"
+            }
+          />
+          {countriesError && (
+            <div className={styles.errorHint}>
+              Failed to load countries. Click 🔄 to retry.
+            </div>
+          )}
+        </div>
 
         {/* Institution */}
         <div className={styles.fieldGroup}>

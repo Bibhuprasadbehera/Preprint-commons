@@ -9,7 +9,7 @@ const AboutPage = () => {
       <div className={layoutStyles.pageContainer}>
         {/* Hero Section - Simplified */}
         <div className={`${layoutStyles.contentSection} animate-fadeInUp`} style={{
-          background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%)',
+          background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%)',
           color: 'white',
           borderRadius: 'var(--radius-xl)',
           padding: 'var(--spacing-3xl)',
