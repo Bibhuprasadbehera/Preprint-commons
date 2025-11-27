@@ -31,9 +31,28 @@ const SubjectAnalysis = () => {
   const [subjectLoadingLocal, setSubjectLoadingLocal] = useState(false);
   const [subjectErrorLocal, setSubjectErrorLocal] = useState(null);
 
+  // Advanced analytics state
+  const [submissionTypeData, setSubmissionTypeData] = useState(null);
+  const [advancedLoading, setAdvancedLoading] = useState(false);
+
   useEffect(() => {
     loadSubjects();
+    fetchAdvancedAnalytics();
   }, []);
+
+  const fetchAdvancedAnalytics = async () => {
+    setAdvancedLoading(true);
+    try {
+      const [submissionData] = await Promise.all([
+        ApiService.getSubmissionTypeAnalytics({})
+      ]);
+      setSubmissionTypeData(submissionData);
+    } catch (err) {
+      console.error('Error fetching advanced analytics:', err);
+    } finally {
+      setAdvancedLoading(false);
+    }
+  };
 
   const loadSubjects = async () => {
     if (subjectOptions.length > 1) return;
@@ -618,6 +637,7 @@ const SubjectAnalysis = () => {
                   </Card.Content>
                 </Card>
               )}
+
             </div>
           </div>
         )}

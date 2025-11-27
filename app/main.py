@@ -12,7 +12,7 @@ import time
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.config import settings
-from app.routers import papers, analytics, health, authors, subjects
+from app.routers import papers, analytics, health, authors, subjects, advanced_analytics
 
 # Configure logging
 logging.basicConfig(
@@ -85,6 +85,7 @@ app.include_router(papers.router)
 app.include_router(analytics.router)
 app.include_router(authors.router)
 app.include_router(subjects.router)
+app.include_router(advanced_analytics.router)
 
 # Legacy endpoints for backward compatibility
 @app.get("/country-data")

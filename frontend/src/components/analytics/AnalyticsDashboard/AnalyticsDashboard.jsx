@@ -1,22 +1,74 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from '../../ui/Card/Card';
 import Button from '../../ui/Button/Button';
 import StatisticsCard from '../StatisticsCard/StatisticsCard';
 import PublicationTimelineChart from '../../analyticsCharts/PublicationTimelineChart';
 import SubjectDistributionChart from '../../analyticsCharts/SubjectDistributionChart';
 import ServerDistributionChart from '../../analyticsCharts/ServerDistributionChart';
+import PublicationTimelineAdvancedChart from '../PublicationTimelineChart';
+import LicenseAnalyticsChart from '../LicenseAnalyticsChart';
+import PublicationStatusChart from '../PublicationStatusChart';
+import PapersList from '../../ui/PapersList/PapersList';
 import { useAnalyticsData } from '../../../hooks/useAnalyticsData';
 import { formatDateRange } from '../AnalyticsDashboardMockData';
+import ApiService from '../../../services/api';
 import styles from './AnalyticsDashboard.module.css';
 
 const AnalyticsDashboard = () => {
   const { data, loading, error, fetchAnalyticsData, retryCount } = useAnalyticsData();
   const { timelineData, subjectData, serverData, statisticsData } = data;
 
+  // Advanced analytics state
+  const [publicationTimelineData, setPublicationTimelineData] = useState(null);
+  const [timelineLoading, setTimelineLoading] = useState(false);
+  const [licenseData, setLicenseData] = useState(null);
+  const [licenseLoading, setLicenseLoading] = useState(false);
+  const [publicationStatusData, setPublicationStatusData] = useState(null);
+  const [statusLoading, setStatusLoading] = useState(false);
+
   // Fetch data on component mount
   useEffect(() => {
     fetchAnalyticsData();
+    fetchPublicationTimeline();
+    fetchLicenseAnalytics();
+    fetchPublicationStatus();
   }, [fetchAnalyticsData]);
+
+  const fetchPublicationTimeline = async () => {
+    setTimelineLoading(true);
+    try {
+      const data = await ApiService.getPublicationTimeline({});
+      setPublicationTimelineData(data);
+    } catch (err) {
+      console.error('Error fetching publication timeline:', err);
+    } finally {
+      setTimelineLoading(false);
+    }
+  };
+
+  const fetchLicenseAnalytics = async () => {
+    setLicenseLoading(true);
+    try {
+      const data = await ApiService.getLicenseAnalytics({});
+      setLicenseData(data);
+    } catch (err) {
+      console.error('Error fetching license analytics:', err);
+    } finally {
+      setLicenseLoading(false);
+    }
+  };
+
+  const fetchPublicationStatus = async () => {
+    setStatusLoading(true);
+    try {
+      const data = await ApiService.getPublicationStatus({});
+      setPublicationStatusData(data);
+    } catch (err) {
+      console.error('Error fetching publication status:', err);
+    } finally {
+      setStatusLoading(false);
+    }
+  };
 
   const handleRefreshData = () => {
     fetchAnalyticsData();
@@ -156,6 +208,140 @@ const AnalyticsDashboard = () => {
             <ServerDistributionChart data={serverData} loading={loading} />
           </Card.Content>
         </Card>
+
+        {/* Publication Timeline Analytics */}
+        {publicationTimelineData && publicationTimelineData.statistics && (
+          <>
+            <Card className={styles.fullWidthCard}>
+              <Card.Header>
+                <h3 className={styles.chartTitle}>Publication Timeline Metrics</h3>
+                <p className={styles.chartSubtitle}>Average time from preprint to publication</p>
+              </Card.Header>
+              <Card.Content>
+                <div className={styles.statsRow}>
+                  <div className={styles.statItem}>
+                    <span className={styles.statLabel}>Total Published</span>
+                    <span className={styles.statValue}>{publicationTimelineData.statistics.total_published || 0}</span>
+                  </div>
+                  <div className={styles.statItem}>
+                    <span className={styles.statLabel}>Avg Days to Publish</span>
+                    <span className={styles.statValue}>{publicationTimelineData.statistics.overall_avg_days || 0} days</span>
+                  </div>
+                  <div className={styles.statItem}>
+                    <span className={styles.statLabel}>Fastest Publication</span>
+                    <span className={styles.statValue}>{publicationTimelineData.statistics.fastest_publish || 0} days</span>
+                  </div>
+                  <div className={styles.statItem}>
+                    <span className={styles.statLabel}>Slowest Publication</span>
+                    <span className={styles.statValue}>{publicationTimelineData.statistics.slowest_publish || 0} days</span>
+                  </div>
+                </div>
+              </Card.Content>
+            </Card>
+
+            <Card className={styles.chartCard}>
+              <Card.Header>
+                <h3 className={styles.chartTitle}>Publication Timeline Trend</h3>
+                <p className={styles.chartSubtitle}>Average days to publish over time</p>
+              </Card.Header>
+              <Card.Content>
+                <PublicationTimelineAdvancedChart data={publicationTimelineData} type="trend" />
+              </Card.Content>
+            </Card>
+
+            <Card className={styles.chartCard}>
+              <Card.Header>
+                <h3 className={styles.chartTitle}>Publication Time Distribution</h3>
+                <p className={styles.chartSubtitle}>How long papers take to get published</p>
+              </Card.Header>
+              <Card.Content>
+                <PublicationTimelineAdvancedChart data={publicationTimelineData} type="distribution" />
+              </Card.Content>
+            </Card>
+          </>
+        )}
+
+        {/* License Analytics */}
+        {licenseData && (
+          <>
+            <Card className={styles.chartCard}>
+              <Card.Header>
+                <h3 className={styles.chartTitle}>License Distribution</h3>
+                <p className={styles.chartSubtitle}>Distribution of licenses across preprints</p>
+              </Card.Header>
+              <Card.Content>
+                <LicenseAnalyticsChart data={licenseData} type="distribution" />
+              </Card.Content>
+            </Card>
+          </>
+        )}
+
+        {/* Publication Status Analytics */}
+        {publicationStatusData && (
+          <>
+            {publicationStatusData.overallRate && (
+              <Card className={styles.fullWidthCard}>
+                <Card.Header>
+                  <h3 className={styles.chartTitle}>Publication Status Overview</h3>
+                  <p className={styles.chartSubtitle}>Publication success rates and patterns</p>
+                </Card.Header>
+                <Card.Content>
+                  <div className={styles.statsRow}>
+                    <div className={styles.statItem}>
+                      <span className={styles.statLabel}>Total Preprints</span>
+                      <span className={styles.statValue}>{publicationStatusData.overallRate.total_preprints || 0}</span>
+                    </div>
+                    <div className={styles.statItem}>
+                      <span className={styles.statLabel}>Published</span>
+                      <span className={styles.statValue}>{publicationStatusData.overallRate.published_count || 0}</span>
+                    </div>
+                    <div className={styles.statItem}>
+                      <span className={styles.statLabel}>Publication Rate</span>
+                      <span className={styles.statValue}>{publicationStatusData.overallRate.publication_rate || 0}%</span>
+                    </div>
+                  </div>
+                </Card.Content>
+              </Card>
+            )}
+
+            <Card className={styles.chartCard}>
+              <Card.Header>
+                <h3 className={styles.chartTitle}>Publication Rate by Subject</h3>
+                <p className={styles.chartSubtitle}>Which subjects have highest publication success</p>
+              </Card.Header>
+              <Card.Content>
+                <PublicationStatusChart data={publicationStatusData} type="subject" />
+              </Card.Content>
+            </Card>
+
+            <Card className={styles.chartCard}>
+              <Card.Header>
+                <h3 className={styles.chartTitle}>Publication Status Trend</h3>
+                <p className={styles.chartSubtitle}>How publication rates have changed over time</p>
+              </Card.Header>
+              <Card.Content>
+                <PublicationStatusChart data={publicationStatusData} type="trend" />
+              </Card.Content>
+            </Card>
+
+            {publicationStatusData.unpublishedGems && 
+             publicationStatusData.unpublishedGems.length > 0 && (
+              <Card className={styles.fullWidthCard}>
+                <Card.Header>
+                  <h3 className={styles.chartTitle}>Unpublished High-Citation Papers</h3>
+                  <p className={styles.chartSubtitle}>Preprints with high impact that haven't been formally published yet</p>
+                </Card.Header>
+                <Card.Content>
+                  <PapersList 
+                    papers={publicationStatusData.unpublishedGems.slice(0, 10)}
+                    loading={false}
+                    variant="compact"
+                  />
+                </Card.Content>
+              </Card>
+            )}
+          </>
+        )}
 
         {/* Additional Statistics */}
         <Card className={styles.chartCard}>
