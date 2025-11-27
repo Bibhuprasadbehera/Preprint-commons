@@ -21,6 +21,7 @@ class PaperBase(BaseModel):
     publication_date: Optional[str] = None
     citation: Optional[str] = None  # JSON array string
     total_citation: Optional[int] = None
+    no_of_days_for_publish: Optional[int] = None
 
 class Paper(PaperBase):
     """Complete paper model"""

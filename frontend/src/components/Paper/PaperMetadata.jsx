@@ -80,6 +80,7 @@ const PaperMetadata = ({ paper }) => {
     { k: 'preprint_subject', l: 'Subject' },
     { k: 'published_DOI', l: 'Published DOI', v: d => `<a href="https://doi.org/${d}" target="_blank" rel="noopener noreferrer" class="${styles.externalLink}">${d}</a>` },
     { k: 'publication_date', l: 'Publication Date', v: d => new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) },
+    { k: 'no_of_days_for_publish', l: 'Days to Publish', v: d => d ? `${d} days` : 'N/A' },
     { k: 'total_citation', l: 'Total Citations' }
   ];
 

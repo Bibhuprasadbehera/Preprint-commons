@@ -52,8 +52,10 @@ def search_papers(
             params=(f"%{query}%", f"%{query}%", f"%{query}%", page_size, offset)
         )
 
-        # Handle NaN values in total_citation to prevent Pydantic validation errors
+        # Handle NaN values in total_citation and no_of_days_for_publish to prevent Pydantic validation errors
         df['total_citation'] = df['total_citation'].fillna(0).astype(int)
+        if 'no_of_days_for_publish' in df.columns:
+            df['no_of_days_for_publish'] = df['no_of_days_for_publish'].fillna(0).astype(int)
 
         has_next = offset + page_size < total
 
@@ -171,8 +173,10 @@ def advanced_search_papers(
         """
         df = pd.read_sql_query(query, conn, params=params + [page_size, offset])
 
-        # Handle NaN values in total_citation to prevent Pydantic validation errors
+        # Handle NaN values in total_citation and no_of_days_for_publish to prevent Pydantic validation errors
         df['total_citation'] = df['total_citation'].fillna(0).astype(int)
+        if 'no_of_days_for_publish' in df.columns:
+            df['no_of_days_for_publish'] = df['no_of_days_for_publish'].fillna(0).astype(int)
 
         has_next = offset + page_size < total
 
@@ -272,8 +276,10 @@ def get_paper(ppc_id: str, conn: sqlite3.Connection = Depends(get_db_connection)
         if df.empty:
             raise HTTPException(status_code=404, detail="Paper not found")
 
-        # Handle NaN values in total_citation to prevent Pydantic validation errors
+        # Handle NaN values in total_citation and no_of_days_for_publish to prevent Pydantic validation errors
         df['total_citation'] = df['total_citation'].fillna(0).astype(int)
+        if 'no_of_days_for_publish' in df.columns:
+            df['no_of_days_for_publish'] = df['no_of_days_for_publish'].fillna(0).astype(int)
 
         row = df.iloc[0].to_dict()
         # Ensure all expected fields exist (fallbacks)
@@ -345,8 +351,10 @@ def fetch_papers(
         """
         df = pd.read_sql_query(query, conn, params=params + [page_size, offset])
 
-        # Handle NaN values in total_citation to prevent Pydantic validation errors
+        # Handle NaN values in total_citation and no_of_days_for_publish to prevent Pydantic validation errors
         df['total_citation'] = df['total_citation'].fillna(0).astype(int)
+        if 'no_of_days_for_publish' in df.columns:
+            df['no_of_days_for_publish'] = df['no_of_days_for_publish'].fillna(0).astype(int)
 
         has_next = offset + page_size < total
 
