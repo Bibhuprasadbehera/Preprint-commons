@@ -92,34 +92,42 @@ const PaperDetailsPage = () => {
           }
         }
 
-        // Extract years for the chart
-        const years = citations.map(c => c.year);
-        const submissionYear = paper.preprint_submission_date ? new Date(paper.preprint_submission_date).getFullYear().toString() : null;
+        const submissionYear = paper.preprint_submission_date ? new Date(paper.preprint_submission_date).getFullYear() : null;
+        
+        // Dynamically determine the year range
+        const citationYears = citations.map(c => parseInt(c.year, 10));
+        const minYear = submissionYear ? submissionYear - 1 : Math.min(...citationYears) - 1;
+        const maxYear = Math.max(...citationYears) + 1;
+        const years = Array.from({ length: maxYear - minYear + 1 }, (_, i) => (minYear + i).toString());
+
+        // Create a map for quick citation lookups
+        const citationMap = new Map(citations.map(c => [c.year.toString(), c.value]));
         const publicationYear = paper.publication_date ? new Date(paper.publication_date).getFullYear().toString() : null;
 
         // Create annotations for versions, submission date, and publication date
         const annotations = {};
 
         // Add submission date annotation
-        if (submissionYear && years.includes(submissionYear)) {
+        if (submissionYear && years.includes(submissionYear.toString())) {
           annotations.submissionLine = {
             type: 'line',
-            xMin: submissionYear,
-            xMax: submissionYear,
-            borderColor: 'rgba(75, 192, 192, 0.8)',
+            xMin: submissionYear.toString(),
+            xMax: submissionYear.toString(),
+            borderColor: 'rgba(40, 167, 69, 0.8)',
             borderWidth: 2,
             borderDash: [5, 5],
             label: {
               display: true,
-              content: 'Submitted',
+              content: 'Preprint Submitted',
               position: 'start',
-              backgroundColor: 'rgba(75, 192, 192, 0.8)',
+              backgroundColor: 'rgba(40, 167, 69, 0.8)',
               color: 'white',
               font: {
                 size: 10,
                 weight: 'bold'
               },
-              padding: 4
+              padding: 4,
+              yAdjust: -10
             }
           };
         }
@@ -135,7 +143,7 @@ const PaperDetailsPage = () => {
             borderDash: [5, 5],
             label: {
               display: true,
-              content: 'Published',
+              content: 'Peer-Reviewed',
               position: 'end',
               backgroundColor: 'rgba(255, 99, 132, 0.8)',
               color: 'white',
@@ -166,7 +174,7 @@ const PaperDetailsPage = () => {
                 display: true,
                 content: version.version || `v${index + 1}`,
                 position: 'top',
-                backgroundColor: 'rgba(153, 102, 255, 0.8)',
+                backgroundColor: 'rgba(108, 92, 231, 0.8)',
                 color: 'white',
                 font: {
                   size: 9,
@@ -188,7 +196,7 @@ const PaperDetailsPage = () => {
             labels: years,
             datasets: [{
               label: 'Citations per year',
-              data: citations.map(c => c.value),
+              data: years.map(year => citationMap.get(year) || 0),
               backgroundColor: 'rgba(54, 162, 235, 0.7)',
               borderColor: 'rgba(54, 162, 235, 1)',
               borderWidth: 1
@@ -214,9 +222,9 @@ const PaperDetailsPage = () => {
                     
                     if (submissionYear) {
                       labels.push({
-                        text: 'Submission Date',
-                        fillStyle: 'rgba(75, 192, 192, 0.8)',
-                        strokeStyle: 'rgba(75, 192, 192, 0.8)',
+                        text: 'Preprint Submitted',
+                        fillStyle: 'rgba(40, 167, 69, 0.8)',
+                        strokeStyle: 'rgba(40, 167, 69, 0.8)',
                         lineWidth: 2,
                         lineDash: [5, 5]
                       });
@@ -224,7 +232,7 @@ const PaperDetailsPage = () => {
                     
                     if (publicationYear) {
                       labels.push({
-                        text: 'Publication Date',
+                        text: 'Peer-Reviewed Publication',
                         fillStyle: 'rgba(255, 99, 132, 0.8)',
                         strokeStyle: 'rgba(255, 99, 132, 0.8)',
                         lineWidth: 2,
@@ -234,9 +242,9 @@ const PaperDetailsPage = () => {
                     
                     if (versions.length > 0) {
                       labels.push({
-                        text: 'Versions',
-                        fillStyle: 'rgba(153, 102, 255, 0.8)',
-                        strokeStyle: 'rgba(153, 102, 255, 1)',
+                        text: 'Preprint Version',
+                        fillStyle: 'rgba(108, 92, 231, 0.8)',
+                        strokeStyle: 'rgba(108, 92, 231, 1)',
                         lineWidth: 2,
                         pointStyle: 'circle'
                       });
@@ -248,7 +256,7 @@ const PaperDetailsPage = () => {
               },
               title: {
                 display: true,
-                text: 'Citation History with Timeline Events',
+                text: 'Citation History',
                 font: {
                   size: 16,
                   weight: 'bold'
