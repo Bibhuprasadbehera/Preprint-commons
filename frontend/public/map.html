@@ -36,7 +36,7 @@
 
       // Country name mappings for data normalization
       const countryNameMapping = {
-        'United States of America': 'USA', 'United States': 'USA', 'US': 'USA',
+        'United States of America': 'United States', 'US': 'United States',
         'United Kingdom': 'UK', 'Great Britain': 'UK', 'Czech Republic': 'Czechia',
         'Korea, Republic of': 'South Korea', 'Republic of Korea': 'South Korea',
         'Democratic Republic of the Congo': 'Congo', 'Russian Federation': 'Russia',
@@ -223,7 +223,7 @@
               const count = countryTotals.get(normalizeCountryName(d.properties.name)) || 0;
               if (count > 0) {
                 // Navigate to explore page with country filter using advanced search
-                const countryName = d.properties.name;
+                const countryName = normalizeCountryName(d.properties.name);
                 const encodedCountry = encodeURIComponent(countryName);
                 
                 console.log('Country clicked:', countryName, 'Count:', count);

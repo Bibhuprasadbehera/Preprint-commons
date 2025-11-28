@@ -324,22 +324,7 @@ const AnalyticsDashboard = () => {
               </Card.Content>
             </Card>
 
-            {publicationStatusData.unpublishedGems && 
-             publicationStatusData.unpublishedGems.length > 0 && (
-              <Card className={styles.fullWidthCard}>
-                <Card.Header>
-                  <h3 className={styles.chartTitle}>Unpublished High-Citation Papers</h3>
-                  <p className={styles.chartSubtitle}>Preprints with high impact that haven't been formally published yet</p>
-                </Card.Header>
-                <Card.Content>
-                  <PapersList 
-                    papers={publicationStatusData.unpublishedGems.slice(0, 10)}
-                    loading={false}
-                    variant="compact"
-                  />
-                </Card.Content>
-              </Card>
-            )}
+
           </>
         )}
 

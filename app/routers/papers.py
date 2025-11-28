@@ -323,8 +323,8 @@ def fetch_papers(
         params = []
         
         if country:
-            conditions.append("country_name = ?")
-            params.append(country)
+            conditions.append("country_name LIKE ?")
+            params.append(f"%{country}%")
             
         if year:
             conditions.append("strftime('%Y', preprint_submission_date) = ?")
@@ -371,3 +371,37 @@ def fetch_papers(
     except Exception as e:
         logger.error(f"Fetch papers error: {e}")
         raise HTTPException(status_code=500, detail="Failed to fetch papers")
+
+@router.delete("/{ppc_id}", status_code=204)
+def delete_paper(ppc_id: str, conn: sqlite3.Connection = Depends(get_db_connection), cache: Cache = Depends(get_cache)):
+    """Delete a paper by PPC_Id"""
+    try:
+        # First, check if the paper exists
+        cursor = conn.cursor()
+        cursor.execute("SELECT PPC_Id FROM papers WHERE PPC_Id = ?", (ppc_id,))
+        paper = cursor.fetchone()
+        
+        if not paper:
+            raise HTTPException(status_code=404, detail="Paper not found")
+
+        # If it exists, delete it
+        cursor.execute("DELETE FROM papers WHERE PPC_Id = ?", (ppc_id,))
+        conn.commit()
+
+        # Invalidate cache for the deleted paper and any relevant search results
+        cache_key_paper = f"paper_{ppc_id}"
+        if cache_key_paper in cache:
+            del cache[cache_key_paper]
+        
+        # A simple approach to cache invalidation for searches: clear the whole cache
+        # A more sophisticated approach would be to remove specific entries that contain the deleted paper
+        cache.clear()
+
+        return JSONResponse(status_code=204, content=None)
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Delete paper error: {e}")
+        conn.rollback()
+        raise HTTPException(status_code=500, detail="Failed to delete paper")
