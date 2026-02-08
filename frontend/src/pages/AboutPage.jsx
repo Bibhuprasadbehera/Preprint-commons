@@ -183,6 +183,23 @@ const AboutPage = () => {
             </h2>
           </div>
 
+          {/* Developer Credit */}
+          <div style={{
+            textAlign: 'center',
+            marginBottom: 'var(--spacing-xl)',
+            padding: 'var(--spacing-lg)',
+            background: 'var(--color-bg-primary)',
+            borderRadius: 'var(--radius-lg)',
+            border: '1px solid var(--color-neutral-200)'
+          }}>
+            <p className="text-body-small" style={{ 
+              color: 'var(--color-text-secondary)',
+              fontStyle: 'italic'
+            }}>
+              Database designed and developed by <strong>Bibhu Prasad Behera</strong>
+            </p>
+          </div>
+
           {/* Logo Display */}
           <div style={{
             display: 'flex',
