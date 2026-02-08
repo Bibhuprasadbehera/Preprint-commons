@@ -33,6 +33,7 @@ const HomePage = () => {
         </section>
 
         {/* What Researchers Say Section */}
+        {/* 
         <section className={styles.testimonials}>
           <div className={styles.container}>
             <div className={styles.sectionHeader}>
@@ -60,6 +61,7 @@ const HomePage = () => {
             </div>
           </div>
         </section>
+        */}
 
         {/* How to Cite Section */}
         <section className={styles.citationSection}>

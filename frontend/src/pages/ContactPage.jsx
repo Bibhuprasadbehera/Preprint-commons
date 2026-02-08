@@ -186,38 +186,6 @@ const ContactPage = () => {
                   Subscribe to get updates
                 </button>
               </div>
-
-              {/* Community */}
-              <div className="animate-slideInRight" style={{
-                animationDelay: '0.4s',
-                background: 'var(--color-bg-primary)',
-                borderRadius: 'var(--radius-xl)',
-                padding: 'var(--spacing-xl)',
-                border: '1px solid var(--color-neutral-200)',
-                boxShadow: 'var(--shadow-md)'
-              }}>
-                <h3 className="text-heading-4" style={{ color: 'var(--color-text-primary)', marginBottom: 'var(--spacing-lg)' }}>
-                  👥 Community for developers
-                </h3>
-                <p className="text-body" style={{ 
-                  color: 'var(--color-text-secondary)',
-                  marginBottom: 'var(--spacing-lg)'
-                }}>
-                  Join our community of researchers and developers
-                </p>
-                <button style={{
-                  background: 'transparent',
-                  color: 'var(--color-primary)',
-                  border: '2px solid var(--color-primary)',
-                  padding: 'var(--spacing-md) var(--spacing-xl)',
-                  borderRadius: 'var(--radius-lg)',
-                  fontWeight: 'var(--font-weight-semibold)',
-                  cursor: 'pointer',
-                  transition: 'all var(--transition-normal)'
-                }}>
-                  Join Community
-                </button>
-              </div>
             </div>
           </div>
         </div>

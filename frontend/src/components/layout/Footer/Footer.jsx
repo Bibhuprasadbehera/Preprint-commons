@@ -27,7 +27,7 @@ const Footer = () => {
                 </svg>
               </a>
               <a 
-                href="https://github.com/Bibhuprasadbehera/Preprint-commons" 
+                href="https://github.com/binaypanda/Preprint-commons" 
                 className={styles.socialLink}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -86,7 +86,7 @@ const Footer = () => {
 
         <div className={styles.bottom}>
             <div className={styles.copyright}>
-                <a href='https://www.binaypandalab.org/' style={{ color: 'inherit', textDecoration: 'none' }}>© 2025 Preprint Commons. All rights reserved. Genome Science and Technology Lab, JNU, New Delhi, India</a>
+                <a href='https://www.binaypandalab.org/' style={{ color: 'inherit', textDecoration: 'none' }}>© 2025 Preprint Commons. All rights reserved. Genome Science and Technology Lab, Jawaharlal Nehru University, New Delhi, India</a>
             </div>
             <div className={styles.bottomLinks}>
           </div>
