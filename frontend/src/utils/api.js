@@ -1,4 +1,4 @@
-export const API_BASE_URL = 'http://localhost:8000';
+export const API_BASE_URL = import.meta.env.PROD ? '/api' : 'http://localhost:8000';
 
 // Debug function to log API calls
 export const debugLog = (endpoint, params, response, error) => {

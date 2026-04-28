@@ -24,7 +24,7 @@ const PaperDetailsPage = () => {
   const fetchPaper = async (attemptNumber = 1) => {
     try {
       console.log(`Fetching paper with ID: ${id} (attempt ${attemptNumber})`);
-      console.log('API Base URL:', process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:8000/api');
+      console.log('API Base URL:', import.meta.env.PROD ? '/api' : 'http://localhost:8000/api');
       setError(null);
 
       const data = await ApiService.getPaper(id);

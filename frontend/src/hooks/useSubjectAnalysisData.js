@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { retryWithBackoff } from '../utils/api';
 
 // This hook targets the modular API route mounted at /api/subjects/analysis via the frontend's service base
-const API_URL = process.env.NODE_ENV === 'production' 
+const API_URL = import.meta.env.PROD
   ? '/api/subjects/analysis'
   : 'http://localhost:8000/api/subjects/analysis';
 

@@ -850,7 +850,7 @@ const DocumentationPage = () => {
                   </p>
                   <div className={styles.apiDetails}>
                     <div>
-                      <strong>Base URL:</strong> <code>http://localhost:8000</code>
+                      <strong>Base URL:</strong> <code>{import.meta.env.PROD ? window.location.origin : 'http://localhost:8000'}</code>
                     </div>
                     <div>
                       <strong>Content Type:</strong> <code>application/json</code>

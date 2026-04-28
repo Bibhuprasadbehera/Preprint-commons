@@ -24,7 +24,8 @@ const ApiEndpoint = ({
   };
 
   const generateCurlExample = () => {
-    let curl = `curl -X ${method} "http://localhost:8000${endpoint}"`;
+    const baseUrl = import.meta.env.PROD ? window.location.origin : 'http://localhost:8000';
+    let curl = `curl -X ${method} "${baseUrl}${endpoint}"`;
     
     if (parameters.length > 0) {
       const queryParams = parameters
