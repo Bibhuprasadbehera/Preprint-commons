@@ -149,7 +149,7 @@ const ContactPage = () => {
 
             {/* Developer Portal Card */}
             <a 
-              href="https://github.com/binaypanda/Preprint-commons"
+              href="https://github.com/Bibhuprasadbehera/Preprint-commons"
               target="_blank"
               rel="noopener noreferrer"
               className="animate-slideInRight"

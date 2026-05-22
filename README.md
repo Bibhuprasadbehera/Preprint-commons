@@ -7,7 +7,7 @@
   
   ![Status](https://img.shields.io/badge/Status-Active-green)
   ![React](https://img.shields.io/badge/React-19.1.0-blue)
-  ![FastAPI](https://img.shields.io/badge/FastAPI-Latest-green)
+  ![FastAPI](https://img.shields.io/badge/FastAPI-0.104.1-green)
   ![Python](https://img.shields.io/badge/Python-3.10+-blue)
 </div>
 
@@ -66,8 +66,8 @@ To address the critical gap in preprint ecosystem analysis by providing a centra
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd PPC-Backend-main
+   git clone https://github.com/Bibhuprasadbehera/Preprint-commons
+   cd Preprint-commons
    ```
 
 2. **Set up the Python backend**
@@ -83,6 +83,11 @@ To address the critical gap in preprint ecosystem analysis by providing a centra
    ```bash
    cd frontend
    npm install
+   ```
+
+4. **(Optional) Run both servers together**
+   ```bash
+   npm run dev:all
    ```
 
 ### Running the Application
@@ -116,7 +121,7 @@ This will create a database (`ppc.db`) with the papers table and all necessary i
 
 ### Project Structure
 ```
-PPC-Backend-main/
+Preprint-commons/
 ├── app/                   # Modular backend structure
 │   ├── routers/          # API route modules
 │   │   ├── papers.py     # Paper endpoints
@@ -154,12 +159,13 @@ PPC-Backend-main/
 ### Available Scripts
 
 **Backend:**
-- `python run_simple.py` - Start development server
+- `python run_simple.py` - Start FastAPI app with router-based structure
 - `python create_db.py` - Initialize database
-- `uvicorn app.main:app --reload` - Start with uvicorn directly
+- `uvicorn app.main:app --reload` - Start with uvicorn directly (modular app)
 
 **Frontend:**
-- `npm run dev` - Start development server
+- `npm run dev` - Start Vite dev server
+- `npm run dev:all` - Start Vite dev server and uvicorn backend together
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint

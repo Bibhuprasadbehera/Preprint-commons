@@ -59,7 +59,6 @@ const Footer = () => {
               <Link to="/documentation" className={styles.link}>Documentation</Link>
               <Link to="/documentation#api" className={styles.link}>API Reference</Link>
               <Link to="/documentation#sources" className={styles.link}>Data Sources</Link>
-              <Link to="/documentation#paper" className={styles.link}>Research Paper</Link>
               <Link to="/documentation#methodology" className={styles.link}>Methodology</Link>
             </div>
           </div>
@@ -74,10 +73,28 @@ const Footer = () => {
         </div>
 
         <div className={styles.bottom}>
+          <div className={styles.bottomLeft}>
             <div className={styles.copyright}>
-                <a href='https://www.binaypandalab.org/' style={{ color: 'inherit', textDecoration: 'none' }}>© 2025 Preprint Commons. All rights reserved. Genome Science and Technology Lab, Jawaharlal Nehru University, New Delhi, India</a>
+              <a
+                href='https://www.binaypandalab.org/'
+                style={{ color: 'inherit', textDecoration: 'none' }}
+              >
+                © 2026 Preprint Commons. Genome Science and Technology Lab, Jawaharlal Nehru University, New Delhi, India
+              </a>
             </div>
-            <div className={styles.bottomLinks}>
+          </div>
+          <div className={styles.bottomRight}>
+            <span className={styles.credit}>
+              Made with <span aria-label="love" role="img">❤️</span> for the scientific community by{' '}
+              <a
+                href="https://bibhuprasadbehera.github.io/personal-website/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.link}
+              >
+                Bibhu
+              </a>
+            </span>
           </div>
         </div>
       </div>
