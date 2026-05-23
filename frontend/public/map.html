@@ -77,7 +77,7 @@
         document.querySelector('.loading').remove();
         const [world, responseData] = await Promise.all([
           d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"),
-          d3.json("/country-data")
+          d3.json("/api/analytics/country-data")
         ]);
 
         if (!world || !responseData?.data) throw new Error("Failed to load required data");

@@ -31,7 +31,7 @@ const useSubjects = () => {
     }
     
     try {
-      const response = await fetch(`${API_BASE_URL}/subjects`);
+      const response = await fetch(`${API_BASE_URL}/api/analytics/subjects`);
       
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);

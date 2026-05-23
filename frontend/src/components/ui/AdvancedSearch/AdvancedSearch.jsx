@@ -119,15 +119,14 @@ const AdvancedSearch = ({ onSearch, loading = false }) => {
   });
 
   // Use custom hooks for each filter option
-  // Note: subjects uses legacy endpoint /subjects (returns {data: []}), 
-  // others use /api/papers/* endpoints (return plain arrays)
+  // All endpoints use /api/* router paths for production nginx compatibility
   const { 
     options: subjects, 
     loading: subjectsLoading, 
     error: subjectsError,
     refreshOptions: refreshSubjects,
     retryCount: subjectsRetryCount
-  } = useFilterOptions('/subjects', 'subjects');
+  } = useFilterOptions('/api/analytics/subjects', 'subjects');
   
   const { 
     options: servers, 
