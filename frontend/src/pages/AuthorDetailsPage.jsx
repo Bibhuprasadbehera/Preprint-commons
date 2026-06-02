@@ -172,6 +172,7 @@ const AuthorDetailsPage = () => {
               type: 'linear',
               display: true,
               position: 'left',
+              min: 0,
               title: {
                 display: true,
                 text: 'Number of Papers',
@@ -183,6 +184,7 @@ const AuthorDetailsPage = () => {
               },
               ticks: {
                 color: blueColor,
+                precision: 0,
                 font: {
                   size: 11,
                   weight: '600'
@@ -196,6 +198,7 @@ const AuthorDetailsPage = () => {
               type: 'linear',
               display: true,
               position: 'right',
+              min: 0,
               title: {
                 display: true,
                 text: 'Total Citations',
@@ -207,6 +210,7 @@ const AuthorDetailsPage = () => {
               },
               ticks: {
                 color: pinkColor,
+                precision: 0,
                 font: {
                   size: 11,
                   weight: '600'
