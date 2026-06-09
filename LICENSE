@@ -1,21 +1,20 @@
-MIT License
+# PREPRINT COMMONS SOURCE-AVAILABLE AND PROPRIETARY SOFTWARE LICENSE
 
-Copyright (c) 2025 Bibhuprasadbehera
+Copyright (c) 2026 Bibhu Prasad Behera. All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+## 1. Terms and Definitions
+* **"Software"** refers to the frontend, backend, database pipeline architectures, configurations, and scripts contained within this repository (`https://github.com/Bibhuprasadbehera/Preprint-commons`).
+* **"Licensor"** refers to the sole copyright owner and architect, Bibhu Prasad Behera.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+## 2. Grant of Rights for Inspection and Modification
+Permission is hereby granted to any person obtaining a copy of this Software to view the source code, inspect its architecture, and propose code modifications, bug fixes, or optimizations via pull requests directly to the original repository. 
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+## 3. Strict Restriction on Deployment and Execution
+**No permission is granted to host, deploy, run, mirror, or distribute this Software**—either in its original state or modified form—on any local network, virtual private server (VPS), cloud infrastructure, or public web domain for operational or production use without the express, prior written consent of the Licensor. 
+
+## 4. Application to Forks and Clones
+Any fork, clone, or local copy of this repository made on GitHub or any other hosting platform is strictly bound by this license. While downstream users may modify the code within their respective forks, they are explicitly prohibited from deploying or executing those forks publicly or privately without authorization.
+
+## 5. Contact for Authorization
+For inquiries regarding deployment rights, production hosting permissions, or institutional utility, contact the Licensor directly at:
+**bibhubehera2001@gmail.com**

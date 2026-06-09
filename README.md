@@ -293,7 +293,7 @@ We welcome contributions from the community! Here's how you can help:
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Preprint Commons Source-Available and Proprietary Software License - see the [LICENSE](LICENSE) file for details.
 
 ## 🆘 Support
 
@@ -308,7 +308,6 @@ If you encounter any issues or have questions:
 
 Built by researchers, for researchers:
 - **Bibhu Prasad Behera** - Research & Development
-- **Binay Panda** - Supervisor
 
 **Institutional Support:**
 - Jawaharlal Nehru University (JNU)

@@ -16,7 +16,7 @@ const Footer = () => {
             </div>
             <div className={styles.socialLinks}>
               <a 
-                href="https://x.com/ganitlabs" 
+                href="https://x.com/Bibhu_prasad_01" 
                 className={styles.socialLink}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -27,7 +27,7 @@ const Footer = () => {
                 </svg>
               </a>
               <a 
-                href="https://github.com/binaypanda/Preprint-commons" 
+                href="https://github.com/Bibhuprasadbehera/Preprint-commons" 
                 className={styles.socialLink}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -67,7 +67,7 @@ const Footer = () => {
           <div className={styles.section}>
             <h3>Legal</h3>
             <div className={styles.links}>
-              <a href="https://github.com/Bibhuprasadbehera/Preprint-commons?tab=License-2-ov-file" className={styles.link}>CC-BY-NC-ND License</a>
+              <a href="https://github.com/Bibhuprasadbehera/Preprint-commons/blob/main/LICENSE" className={styles.link}>License</a>
             </div>
           </div>
         </div>
@@ -75,12 +75,7 @@ const Footer = () => {
         <div className={styles.bottom}>
           <div className={styles.bottomLeft}>
             <div className={styles.copyright}>
-              <a
-                href='https://www.binaypandalab.org/'
-                style={{ color: 'inherit', textDecoration: 'none' }}
-              >
-                © 2026 Preprint Commons. Genome Science and Technology Lab, Jawaharlal Nehru University, New Delhi, India
-              </a>
+              © 2026 Preprint Commons. Bibhu Prasad Behera, Jawaharlal Nehru University, New Delhi, India
             </div>
           </div>
           <div className={styles.bottomRight}>

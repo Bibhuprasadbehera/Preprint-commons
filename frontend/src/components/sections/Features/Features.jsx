@@ -53,8 +53,8 @@ const Features = () => {
     },
     {
       icon: '🔒',
-      title: 'Open Data',
-      description: 'All code is freely available under CC-BY-NC-ND license'
+      title: 'Source-Available',
+      description: 'Code is open for inspection and pull requests'
     }
   ];
 
